@@ -1648,3 +1648,1153 @@ const sQR=localStorage.getItem('scc_qr');if(sQR){window._qrData=sQR;try{document
 .tasa-info h4{color:#fff;font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;}
 .tasa-info p{color:rgba(255,255,255,0.45);font-size:.72rem;}
 .tasa-close{background:rgba(255,255,255,0.08);border:none;color:rgba(255,255,255,0.7);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:none;font-size:.9rem;margin-left:auto;transition:.2s;}
+<div style="border-top:1px solid rgba(212,160,23,0.15);margin-top:6px;padding-top:10px;display:flex;gap:8px;">
+    <div style="position:relative;flex:1;"><span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:.4;font-size:.8rem;">🔍</span><input type="text" placeholder="Search..." id="mobileSearchIn" oninput="doSearch()" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(212,160,23,0.18);border-radius:50px;padding:8px 12px 8px 32px;color:#fff;font-family:'Outfit',sans-serif;font-size:.82rem;outline:none;"></div>
+  </div>
+</div>
+
+<!-- HOME PAGE -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-slides" id="heroSlides">
+      <div class="hero-slide hs1"><div class="slide-content"><div class="slide-tag" id="slide1tag">✦ Fresh Baked Daily</div><h1 class="slide-h1" id="slide1h1">Cakes Crafted<br>with <em>Pure Love</em></h1><p class="slide-p" id="slide1p">Custom-designed cakes with finest Belgian chocolate and farm-fresh ingredients.</p><div class="hero-btns"><button class="btn-gold" onclick="goTab('cake')">🎂 Shop Cakes</button><button class="btn-ghost" onclick="goTab('builder')">🎨 Build Custom</button></div></div><div class="hero-visual"><div style="position:relative;display:inline-block;"><div class="hero-img-wrap" id="heroImg0"><div class="hero-emoji-fb">🎂</div></div><div class="offer-badge" id="heroBadge0">30%<br><span>OFF</span></div></div></div></div>
+      <div class="hero-slide hs2"><div class="slide-content"><div class="slide-tag">🍕 Hot & Fresh</div><h1 class="slide-h1">Pizza Perfected<br>in <em>Every Slice</em></h1><p class="slide-p">Stone-baked pizzas with premium toppings. Delivered hot within 60 minutes.</p><div class="hero-btns"><button class="btn-gold" onclick="goTab('pizza')">🍕 Order Pizza</button></div></div><div class="hero-visual"><div class="hero-img-wrap" id="heroImg1"><div class="hero-emoji-fb">🍕</div></div></div></div>
+      <div class="hero-slide hs3"><div class="slide-content"><div class="slide-tag">👑 Members Only</div><h1 class="slide-h1">Join Our <em>VIP Club</em><br>Save More!</h1><p class="slide-p">Silver, Gold & Platinum memberships with exclusive discounts and S Coin bonuses.</p><div class="hero-btns"><button class="btn-gold" onclick="goTab('membership')">👑 View Plans</button></div></div><div class="hero-visual"><div class="hero-img-wrap"><div class="hero-emoji-fb">👑</div></div></div></div>
+      <div class="hero-slide hs4"><div class="slide-content"><div class="slide-tag">🍫 Premium Belgian</div><h1 class="slide-h1">Artisan<br><em>Chocolates</em></h1><p class="slide-p">Handcrafted truffles, pralines and bars. Perfect gifts for every occasion.</p><div class="hero-btns"><button class="btn-gold" onclick="goTab('chocolate')">🍫 Shop Chocolates</button></div></div><div class="hero-visual"><div class="hero-img-wrap"><div class="hero-emoji-fb">🍫</div></div></div></div>
+    </div>
+    <button class="harrow prev" onclick="slideH(-1)">&#8249;</button><button class="harrow next" onclick="slideH(1)">&#8250;</button>
+    <div class="hero-nav" id="heroDots"></div>
+  </div>
+  <div class="ticker"><div class="ticker-track" id="tickerTrack">
+    <span id="t1">Fresh Bakes Daily</span><span id="t2">10 S Coins per ₹100</span><span id="t3">Free Delivery ₹500+</span><span id="t4">Custom Cakes Available</span><span>Ekbarna, Malda WB</span><span>+91 87689 27686</span><span>WhatsApp Orders Welcome</span><span>S Coins Valid 3 Months</span>
+    <span>Fresh Bakes Daily</span><span>10 S Coins per ₹100</span><span>Free Delivery ₹500+</span><span>Custom Cakes Available</span><span>Ekbarna, Malda WB</span><span>+91 87689 27686</span><span>WhatsApp Orders Welcome</span><span>S Coins Valid 3 Months</span>
+  </div></div>
+  <div class="sec" style="padding-bottom:0;"><div class="sec-inner"><div class="fest-banner" id="festBanner"><div class="fest-left"><div class="fest-tag">🎉 Limited Time</div><h2 class="fest-h" id="festH">Eid Special — <em>25% Off</em> All Cakes</h2><p class="fest-p" id="festP">Plus bonus S Coins on every order. Don't miss out!</p></div><div class="fest-right"><div class="fest-cd-lbl">Offer ends in</div><div class="fest-cd"><div class="cd-box"><span class="cd-num" id="cdH">00</span><span class="cd-lbl">Hrs</span></div><div class="cd-sep">:</div><div class="cd-box"><span class="cd-num" id="cdM">00</span><span class="cd-lbl">Min</span></div><div class="cd-sep">:</div><div class="cd-box"><span class="cd-num" id="cdS">00</span><span class="cd-lbl">Sec</span></div></div></div></div></div></div>
+  <div class="sec"><div class="sec-inner"><div class="sec-head"><div class="eyebrow">Explore</div><h2 class="sec-title" id="homeTitle">What are you <em>craving?</em></h2></div><div class="cat-cards" id="homeCatCards">
+    <div class="cat-card" onclick="goTab('cake')"><div class="cc-icon">🎂</div><div class="cc-name">Cakes</div><div class="cc-sub">Birthday, Wedding & Custom</div></div>
+    <div class="cat-card" onclick="goTab('pizza')"><div class="cc-icon">🍕</div><div class="cc-name">Pizza</div><div class="cc-sub">Stone-baked, Hot Delivery</div></div>
+    <div class="cat-card" onclick="goTab('cookie')"><div class="cc-icon">🍪</div><div class="cc-name">Cookies</div><div class="cc-sub">12 Flavours, Fresh Daily</div></div>
+    <div class="cat-card" onclick="goTab('chocolate')"><div class="cc-icon">🍫</div><div class="cc-name">Chocolates</div><div class="cc-sub">Belgian, Truffles & Gifts</div></div>
+    <div class="cat-card" onclick="goTab('builder')"><div class="cc-icon">🎨</div><div class="cc-name">Custom Cake</div><div class="cc-sub">Build Your Dream Cake</div></div>
+    <div class="cat-card" onclick="goTab('membership')"><div class="cc-icon">👑</div><div class="cc-name">Membership</div><div class="cc-sub">VIP Discounts & Perks</div></div>
+  </div></div></div>
+  <div class="sec" style="background:var(--warm);"><div class="sec-inner"><div class="sec-head"><div class="eyebrow">Customer Love</div><h2 class="sec-title">What They <em>Say</em></h2></div><div class="reviews-grid" id="homeReviews"></div><div style="text-align:center;margin-top:22px;"><button class="btn-gold" onclick="openM('reviewModal')">✍️ Write a Review</button></div></div></div>
+  <div class="sec"><div class="sec-inner"><div class="sec-head"><div class="eyebrow">Delivery Area</div><h2 class="sec-title">We Deliver <em>Near You</em></h2></div><div class="map-wrap"><div class="map-container"><iframe src="https://maps.google.com/maps?q=Ekbarna,Malda,West+Bengal&z=13&output=embed" loading="lazy" allowfullscreen></iframe></div><div class="delivery-zones" id="deliveryZonesDisplay"></div></div></div></div>
+  <div class="coin-sec"><div class="coin-inner"><div class="coin-left"><span class="big-coin">🪙</span><h2>Introducing <em>S Coins</em><br>Your Reward</h2><p>Every purchase earns S Coins automatically. Redeem for discounts anytime.</p><div class="coin-stats"><div class="cstat"><span class="cstat-num" id="coinRate">10</span><span class="cstat-lbl">Coins/₹100</span></div><div class="cstat"><span class="cstat-num">₹0.10</span><span class="cstat-lbl">Per Coin</span></div><div class="cstat"><span class="cstat-num" id="coinValidity">3 Mo</span><span class="cstat-lbl">Validity</span></div><div class="cstat"><span class="cstat-num">∞</span><span class="cstat-lbl">Unlimited</span></div></div></div><div class="coin-right"><h3>How It Works</h3><div class="how-step"><div class="step-num">1</div><div class="step-text"><strong>Sign in with phone</strong><span>Just name + number. No password.</span></div></div><div class="how-step"><div class="step-num">2</div><div class="step-text"><strong>Shop & earn auto</strong><span>10 S Coins per ₹100 spent.</span></div></div><div class="how-step"><div class="step-num">3</div><div class="step-text"><strong>Redeem at checkout</strong><span>Each coin = ₹0.10 off.</span></div></div><div class="how-step"><div class="step-num">4</div><div class="step-text"><strong>3-month history</strong><span>Full records in your wallet.</span></div></div></div></div></div>
+  <div class="sec" style="background:var(--warm);"><div class="sec-inner"><div class="sec-head"><div class="eyebrow">Track Order</div><h2 class="sec-title">Where's My <em>Order?</em></h2></div><div class="track-wrap"><div class="track-row"><input type="text" id="trackIn" placeholder="Order ID or Phone Number"><button onclick="trackOrder()">Track →</button></div><div class="track-tl" id="trackTl"><div class="tl-steps" id="tlSteps"></div></div></div></div></div>
+</div>
+
+<!-- CAKE PAGE -->
+<div class="page" id="page-cake"><div class="sec"><div class="sec-inner"><div class="pg-hero cake-bg"><div><div class="pg-tag">Artisan Cakes</div><h1 class="pg-h1">Celebration <em>Cakes</em><br>Made with Love</h1><p class="pg-p">Custom birthday, wedding & anniversary cakes. Belgian chocolate, fresh cream, artisan designs.</p></div><div class="pg-emoji">🎂</div></div><div class="sec-head" style="margin-top:32px;"><div class="eyebrow">Our Cake Collection</div><h2 class="sec-title">Choose Your <em>Cake</em></h2></div><div class="pgrid" id="cakeGrid"></div></div></div></div>
+
+<!-- PIZZA PAGE -->
+<div class="page" id="page-pizza"><div class="sec"><div class="sec-inner"><div class="pg-hero pizza-bg"><div><div class="pg-tag">Stone Baked</div><h1 class="pg-h1">Hot Pizza<br><em>Every Time</em></h1><p class="pg-p">Premium toppings on hand-stretched dough. Delivered to your door within 60 minutes.</p></div><div class="pg-emoji">🍕</div></div><div class="sec-head" style="margin-top:32px;"><div class="eyebrow">Our Pizza Menu</div><h2 class="sec-title">Pick Your <em>Pizza</em></h2></div><div class="pgrid" id="pizzaGrid"></div></div></div></div>
+
+<!-- COOKIE PAGE -->
+<div class="page" id="page-cookie"><div class="sec"><div class="sec-inner"><div class="pg-hero cookie-bg"><div><div class="pg-tag">Freshly Baked</div><h1 class="pg-h1">Cookies that<br><em>Melt</em> Away</h1><p class="pg-p">12 signature flavours baked every morning. Minimum 12 pieces per box.</p></div><div class="pg-emoji">🍪</div></div><div class="sec-head" style="margin-top:32px;"><div class="eyebrow">Cookie Selection</div><h2 class="sec-title">Pick Your <em>Cookies</em></h2></div><div class="pgrid" id="cookieGrid"></div></div></div></div>
+
+<!-- CHOCOLATE PAGE -->
+<div class="page" id="page-chocolate"><div class="sec"><div class="sec-inner"><div class="pg-hero choc-bg"><div><div class="pg-tag">Premium Belgian</div><h1 class="pg-h1">Artisan<br><em>Chocolates</em></h1><p class="pg-p">Handcrafted truffles, pralines and chocolate bars. Perfect gifts for every occasion.</p></div><div class="pg-emoji">🍫</div></div><div class="sec-head" style="margin-top:32px;"><div class="eyebrow">Chocolate Collection</div><h2 class="sec-title">Our <em>Chocolates</em></h2></div><div class="pgrid" id="chocolateGrid"></div></div></div></div>
+
+<!-- CUSTOM CAKE BUILDER -->
+<div class="page" id="page-builder"><div class="sec"><div class="sec-inner">
+  <div class="sec-head"><div class="eyebrow">Design Your Dream</div><h2 class="sec-title">Custom <em>Cake Builder</em></h2><p class="sec-sub">Choose every detail — we'll bake it to perfection.</p></div>
+  <div class="builder-wrap">
+    <div class="builder-steps">
+      <div class="bs active" id="bs1" onclick="goBuildStep(1)">1 · Size</div>
+      <div class="bs" id="bs2" onclick="goBuildStep(2)">2 · Flavour</div>
+      <div class="bs" id="bs3" onclick="goBuildStep(3)">3 · Icing</div>
+      <div class="bs" id="bs4" onclick="goBuildStep(4)">4 · Toppings</div>
+      <div class="bs" id="bs5" onclick="goBuildStep(5)">5 · Message</div>
+      <div class="bs" id="bs6" onclick="goBuildStep(6)">6 · Order</div>
+    </div>
+    <div class="builder-pane show" id="bp1">
+      <h4 style="margin-bottom:14px;color:var(--mahogany);font-family:'Cormorant Garamond',serif;font-size:1.2rem;">Select Cake Size</h4>
+      <div class="build-options" id="sizeOptions"></div>
+      <button class="btn-gold" onclick="goBuildStep(2)" style="margin-top:8px;">Next: Choose Flavour →</button>
+    </div>
+    <div class="builder-pane" id="bp2">
+      <h4 style="margin-bottom:14px;color:var(--mahogany);font-family:'Cormorant Garamond',serif;font-size:1.2rem;">Choose Flavour</h4>
+      <div class="build-options" id="flavourOptions"></div>
+      <div style="display:flex;gap:10px;margin-top:8px;"><button class="btn-ghost" onclick="goBuildStep(1)" style="color:var(--text);border-color:var(--border);">← Back</button><button class="btn-gold" onclick="goBuildStep(3)">Next: Choose Icing →</button></div>
+    </div>
+    <div class="builder-pane" id="bp3">
+      <h4 style="margin-bottom:14px;color:var(--mahogany);font-family:'Cormorant Garamond',serif;font-size:1.2rem;">Choose Icing</h4>
+      <div class="build-options" id="icingOptions"></div>
+      <div style="display:flex;gap:10px;margin-top:8px;"><button class="btn-ghost" onclick="goBuildStep(2)" style="color:var(--text);border-color:var(--border);">← Back</button><button class="btn-gold" onclick="goBuildStep(4)">Next: Toppings →</button></div>
+    </div>
+    <div class="builder-pane" id="bp4">
+      <h4 style="margin-bottom:14px;color:var(--mahogany);font-family:'Cormorant Garamond',serif;font-size:1.2rem;">Choose Toppings (Select Multiple)</h4>
+      <div class="build-options" id="toppingOptions"></div>
+      <div style="display:flex;gap:10px;margin-top:8px;"><button class="btn-ghost" onclick="goBuildStep(3)" style="color:var(--text);border-color:var(--border);">← Back</button><button class="btn-gold" onclick="goBuildStep(5)">Next: Add Message →</button></div>
+    </div>
+    <div class="builder-pane" id="bp5">
+      <h4 style="margin-bottom:14px;color:var(--mahogany);font-family:'Cormorant Garamond',serif;font-size:1.2rem;">Cake Message & Delivery Date</h4>
+      <div class="ff"><label>Message on Cake (optional)</label><input type="text" id="cakeMsg" placeholder='e.g. "Happy Birthday Priya! 🎂"' maxlength="40"></div>
+      <div class="ff"><label>Delivery Date</label><input type="date" id="cakeDate"></div>
+      <div class="ff"><label>Special Instructions</label><textarea id="cakeNote" rows="2" placeholder="Any allergies or special requests?"></textarea></div>
+      <div style="display:flex;gap:10px;margin-top:8px;"><button class="btn-ghost" onclick="goBuildStep(4)" style="color:var(--text);border-color:var(--border);">← Back</button><button class="btn-gold" onclick="goBuildStep(6)">Review Order →</button></div>
+    </div>
+    <div class="builder-pane" id="bp6">
+      <h4 style="margin-bottom:14px;color:var(--mahogany);font-family:'Cormorant Garamond',serif;font-size:1.2rem;">Your Custom Cake Summary</h4>
+      <div class="builder-summary" id="buildSummary"></div>
+      <div style="display:flex;gap:10px;margin-top:12px;"><button class="btn-ghost" onclick="goBuildStep(5)" style="color:var(--text);border-color:var(--border);">← Edit</button><button class="btn-gold" onclick="addCustomCakeToCart()">🛒 Add to Cart</button></div>
+    </div>
+  </div>
+</div></div></div>
+
+<!-- MEMBERSHIP PAGE -->
+<div class="page" id="page-membership"><div class="sec"><div class="sec-inner">
+  <div class="sec-head"><div class="eyebrow">VIP Club</div><h2 class="sec-title">Choose Your <em>Membership</em></h2><p class="sec-sub">Unlock exclusive discounts, bonus S Coins and priority service.</p></div>
+  <div class="membership-grid" id="membershipGrid"></div>
+  <div style="margin-top:40px;background:var(--warm);border-radius:16px;padding:24px;">
+    <div class="sec-head" style="margin-bottom:20px;"><div class="eyebrow">Compare Plans</div><h2 class="sec-title" style="font-size:1.6rem;">What's <em>Included?</em></h2></div>
+    <div style="overflow-x:auto;"><table class="orders-tbl" style="background:#fff;border-radius:10px;overflow:hidden;" id="memberCompareTable">
+      <thead><tr style="background:var(--mahogany);"><th style="color:#fff;padding:12px 16px;">Feature</th><th style="color:#9ca3af;">🥈 Silver</th><th style="color:var(--gold);">🥇 Gold</th><th style="color:#e5e7eb;">💎 Platinum</th></tr></thead>
+      <tbody id="memberCompareBody"></tbody>
+    </table></div>
+  </div>
+</div></div></div>
+
+<!-- CART -->
+<div class="cart-ov" id="cartOv" onclick="toggleCart()"></div>
+<div class="cart-sb" id="cartSb">
+  <div class="cs-head"><h3>🛒 Your Cart</h3><button class="cs-close" onclick="toggleCart()">✕</button></div>
+  <div class="cs-body" id="csBody"><div class="cs-empty"><div style="font-size:3rem;opacity:.25;">🛒</div><p>Your cart is empty</p></div></div>
+  <div class="cs-foot">
+    <div class="cs-total-rows" id="csTotalRows"></div>
+    <div class="cs-coin" id="csCoin">🪙 You'll earn 0 S Coins</div>
+    <button class="btn-checkout" onclick="openCheckout()">Proceed to Checkout →</button>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="overlay" id="loginModal"><div class="modal"><div class="modal-hd"><div class="modal-title">Welcome 👋</div><button class="modal-x" onclick="closeM('loginModal')">✕</button></div><p style="color:var(--muted);font-size:.8rem;margin-bottom:16px;">Sign in to track orders & earn S Coins.</p><div class="ff"><label>Your Name</label><input type="text" id="loginName" placeholder="Full name"></div><div class="ff"><label>Phone Number</label><input type="tel" id="loginPhone" placeholder="+91 XXXXX XXXXX"></div><button class="btn-full" onclick="doLogin()">Sign In & Earn 🪙</button><p class="modal-note">No OTP needed. Data stays private.</p></div></div>
+
+<!-- COIN MODAL -->
+<div class="overlay" id="coinModal"><div class="modal"><div class="modal-hd"><div class="modal-title">🪙 S Coin Wallet</div><button class="modal-x" onclick="closeM('coinModal')">✕</button></div><div class="coin-modal-body"><span class="coin-big-icon">🪙</span><div class="coin-bal" id="wBal">0</div><div class="coin-val" id="wVal">Worth ₹0.00</div><div id="wUser" style="margin-top:4px;font-size:.74rem;color:var(--muted);"></div><div id="wMemberBadge" style="margin-top:6px;"></div><div class="coin-hist"><h4>Transactions</h4><div id="coinHistList"><p style="color:var(--muted);font-size:.72rem;">No transactions yet.</p></div></div></div></div></div>
+
+<!-- REVIEW MODAL -->
+<div class="overlay" id="reviewModal"><div class="modal"><div class="modal-hd"><div class="modal-title">⭐ Write a Review</div><button class="modal-x" onclick="closeM('reviewModal')">✕</button></div><div class="ff"><label>Product</label><select id="rvProd"></select></div><div class="ff"><label>Rating</label><div class="star-select" id="starSel"><button class="star-btn" onclick="setStars(1)">⭐</button><button class="star-btn" onclick="setStars(2)">⭐</button><button class="star-btn" onclick="setStars(3)">⭐</button><button class="star-btn" onclick="setStars(4)">⭐</button><button class="star-btn" onclick="setStars(5)">⭐</button></div></div><div class="ff"><label>Review</label><textarea id="rvText" rows="3" placeholder="Share your experience..."></textarea></div><div class="ff"><label>Your Name</label><input type="text" id="rvName" placeholder="Display name"></div><button class="btn-full" onclick="submitReview()">Submit ✨</button></div></div>
+
+<!-- CHECKOUT MODAL -->
+<div class="overlay" id="checkoutModal"><div class="modal" style="max-width:490px;"><div class="modal-hd"><div class="modal-title">Place Order</div><button class="modal-x" onclick="closeM('checkoutModal')">✕</button></div>
+  <div class="order-steps"><div class="os active" id="os1">1 · Details</div><div class="os" id="os2">2 · Payment</div><div class="os" id="os3">3 · Done</div></div>
+  <div class="step-pane show" id="step1">
+    <div class="ff"><label>Name</label><input type="text" id="ordName" placeholder="Full name"></div>
+    <div class="frow"><div class="ff"><label>Phone</label><input type="tel" id="ordPhone" placeholder="+91..."></div><div class="ff"><label>PIN Code</label><input type="text" id="ordPin" placeholder="732101"></div></div>
+    <div class="ff"><label>Delivery Address</label><textarea id="ordAddr" rows="2" placeholder="House / Area / Landmark, Malda"></textarea></div>
+    <div id="useCoinRow" style="display:none;margin-bottom:11px;"><label style="display:flex;align-items:center;gap:6px;cursor:none;font-size:.78rem;color:var(--muted);"><input type="checkbox" id="useCoin" style="width:13px;height:13px;accent-color:var(--gold);"> Use S Coins — <span id="coinSaveTxt">save ₹0</span></label></div>
+    <div style="background:var(--cream);border-radius:10px;padding:12px;margin-bottom:12px;font-size:.82rem;" id="checkoutSummary"></div>
+    <button class="btn-full" onclick="goStep(2)">Continue to Payment →</button>
+  </div>
+  <div class="step-pane" id="step2">
+    <h4 style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--text);margin-bottom:14px;">Choose Payment Method</h4>
+    <div class="pay-methods">
+      <div class="pay-method sel" id="pm-upi" onclick="selPayMethod('upi')"><div class="pm-icon">📲</div><div class="pm-name">UPI / QR</div></div>
+      <div class="pay-method" id="pm-cod" onclick="selPayMethod('cod')"><div class="pm-icon">💵</div><div class="pm-name">Cash on Delivery</div></div>
+    </div>
+    <div id="upi-section">
+      <div style="text-align:center;padding:10px 0;"><div style="font-size:.66rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:11px;">Scan & Pay</div><div class="qr-img-wrap" id="qrDisplayWrap"><div style="font-size:2.8rem;opacity:.22;">📲</div></div><div class="pay-amt" id="payAmt">₹0</div><div class="upi-box" id="payUpiId">UPI ID not set</div><div class="pay-note">1. Scan QR or use UPI ID<br>2. Pay in your UPI app<br>3. Tap confirmed below</div></div>
+      <button class="btn-full" onclick="goStep(3)" style="background:linear-gradient(135deg,#14532d,#15803d);">✅ I've Paid — Confirm Order</button>
+    </div>
+    <div id="cod-section" style="display:none;">
+      <div style="background:var(--cream);border-radius:10px;padding:16px;text-align:center;margin-bottom:14px;">
+        <div style="font-size:2rem;margin-bottom:8px;">💵</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:var(--mahogany);" id="codAmt">₹0</div>
+        <div style="font-size:.8rem;color:var(--muted);margin-top:6px;">Pay when your order arrives</div>
+      </div>
+      <button class="btn-full" onclick="goStep(3)">✅ Place COD Order</button>
+    </div>
+  </div>
+  <div class="step-pane" id="step3" style="text-align:center;padding:11px 0;">
+    <div style="font-size:3rem;margin-bottom:11px;">🎉</div>
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.55rem;color:var(--text);margin-bottom:7px;">Order Placed!</h3>
+    <p style="color:var(--muted);font-size:.8rem;margin-bottom:11px;">We'll call <strong id="confPhone">—</strong> to confirm shortly.</p>
+    <div id="confCoins" style="background:linear-gradient(135deg,#fffbf0,#fff8e0);border:1px solid rgba(212,160,23,0.24);border-radius:8px;padding:9px;font-size:.79rem;color:var(--mahogany);font-weight:600;margin-bottom:11px;"></div>
+    <div id="confWaRow" style="display:none;margin-bottom:11px;"><button onclick="openWhatsApp()" style="background:linear-gradient(135deg,#065f46,#059669);color:#fff;border:none;border-radius:8px;padding:9px 19px;font-family:'Outfit',sans-serif;font-weight:700;cursor:none;font-size:.82rem;">💬 Confirm on WhatsApp</button></div>
+    <button class="btn-full" onclick="closeM('checkoutModal')">Continue Shopping</button>
+  </div>
+</div></div>
+
+<!-- MEMBERSHIP PURCHASE MODAL -->
+<div class="overlay" id="memberModal"><div class="modal" style="max-width:420px;text-align:center;"><div class="modal-hd"><div class="modal-title" id="memModalTitle">Join Silver</div><button class="modal-x" onclick="closeM('memberModal')">✕</button></div><div id="memModalContent"></div></div></div>
+
+
+<!-- OUR STORY MODAL -->
+<div class="overlay" id="storyModal">
+  <div class="modal story-modal">
+    <div class="modal-hd">
+      <div class="modal-title" style="font-family:'Great Vibes',cursive;font-size:1.6rem;">Our Story</div>
+      <button class="modal-x" onclick="closeM('storyModal')">✕</button>
+    </div>
+
+    <div class="story-hero">
+      <span class="story-logo">Sanchita's Cake Corner</span>
+      <div class="story-tagline">Est. 2015 · Ekbarna, Malda · Baked with Love</div>
+    </div>
+
+    <div class="story-body">
+      <p>
+        Every great story begins with a single step — ours began with a single <strong>cake</strong>.
+        Back in <span class="highlight">2015</span>, in the quiet lanes of <strong>Ekbarna, Malda</strong>,
+        a young woman named <strong>Sanchita Misra</strong> made a decision that would
+        forever change the way her town celebrated its sweetest moments.
+      </p>
+
+      <div class="story-quote">"If it's made with love, it will always taste like home."</div>
+
+      <p>
+        What started as a humble passion — baking late into the night, experimenting with
+        Belgian chocolate, perfecting every layer of sponge — quietly grew into something
+        far greater than Sanchita had ever imagined. Word spread from neighbour to neighbour,
+        from one birthday table to the next, from one wedding celebration to another.
+        <strong>People didn't just come for the cake. They came for the feeling.</strong>
+      </p>
+
+      <p>
+        Over <span class="highlight">10 wonderful years</span>, Sanchita's Cake Corner has
+        blossomed from a home kitchen dream into a beloved bakery — a place where
+        stone-baked pizzas emerge golden and hot, where hand-crafted cookies fill
+        the air with warmth, and where every custom cake tells a story as unique
+        as the person it is made for.
+      </p>
+
+      <div class="story-stats">
+        <div class="story-stat"><span class="ss-num">10</span><span class="ss-lbl">Years of Baking</span></div>
+        <div class="story-stat"><span class="ss-num">∞</span><span class="ss-lbl">Happy Customers</span></div>
+        <div class="story-stat"><span class="ss-num">100%</span><span class="ss-lbl">Made with Love</span></div>
+      </div>
+
+      <p>
+        Today, from our little corner of Malda, we serve birthday cakes that make
+        children's eyes light up, wedding cakes that bring tears of joy, and everyday
+        treats that turn ordinary evenings into something special. Every item that
+        leaves our kitchen carries with it a piece of Sanchita's heart — her
+        dedication, her warmth, and her <strong>unwavering belief that food, when
+        made with love, has the power to bring people together.</strong>
+      </p>
+
+      <p style="margin-bottom:8px;">
+        We are more than a bakery. We are a <span class="highlight">family</span> —
+        and you are always welcome at our table.
+      </p>
+    </div>
+
+    <div class="story-divider"><span>✦</span></div>
+
+    <span class="story-sign">Sanchita Misra</span>
+    <div class="story-sign-title">Founder & Head Baker · Sanchita's Cake Corner</div>
+
+    <div style="margin-top:24px;">
+      <button class="btn-full" onclick="closeM('storyModal')" style="max-width:200px;margin:0 auto;display:block;">
+        Close ✕
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- BULK/EVENT MODAL -->
+<div class="overlay" id="bulkModal">
+  <div class="modal" style="max-width:620px;">
+    <div class="modal-hd">
+      <div class="modal-title" style="font-family:'Great Vibes',cursive;font-size:1.6rem;">Bulk & Events</div>
+      <button class="modal-x" onclick="closeM('bulkModal')">✕</button>
+    </div>
+    <div style="background:linear-gradient(135deg,#0d0a07,#2a1208);border-radius:16px;padding:26px;margin-bottom:22px;text-align:center;">
+      <div style="font-size:2.5rem;margin-bottom:10px;">🎉 🎂 🍕 🍪</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:var(--gold);margin-bottom:6px;">Planning Something Big?</div>
+      <div style="color:rgba(255,255,255,0.5);font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;">Weddings · Birthdays · Corporate · Festivals</div>
+    </div>
+    <div style="margin-bottom:20px;">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--text);line-height:1.85;margin-bottom:16px;font-style:italic;">Whether you're hosting an intimate gathering or a grand celebration, Sanchita's Cake Corner is your perfect catering partner. We offer <strong style="font-style:normal;color:var(--mahogany);">special bulk pricing</strong> tailored to your event size and requirements.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+        <div style="background:var(--cream);border-radius:12px;padding:16px;border:1px solid rgba(212,160,23,0.15);">
+          <div style="font-size:1.6rem;margin-bottom:7px;">🎂</div>
+          <div style="font-weight:700;font-size:.88rem;color:var(--mahogany);margin-bottom:4px;">Wedding & Celebrations</div>
+          <div style="font-size:.78rem;color:var(--muted);line-height:1.6;">Custom multi-tier cakes, dessert tables, mini cakes & more for your special day.</div>
+        </div>
+        <div style="background:var(--cream);border-radius:12px;padding:16px;border:1px solid rgba(212,160,23,0.15);">
+          <div style="font-size:1.6rem;margin-bottom:7px;">🏢</div>
+          <div style="font-weight:700;font-size:.88rem;color:var(--mahogany);margin-bottom:4px;">Corporate Events</div>
+          <div style="font-size:.78rem;color:var(--muted);line-height:1.6;">Branded cakes, cookie boxes, pizza platters & snack packages for your team.</div>
+        </div>
+        <div style="background:var(--cream);border-radius:12px;padding:16px;border:1px solid rgba(212,160,23,0.15);">
+          <div style="font-size:1.6rem;margin-bottom:7px;">🎈</div>
+          <div style="font-weight:700;font-size:.88rem;color:var(--mahogany);margin-bottom:4px;">Birthday Parties</div>
+          <div style="font-size:.78rem;color:var(--muted);line-height:1.6;">Theme cakes, cupcake towers, cookie favours & pizza spreads for all ages.</div>
+        </div>
+        <div style="background:var(--cream);border-radius:12px;padding:16px;border:1px solid rgba(212,160,23,0.15);">
+          <div style="font-size:1.6rem;margin-bottom:7px;">🕌</div>
+          <div style="font-weight:700;font-size:.88rem;color:var(--mahogany);margin-bottom:4px;">Festivals & Occasions</div>
+          <div style="font-size:.78rem;color:var(--muted);line-height:1.6;">Eid, Puja, Christmas, New Year — bulk sweet boxes & special edition treats.</div>
+        </div>
+      </div>
+      <div style="background:linear-gradient(135deg,#fff9f0,#fff5e8);border:1px solid rgba(212,160,23,0.25);border-radius:14px;padding:18px;text-align:center;margin-bottom:18px;">
+        <div style="font-size:1.1rem;margin-bottom:6px;">💰</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:var(--mahogany);margin-bottom:6px;">Exclusive Bulk Discounts Available</div>
+        <div style="font-size:.82rem;color:var(--muted);line-height:1.65;">The more you order, the more you save! Special pricing is available for orders above a certain quantity. Discounts are discussed and confirmed personally based on your requirements.</div>
+      </div>
+      <div style="background:linear-gradient(135deg,#065f46,#059669);border-radius:14px;padding:18px;text-align:center;">
+        <div style="color:rgba(255,255,255,0.7);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Get Your Custom Quote</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:#fff;margin-bottom:12px;">Contact us directly on WhatsApp</div>
+        <a href="https://wa.me/918768927686?text=Hi%20Sanchita's%20Cake%20Corner!%20I'm%20interested%20in%20bulk%20ordering%20for%20an%20event.%20Could%20you%20please%20share%20pricing%20details?" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#fff;color:#065f46;padding:11px 24px;border-radius:50px;font-weight:700;font-size:.88rem;text-decoration:none;transition:.3s;">
+          💬 WhatsApp: +91 87689 27686
+        </a>
+        <div style="color:rgba(255,255,255,0.55);font-size:.74rem;margin-top:10px;">We'll get back to you within a few hours!</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RETURN POLICY MODAL -->
+<div class="overlay" id="returnModal">
+  <div class="modal" style="max-width:600px;">
+    <div class="modal-hd">
+      <div class="modal-title" style="font-family:'Great Vibes',cursive;font-size:1.6rem;">Return Policy</div>
+      <button class="modal-x" onclick="closeM('returnModal')">✕</button>
+    </div>
+    <div style="background:linear-gradient(135deg,#0d0a07,#2a1208);border-radius:16px;padding:22px;margin-bottom:22px;text-align:center;">
+      <div style="font-size:2rem;margin-bottom:8px;">📋</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:700;color:var(--gold);">Our Return Policy</div>
+      <div style="color:rgba(255,255,255,0.45);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;margin-top:4px;">Last updated · 2025</div>
+    </div>
+
+    <div style="background:#fff8f0;border:1px solid rgba(192,57,43,0.2);border-radius:12px;padding:16px;margin-bottom:18px;display:flex;gap:12px;align-items:flex-start;">
+      <span style="font-size:1.5rem;flex-shrink:0;">⚠️</span>
+      <div>
+        <div style="font-weight:700;color:var(--rose);font-size:.9rem;margin-bottom:4px;">General Policy — No Returns</div>
+        <div style="font-size:.82rem;color:var(--muted);line-height:1.7;">As all our products are <strong>freshly baked food items</strong>, we generally do not accept returns or exchanges once an order has been delivered or picked up. This is in accordance with standard food safety and hygiene practices.</div>
+      </div>
+    </div>
+
+    <div style="background:#f0fff4;border:1px solid rgba(22,163,74,0.2);border-radius:12px;padding:16px;margin-bottom:18px;">
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;">
+        <span style="font-size:1.4rem;">✅</span>
+        <div style="font-weight:700;color:#15803d;font-size:.92rem;">Exception — Defective or Damaged Products</div>
+      </div>
+      <p style="font-size:.82rem;color:var(--muted);line-height:1.75;margin-bottom:12px;">We take full responsibility for the quality of every item we make. If you genuinely receive a product that is <strong style="color:var(--text);">damaged, spoiled, or significantly different</strong> from what was ordered, you are eligible for a <strong style="color:#15803d;">replacement or refund</strong> — subject to the conditions below.</p>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;gap:10px;align-items:flex-start;background:#fff;border-radius:9px;padding:11px 13px;">
+          <span style="color:#15803d;font-weight:700;font-size:.9rem;flex-shrink:0;">1.</span>
+          <div style="font-size:.8rem;color:var(--text);line-height:1.6;"><strong>Report within 2 hours</strong> of receiving your order. Complaints raised after this window may not be entertained.</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;background:#fff;border-radius:9px;padding:11px 13px;">
+          <span style="color:#15803d;font-weight:700;font-size:.9rem;flex-shrink:0;">2.</span>
+          <div style="font-size:.8rem;color:var(--text);line-height:1.6;"><strong>Provide clear photographic or video proof</strong> of the defective product. The item must be mostly uneaten and in its original packaging.</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;background:#fff;border-radius:9px;padding:11px 13px;">
+          <span style="color:#15803d;font-weight:700;font-size:.9rem;flex-shrink:0;">3.</span>
+          <div style="font-size:.8rem;color:var(--text);line-height:1.6;"><strong>Contact us via WhatsApp</strong> with your Order ID and proof. Our team will review and respond within a few hours.</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;background:#fff;border-radius:9px;padding:11px 13px;">
+          <span style="color:#15803d;font-weight:700;font-size:.9rem;flex-shrink:0;">4.</span>
+          <div style="font-size:.8rem;color:var(--text);line-height:1.6;">Upon verification, we will offer a <strong>replacement at the earliest</strong> or a <strong>full refund</strong> via the original payment method.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--cream);border-radius:12px;padding:14px;margin-bottom:18px;">
+      <div style="font-weight:700;font-size:.85rem;color:var(--mahogany);margin-bottom:8px;">❌ Returns will NOT be accepted for:</div>
+      <div style="display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:.79rem;color:var(--muted);">• Change of mind after the order is placed or delivered</div>
+        <div style="font-size:.79rem;color:var(--muted);">• Incorrect address or delivery details provided by the customer</div>
+        <div style="font-size:.79rem;color:var(--muted);">• Taste preference or personal dislike of flavour</div>
+        <div style="font-size:.79rem;color:var(--muted);">• Products reported after more than 2 hours of delivery</div>
+        <div style="font-size:.79rem;color:var(--muted);">• Partially consumed items without valid proof of defect</div>
+      </div>
+    </div>
+
+    <div style="background:linear-gradient(135deg,#065f46,#059669);border-radius:12px;padding:16px;text-align:center;">
+      <div style="color:#fff;font-size:.85rem;font-weight:600;margin-bottom:8px;">Have an issue with your order?</div>
+      <a href="https://wa.me/918768927686?text=Hi!%20I%20have%20an%20issue%20with%20my%20order.%20Order%20ID:%20" target="_blank" style="display:inline-flex;align-items:center;gap:7px;background:#fff;color:#065f46;padding:9px 20px;border-radius:50px;font-weight:700;font-size:.84rem;text-decoration:none;">
+        💬 Contact us on WhatsApp
+      </a>
+    </div>
+
+    <div style="margin-top:16px;">
+      <button class="btn-full" onclick="closeM('returnModal')" style="max-width:180px;margin:0 auto;display:block;">Close ✕</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN GATE -->
+<div class="overlay" id="adminGateModal"><div class="modal" style="max-width:330px;text-align:center;"><div class="modal-hd"><div class="modal-title" style="font-size:1rem;">🔐 Admin Access</div><button class="modal-x" onclick="closeM('adminGateModal')">✕</button></div><input type="password" id="admPass" placeholder="Admin password" style="width:100%;border:1.5px solid #e8ddd5;border-radius:7px;padding:9px 12px;font-family:'Outfit',sans-serif;font-size:.84rem;outline:none;margin-bottom:11px;text-align:center;letter-spacing:.16em;" onkeypress="if(event.key==='Enter')chkAdmin()"><button class="btn-full" onclick="chkAdmin()">Enter Admin Panel</button></div></div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel"><div class="adm-bar"><div class="adm-bar-in">
+  <div class="adm-logo">⚙️ Admin</div>
+  <div class="adm-tabs">
+    <button class="adm-tab on" onclick="admTab('dash',this)">📊 Dashboard</button>
+    <button class="adm-tab" onclick="admTab('siteEdit',this)">✏️ Site Content</button>
+    <button class="adm-tab" onclick="admTab('addProd',this)">➕ Add Product</button>
+    <button class="adm-tab" onclick="admTab('prods',this)">📦 Products</button>
+    <button class="adm-tab" onclick="admTab('payment',this)">💳 Payment/QR</button>
+    <button class="adm-tab" onclick="admTab('delivery',this)">🚚 Delivery</button>
+    <button class="adm-tab" onclick="admTab('membership',this)">👑 Membership</button>
+    <button class="adm-tab" onclick="admTab('offers',this)">🎉 Offers</button>
+    <button class="adm-tab" onclick="admTab('builder',this)">🎨 Cake Builder</button>
+    <button class="adm-tab" onclick="admTab('orders',this)">📋 Orders</button>
+    <button class="adm-tab" onclick="admTab('customers',this)">👥 Customers</button>
+    <button class="adm-tab" onclick="admTab('sms',this)">📱 SMS/WA</button>
+    <button class="adm-tab" onclick="admTab('db',this)">🗄️ Database</button>
+  </div>
+  <button class="adm-close" onclick="closeAdmin()">✕ Exit</button>
+</div></div>
+<div class="adm-body">
+
+<!-- DASHBOARD -->
+<div class="adm-pane on" id="adm-dash">
+  <div class="stats-row"><div class="stat-c"><span class="stat-v" id="st-prod">0</span><span class="stat-l">Products</span></div><div class="stat-c"><span class="stat-v" id="st-ord">0</span><span class="stat-l">Orders</span></div><div class="stat-c"><span class="stat-v" id="st-rev">₹0</span><span class="stat-l">Revenue</span></div><div class="stat-c"><span class="stat-v" id="st-coin">0</span><span class="stat-l">Coins Issued</span></div><div class="stat-c"><span class="stat-v" id="st-cust">0</span><span class="stat-l">Customers</span></div><div class="stat-c"><span class="stat-v" id="st-mem">0</span><span class="stat-l">Members</span></div></div>
+  <div class="adm-card"><h3>📡 Status</h3><div id="sysSt" style="color:rgba(255,200,0,0.7);font-size:.8rem;padding:9px;background:rgba(255,200,0,0.036);border-radius:6px;">⚠️ Demo mode — connect DB for persistence.</div></div>
+</div>
+
+<!-- SITE CONTENT EDITOR -->
+<div class="adm-pane" id="adm-siteEdit">
+  <div class="adm-card"><h3>✏️ Hero Slider Content</h3>
+    <div class="afrow"><div class="aff"><label>Slide 1 Tag Text</label><input type="text" id="se-s1tag" placeholder="✦ Fresh Baked Daily"></div><div class="aff"><label>Slide 1 Offer Badge</label><input type="text" id="se-s1badge" placeholder="30% OFF"></div></div>
+    <div class="aff" style="margin-bottom:9px;"><label>Slide 1 Heading (use | for line break)</label><input type="text" id="se-s1h1" placeholder="Cakes Crafted|with Pure Love"></div>
+    <div class="aff" style="margin-bottom:14px;"><label>Slide 1 Subtext</label><textarea id="se-s1p" rows="2" placeholder="Custom-designed cakes..."></textarea></div>
+    <button class="abtn" onclick="saveHeroContent()">💾 Save Hero Content</button>
+  </div>
+  <div class="adm-card"><h3>✏️ Ticker / Announcement Bar</h3>
+    <div class="aff" style="margin-bottom:9px;"><label>Ticker Message 1</label><input type="text" id="tk1" placeholder="Fresh Bakes Daily"></div>
+    <div class="aff" style="margin-bottom:9px;"><label>Ticker Message 2</label><input type="text" id="tk2" placeholder="10 S Coins per ₹100"></div>
+    <div class="aff" style="margin-bottom:9px;"><label>Ticker Message 3</label><input type="text" id="tk3" placeholder="Free Delivery ₹500+"></div>
+    <div class="aff" style="margin-bottom:14px;"><label>Ticker Message 4</label><input type="text" id="tk4" placeholder="Custom Cakes Available"></div>
+    <button class="abtn" onclick="saveTicker()">💾 Save Ticker</button>
+  </div>
+  <div class="adm-card"><h3>✏️ Footer & Contact Info</h3>
+    <div class="afrow"><div class="aff"><label>Shop Address</label><input type="text" id="se-addr" placeholder="Ekbarna, Malda, West Bengal"></div><div class="aff"><label>Phone Number</label><input type="text" id="se-phone" placeholder="+91 87689 27686"></div></div>
+    <div class="afrow"><div class="aff"><label>Opening Hours</label><input type="text" id="se-hours" placeholder="Open 8 AM - 9 PM, All Days"></div><div class="aff"><label>Google Maps Embed URL</label><input type="url" id="se-mapurl" placeholder="https://maps.google.com/..."></div></div>
+    <button class="abtn" onclick="saveSiteInfo()">💾 Save Info</button>
+  </div>
+  <div class="adm-card"><h3>✏️ Festival Banner</h3>
+    <div class="afrow"><div class="aff"><label>Offer Name</label><input type="text" id="se-offerName" placeholder="Eid Special"></div><div class="aff"><label>Discount %</label><input type="number" id="se-offerDisc" placeholder="25"></div></div>
+    <div class="aff" style="margin-bottom:14px;"><label>Banner Description</label><input type="text" id="se-offerDesc" placeholder="Plus bonus S Coins on every order!"></div>
+    <button class="abtn" onclick="saveFestBanner()">💾 Update Banner</button>
+  </div>
+  <div class="adm-card"><h3>✏️ S Coin Settings</h3>
+    <div class="afrow"><div class="aff"><label>Coins Earned per ₹100</label><input type="number" id="se-coinRate" placeholder="10"></div><div class="aff"><label>Coin Validity (months)</label><input type="number" id="se-coinValidity" placeholder="3"></div></div>
+    <button class="abtn" onclick="saveCoinSettings()">💾 Save Coin Settings</button>
+  </div>
+</div>
+
+<!-- ADD PRODUCT -->
+<div class="adm-pane" id="adm-addProd"><div class="adm-card"><h3>➕ Add New Product</h3>
+  <div class="afrow"><div class="aff"><label>Name</label><input type="text" id="pN" placeholder="Dark Chocolate Cake"></div><div class="aff"><label>Category</label><select id="pC"><option value="cake">🎂 Cake</option><option value="pizza">🍕 Pizza</option><option value="cookie">🍪 Cookies</option><option value="chocolate">🍫 Chocolate</option><option value="cupcake">🧁 Cupcake</option></select></div></div>
+  <div class="afrow"><div class="aff"><label>Price (₹)</label><input type="number" id="pP" placeholder="450"></div><div class="aff"><label>Offer Price (₹)</label><input type="number" id="pOP" placeholder="380"></div></div>
+  <div class="afrow"><div class="aff"><label>Emoji</label><input type="text" id="pE" placeholder="🎂"></div><div class="aff"><label>Stock</label><input type="number" id="pS" placeholder="50"></div></div>
+  <div class="aff" style="margin-bottom:9px;"><label>Description</label><textarea id="pD" rows="2" placeholder="Describe this item..."></textarea></div>
+  <div class="aff" style="margin-bottom:9px;"><label>Photo URL (optional)</label><input type="url" id="pPhoto" placeholder="https://..."></div>
+  <div class="aff" style="margin-bottom:13px;"><label>Upload Photo from Device</label><input type="file" id="pPhotoFile" accept="image/*" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:7px;padding:7px 10px;color:rgba(255,255,255,0.62);font-family:'Outfit',sans-serif;font-size:.76rem;width:100%;" onchange="prevNewPhoto(this)"></div>
+  <div id="newPhotoPreview" style="display:none;margin-bottom:11px;"><img id="newPhotoImg" style="width:85px;height:85px;object-fit:cover;border-radius:6px;border:2px solid rgba(212,160,23,0.26);"></div>
+  <button class="abtn" onclick="addProd()">✅ Add Product</button>
+</div></div>
+
+<!-- PRODUCTS -->
+<div class="adm-pane" id="adm-prods"><div class="adm-card"><h3>📦 All Products <span id="prodCnt" style="font-size:.78rem;color:rgba(255,255,255,0.22);font-family:'Outfit',sans-serif;"></span></h3><div class="adm-pgrid" id="admPGrid"></div></div></div>
+
+<!-- PAYMENT -->
+<div class="adm-pane" id="adm-payment">
+  <div class="adm-card"><h3>💳 UPI / PhonePe Settings</h3>
+    <div class="afrow"><div class="aff"><label>UPI ID or Phone</label><input type="text" id="upiId" placeholder="+91 87689 27686"></div><div class="aff"><label>Account Name</label><input type="text" id="upiName" placeholder="Sanchita's Cake Corner"></div></div>
+    <div class="aff" style="margin-bottom:14px;"><label>Razorpay Key ID (optional)</label><input type="text" id="rzpKey" placeholder="rzp_live_xxxxxxxxxx"></div>
+    <button class="abtn" onclick="savePay()" style="margin-bottom:20px;">💾 Save Payment Settings</button>
+    <h3>📷 Upload QR Code</h3>
+    <div class="qr-upload-area" onclick="document.getElementById('qrFi').click()"><div class="qr-prev" id="qrPrev"><span style="font-size:1.7rem;opacity:.24;">📷</span></div><p style="color:rgba(255,255,255,0.32);font-size:.76rem;">Click to upload QR image</p><input type="file" id="qrFi" accept="image/*" style="display:none;" onchange="prevQR(this)"></div>
+    <button class="abtn" style="margin-top:11px;" onclick="saveQR()">✅ Save QR Code</button>
+  </div>
+  <div class="adm-card"><h3>✅ Mark Order Payment</h3>
+    <div class="afrow"><div class="aff"><label>Order ID</label><input type="text" id="markOrdId" placeholder="ORD123456"></div><div class="aff"><label>Status</label><select id="markSt"><option value="confirmed">✅ Confirmed</option><option value="pending">⏳ Pending</option><option value="failed">❌ Failed</option></select></div></div>
+    <button class="abtn" onclick="markPay()">Update Payment</button>
+  </div>
+</div>
+
+<!-- DELIVERY SETTINGS -->
+<div class="adm-pane" id="adm-delivery">
+  <div class="adm-card"><h3>🚚 Delivery Zones & Charges</h3>
+    <p style="color:rgba(255,255,255,0.4);font-size:.8rem;margin-bottom:16px;">Edit delivery zones. Changes reflect on the website immediately.</p>
+    <div id="deliveryZonesAdmin"></div>
+    <button class="abtn green" onclick="addDeliveryZone()" style="margin-top:12px;">+ Add Zone</button>
+    <button class="abtn" onclick="saveDeliveryZones()" style="margin-left:8px;">💾 Save All Zones</button>
+  </div>
+  <div class="adm-card"><h3>🆓 Free Delivery Threshold</h3>
+    <div class="afrow"><div class="aff"><label>Free delivery above (₹)</label><input type="number" id="freeDeliveryThreshold" placeholder="500"></div><div class="aff"><label>Min Order Value (₹)</label><input type="number" id="minOrderValue" placeholder="0"></div></div>
+    <button class="abtn" onclick="saveDeliverySettings()">💾 Save</button>
+  </div>
+</div>
+
+<!-- MEMBERSHIP ADMIN -->
+<div class="adm-pane" id="adm-membership">
+  <div class="adm-card"><h3>👑 Membership Plans</h3>
+    <p style="color:rgba(255,255,255,0.4);font-size:.8rem;margin-bottom:16px;">Edit membership plans, fees and benefits.</p>
+    <div id="membershipAdmin"></div>
+    <button class="abtn" onclick="saveMembershipPlans()" style="margin-top:12px;">💾 Save All Plans</button>
+  </div>
+  <div class="adm-card"><h3>👥 Current Members</h3>
+    <div style="overflow-x:auto;"><table class="orders-tbl"><thead><tr><th>Name</th><th>Phone</th><th>Plan</th><th>Joined</th><th>Expires</th></tr></thead><tbody id="membersBody"><tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.2);padding:22px;">No members yet.</td></tr></tbody></table></div>
+  </div>
+</div>
+
+<!-- OFFERS -->
+<div class="adm-pane" id="adm-offers">
+  <div class="adm-card"><h3>🎉 Festival Offer</h3>
+    <div class="afrow"><div class="aff"><label>Offer Name</label><input type="text" id="oN" placeholder="Eid Special"></div><div class="aff"><label>Discount %</label><input type="number" id="oD" placeholder="25"></div></div>
+    <div class="afrow"><div class="aff"><label>Start</label><input type="date" id="oSD"></div><div class="aff"><label>End</label><input type="date" id="oED"></div></div>
+    <div class="aff" style="margin-bottom:14px;"><label>Description</label><input type="text" id="oDesc" placeholder="25% off all cakes!"></div>
+    <button class="abtn" onclick="saveOffer()">🎉 Activate Offer</button>
+  </div>
+  <div class="adm-card"><h3>Active Offers</h3><div id="offerList" style="color:rgba(255,255,255,0.26);font-size:.76rem;">None.</div></div>
+</div>
+
+<!-- CAKE BUILDER ADMIN -->
+<div class="adm-pane" id="adm-builder">
+  <div class="adm-card"><h3>🎨 Cake Builder Options</h3>
+    <p style="color:rgba(255,255,255,0.4);font-size:.8rem;margin-bottom:16px;">Edit sizes, flavours, icings and toppings for the custom cake builder.</p>
+    <div id="builderAdmin"></div>
+    <button class="abtn" onclick="saveBuilderOptions()" style="margin-top:12px;">💾 Save Builder Options</button>
+  </div>
+</div>
+
+<!-- ORDERS -->
+<div class="adm-pane" id="adm-orders"><div class="adm-card"><h3>📋 Orders</h3><div style="overflow-x:auto;"><table class="orders-tbl"><thead><tr><th>ID</th><th>Customer</th><th>Phone</th><th>Total</th><th>Coins</th><th>Payment</th><th>Time</th></tr></thead><tbody id="ordsBody"><tr><td colspan="7" style="text-align:center;color:rgba(255,255,255,0.16);padding:22px;">No orders yet.</td></tr></tbody></table></div></div></div>
+
+<!-- CUSTOMERS -->
+<div class="adm-pane" id="adm-customers"><div class="adm-card"><h3>👥 Customers</h3><button class="abtn" onclick="exportCSV()" style="margin-bottom:13px;">📥 Export CSV</button><div style="overflow-x:auto;"><table class="orders-tbl"><thead><tr><th>Name</th><th>Phone</th><th>Member</th><th>S Coins</th><th>Orders</th><th>Spent</th></tr></thead><tbody id="custBody"><tr><td colspan="6" style="text-align:center;color:rgba(255,255,255,0.16);padding:22px;">No customers yet.</td></tr></tbody></table></div></div></div>
+
+<!-- SMS/WA -->
+<div class="adm-pane" id="adm-sms">
+  <div class="adm-card"><h3>💬 WhatsApp</h3><div class="sms-info">Orders auto-send a WhatsApp notification to your number.</div>
+    <div class="aff" style="margin-bottom:9px;"><label>WhatsApp Number</label><input type="tel" id="waBizNum" placeholder="+91 87689 27686"></div>
+    <div class="aff" style="margin-bottom:13px;"><label>Template</label><textarea id="waTemplate" rows="3" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:7px;padding:7px 10px;color:#fff;font-family:'Outfit',sans-serif;font-size:.77rem;resize:vertical;width:100%;">New Order! ID:{ORDER_ID} | {NAME}({PHONE}) | {ITEMS} | ₹{TOTAL} | {ADDRESS}</textarea></div>
+    <button class="abtn" onclick="saveWA()">💾 Save</button>
+  </div>
+  <div class="adm-card"><h3>📱 Fast2SMS</h3><div class="sms-info">₹100 for ~400 SMS at fast2sms.com</div>
+    <div class="afrow"><div class="aff"><label>API Key</label><input type="text" id="smsKey" placeholder="API Key"></div><div class="aff"><label>Sender ID</label><input type="text" id="smsSid" placeholder="SANCHI"></div></div>
+    <div class="aff" style="margin-bottom:13px;"><label>SMS Template</label><textarea id="smsTpl" rows="2" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:7px;padding:7px 10px;color:#fff;font-family:'Outfit',sans-serif;font-size:.76rem;resize:vertical;width:100%;">Order {ORDER_ID} Sanchita's Ekbarna Malda! Rs.{TOTAL} confirmed. +{COINS} S Coins!</textarea></div>
+    <button class="abtn" onclick="saveSMS()" style="margin-right:6px;">💾 Save</button><button class="abtn grey" onclick="testSMS()">📤 Test</button>
+  </div>
+</div>
+
+<!-- DATABASE -->
+<div class="adm-pane" id="adm-db">
+  <div class="adm-card"><h3>🗄️ InfinityFree MySQL</h3>
+    <div class="afrow"><div class="aff"><label>API URL</label><input type="url" id="dbUrl" placeholder="https://yoursite.infinityfreeapp.com/api"></div><div class="aff"><label>Secret Key</label><input type="password" id="dbKey" placeholder="secret_key"></div></div>
+    <button class="abtn" onclick="saveDB()" style="margin-right:7px;">💾 Save</button><button class="abtn grey" onclick="testDB()">🔗 Test</button>
+    <div id="dbRes" style="margin-top:9px;font-size:.74rem;"></div>
+  </div>
+  <div class="adm-card"><h3>SQL Setup</h3><div class="code-blk"><pre>CREATE TABLE products (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(200), category VARCHAR(50), price DECIMAL(10,2), offer_price DECIMAL(10,2), emoji VARCHAR(10), photo_url VARCHAR(500), description TEXT, stock INT DEFAULT 100, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE orders (id VARCHAR(20) PRIMARY KEY, customer_name VARCHAR(200), phone VARCHAR(20), address TEXT, items JSON, total DECIMAL(10,2), coins_earned INT, status VARCHAR(50) DEFAULT 'pending', payment_status VARCHAR(50) DEFAULT 'pending', payment_method VARCHAR(50), created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE customers (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(200), phone VARCHAR(20) UNIQUE, total_coins INT DEFAULT 0, total_spent DECIMAL(10,2) DEFAULT 0, order_count INT DEFAULT 0, membership VARCHAR(20) DEFAULT 'none', membership_expiry DATE, last_order TIMESTAMP);
+CREATE TABLE reviews (id INT AUTO_INCREMENT PRIMARY KEY, product_id INT, product_name VARCHAR(200), reviewer_name VARCHAR(200), rating INT, review_text TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);</pre></div>
+  </div>
+</div>
+
+</div></div><!-- end admin -->
+
+<footer id="siteFooter">
+  <div class="footer-grid">
+    <div class="footer-brand"><span class="logo-txt">Sanchita's Cake Corner</span><p id="footerAbout">Artisan cakes, pizzas, cookies and chocolates crafted with love in Ekbarna, Malda.</p><div class="contact-info"><div class="cline"><span class="ci2">📍</span><span id="footerAddr">Ekbarna, Malda, West Bengal</span></div><div class="cline"><span class="ci2">📞</span><span id="footerPhone">+91 87689 27686</span></div><div class="cline"><span class="ci2">💬</span><span>WhatsApp Orders Welcome</span></div><div class="cline"><span class="ci2">🕐</span><span id="footerHours">Open 8 AM – 9 PM, All Days</span></div></div></div>
+    <div class="footer-col"><h4>Menu</h4><ul><li onclick="goTab('home')">🏠 Home</li><li onclick="goTab('cake')">🎂 Cakes</li><li onclick="goTab('pizza')">🍕 Pizza</li><li onclick="goTab('cookie')">🍪 Cookies</li><li onclick="goTab('chocolate')">🍫 Chocolates</li><li onclick="goTab('builder')">🎨 Custom Cake</li><li onclick="goTab('membership')">👑 Membership</li></ul></div>
+    <div class="footer-col"><h4>Help</h4><ul><li>📦 Track Order</li><li onclick="openM('returnModal')" style="cursor:none;">🔄 Return Policy</li><li>🪙 S Coin FAQ</li><li>❓ Help Centre</li></ul></div>
+    <div class="footer-col"><h4>About</h4><ul><li onclick="openM('storyModal')" style="cursor:none;">🏪 Our Story</li><li>🎂 Custom Orders</li><li onclick="openM('reviewModal')">⭐ Write Review</li><li onclick="openM('bulkModal')" style="cursor:none;">🤝 Bulk / Events</li></ul></div>
+  </div>
+  <div class="footer-btm"><p>© 2025 Sanchita's Cake Corner · Ekbarna, Malda, WB</p><button class="adm-trigger" onclick="openAdminGate()">⚙️ Admin</button></div>
+</footer>
+<script>
+// CURSOR
+const cur=document.getElementById('cur'),curR=document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function aR(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(aR);})();
+window.addEventListener('load',()=>setTimeout(()=>document.getElementById('loader').classList.add('hide'),1900));
+window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',scrollY>50));
+
+// SITE SETTINGS (editable from admin)
+let siteSettings = JSON.parse(localStorage.getItem('scc_settings') || JSON.stringify({
+  address:'Ekbarna, Malda, West Bengal', phone:'+91 87689 27686', hours:'Open 8 AM – 9 PM, All Days',
+  festName:'Eid Special', festDisc:25, festDesc:'Plus bonus S Coins on every order. Don\'t miss out!',
+  coinRate:10, coinValidity:3, freeDeliveryAbove:500, minOrder:0,
+  ticker:['Fresh Bakes Daily','10 S Coins per ₹100','Free Delivery ₹500+','Custom Cakes Available'],
+  heroTag:'✦ Fresh Baked Daily', heroH1:'Cakes Crafted|with Pure Love', heroP:'Custom-designed cakes with finest Belgian chocolate.',
+  upiId:'', upiName:'Sanchitas Cake Corner', rzpKey:'', mapUrl:''
+}));
+
+// DELIVERY ZONES
+let deliveryZones = JSON.parse(localStorage.getItem('scc_zones') || JSON.stringify([
+  {name:'Ekbarna (Local)',icon:'📍',time:'30 mins',fee:0},
+  {name:'Malda Town',icon:'🏙️',time:'45 mins',fee:30},
+  {name:'English Bazar',icon:'🌆',time:'50 mins',fee:40},
+  {name:'Old Malda',icon:'🏘️',time:'55 mins',fee:40},
+  {name:'Gajol / Habibpur',icon:'🛣️',time:'75 mins',fee:60},
+  {name:'Custom Zone',icon:'🎯',time:'Call to confirm',fee:-1}
+]));
+
+// MEMBERSHIP PLANS
+let membershipPlans = JSON.parse(localStorage.getItem('scc_plans') || JSON.stringify([
+  {id:'silver',name:'Silver',icon:'🥈',price:199,duration:3,discountPct:5,bonusCoins:50,freeDeliveries:2,features:['5% off all orders','50 bonus S Coins on join','2 free deliveries/month','Priority support']},
+  {id:'gold',name:'Gold',icon:'🥇',price:399,duration:6,discountPct:10,bonusCoins:150,freeDeliveries:5,features:['10% off all orders','150 bonus S Coins on join','5 free deliveries/month','Custom cake discount','Birthday special offer']},
+  {id:'platinum',name:'Platinum',icon:'💎',price:799,duration:12,discountPct:18,bonusCoins:400,freeDeliveries:999,features:['18% off all orders','400 bonus S Coins on join','Unlimited free deliveries','Priority queue','Annual birthday cake FREE','Exclusive new flavour access']}
+]));
+
+// CAKE BUILDER OPTIONS
+let builderOptions = JSON.parse(localStorage.getItem('scc_builder') || JSON.stringify({
+  sizes:[{name:'Half Kg',icon:'🎂',price:299},{name:'1 Kg',icon:'🎂',price:499},{name:'1.5 Kg',icon:'🎂',price:699},{name:'2 Kg',icon:'🎂',price:899},{name:'3 Kg',icon:'🎂',price:1199}],
+  flavours:[{name:'Chocolate',icon:'🍫',price:0},{name:'Vanilla',icon:'🍦',price:0},{name:'Red Velvet',icon:'❤️',price:50},{name:'Mango',icon:'🥭',price:50},{name:'Black Forest',icon:'🌲',price:50},{name:'Strawberry',icon:'🍓',price:30}],
+  icings:[{name:'Buttercream',icon:'🧁',price:0},{name:'Fondant',icon:'✨',price:100},{name:'Whipped Cream',icon:'🤍',price:0},{name:'Ganache',icon:'🍫',price:80}],
+  toppings:[{name:'Fresh Berries',icon:'🍓',price:60},{name:'Chocolate Shavings',icon:'🍫',price:40},{name:'Sprinkles',icon:'🎉',price:20},{name:'Edible Flowers',icon:'🌸',price:80},{name:'Macarons',icon:'🌈',price:120},{name:'None',icon:'✖️',price:0}]
+}));
+
+// PRODUCTS
+let products=[
+  {id:1,name:"Dark Chocolate Layer Cake",category:"cake",price:750,offerPrice:520,emoji:"🎂",photo:"",desc:"3-layer Belgian dark chocolate with ganache frosting",stock:12,ratings:[5,4,5,5]},
+  {id:2,name:"Strawberry Dream Cake",category:"cake",price:620,offerPrice:460,emoji:"🍓",photo:"",desc:"Fresh strawberries with whipped cream, light sponge",stock:8,ratings:[5,4,5]},
+  {id:3,name:"Red Velvet Classic",category:"cake",price:820,offerPrice:640,emoji:"❤️",photo:"",desc:"Classic red velvet with cream cheese frosting",stock:6,ratings:[5,5,4,5]},
+  {id:4,name:"Mango Delight Cake",category:"cake",price:580,offerPrice:440,emoji:"🥭",photo:"",desc:"Alphonso mango cream with vanilla sponge",stock:10,ratings:[4,5,4]},
+  {id:5,name:"Pepperoni Stone Bake",category:"pizza",price:420,offerPrice:350,emoji:"🍕",photo:"",desc:"Premium pepperoni, mozzarella, tomato base",stock:25,ratings:[5,4,5]},
+  {id:6,name:"Grilled Chicken Pizza",category:"pizza",price:460,offerPrice:390,emoji:"🐔",photo:"",desc:"Tender grilled chicken, bell peppers, onion",stock:20,ratings:[4,5,5]},
+  {id:7,name:"Four Cheese Pizza",category:"pizza",price:490,offerPrice:420,emoji:"🧀",photo:"",desc:"Mozzarella, cheddar, gouda, parmesan blend",stock:18,ratings:[5,4]},
+  {id:8,name:"Choco Chip Cookies",category:"cookie",price:200,offerPrice:160,emoji:"🍪",photo:"",desc:"Crispy edges, gooey centre — 12 pieces per box",stock:60,ratings:[5,5,4,5,5]},
+  {id:9,name:"Butter Shortbread",category:"cookie",price:180,offerPrice:145,emoji:"🥠",photo:"",desc:"Classic butter cookies, set of 12",stock:55,ratings:[4,4,5]},
+  {id:10,name:"Dark Chocolate Truffle Box",category:"chocolate",price:450,offerPrice:380,emoji:"🍫",photo:"",desc:"12 handmade dark chocolate truffles in gift box",stock:20,ratings:[5,5,5]},
+  {id:11,name:"Belgian Milk Chocolate Bar",category:"chocolate",price:180,offerPrice:150,emoji:"🍫",photo:"",desc:"Premium Belgian milk chocolate 100g bar",stock:35,ratings:[4,5,4]},
+  {id:12,name:"Assorted Pralines Box",category:"chocolate",price:550,offerPrice:460,emoji:"🎁",photo:"",desc:"16 assorted pralines — perfect gift",stock:15,ratings:[5,5,4,5]},
+];
+
+// INIT SITE FROM SETTINGS
+function applySettings(){
+  const s=siteSettings;
+  const el=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  el('footerAddr',s.address);el('footerPhone',s.phone);el('footerHours',s.hours);
+  el('festH',`${s.festName} — <em>${s.festDisc}% Off</em>`);
+  document.getElementById('festH').innerHTML=`${s.festName} — <em>${s.festDisc}% Off</em>`;
+  el('festP',s.festDesc);el('coinRate',s.coinRate);el('coinValidity',s.coinValidity+' Mo');
+  renderDeliveryZonesDisplay();
+}
+applySettings();
+
+// TABS
+function toggleMobileMenu(){
+  const btn=document.getElementById('burgerBtn');
+  const menu=document.getElementById('mobileMenu');
+  btn.classList.toggle('open');
+  menu.classList.toggle('open');
+}
+function goTabMob(tab){
+  toggleMobileMenu();
+  goTab(tab);
+  document.querySelectorAll('.mob-tab-btn').forEach(b=>b.classList.remove('active'));
+  const mb=document.getElementById('mtb-'+tab);if(mb)mb.classList.add('active');
+}
+function goTab(tab){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.mob-tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+tab).classList.add('active');
+  const tb=document.getElementById('tb-'+tab);if(tb)tb.classList.add('active');
+  const mb=document.getElementById('mtb-'+tab);if(mb)mb.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(tab==='cake')renderGrid('cakeGrid','cake');
+  if(tab==='pizza')renderGrid('pizzaGrid','pizza');
+  if(tab==='cookie')renderGrid('cookieGrid','cookie');
+  if(tab==='chocolate')renderGrid('chocolateGrid','chocolate');
+  if(tab==='membership')renderMembership();
+  if(tab==='builder')initBuilder();
+}
+
+// HERO SLIDER
+let curSlide=0;const SLIDES=4;
+function buildDots(){const d=document.getElementById('heroDots');d.innerHTML='';for(let i=0;i<SLIDES;i++){const b=document.createElement('div');b.className='h-dot'+(i===0?' on':'');b.onclick=()=>goSlide(i);d.appendChild(b);}}
+function goSlide(n){curSlide=(n+SLIDES)%SLIDES;document.getElementById('heroSlides').style.transform=`translateX(-${curSlide*100}%)`;document.querySelectorAll('.h-dot').forEach((d,i)=>d.classList.toggle('on',i===curSlide));}
+function slideH(d){goSlide(curSlide+d);}
+buildDots();setInterval(()=>goSlide(curSlide+1),5500);
+
+// COUNTDOWN
+function tick(){const now=new Date(),end=new Date(now);end.setHours(23,59,59,999);const diff=end-now,h=Math.floor(diff/3600000),m=Math.floor(diff%3600000/60000),s=Math.floor(diff%60000/1000);document.getElementById('cdH').textContent=String(h).padStart(2,'0');document.getElementById('cdM').textContent=String(m).padStart(2,'0');document.getElementById('cdS').textContent=String(s).padStart(2,'0');}
+setInterval(tick,1000);tick();
+
+// PRODUCTS
+function avgR(p){return p.ratings&&p.ratings.length?Math.round((p.ratings.reduce((a,b)=>a+b,0)/p.ratings.length)*10)/10:0;}
+function starsH(n){let s='';for(let i=1;i<=5;i++)s+=i<=Math.round(n)?'⭐':'☆';return s;}
+function makeCard(p){
+  const disc=p.offerPrice?Math.round((1-p.offerPrice/p.price)*100):0;
+  const earn=Math.floor((p.offerPrice||p.price)/100)*siteSettings.coinRate;
+  const avg=avgR(p);
+  const imgH=p.photo?`<img src="${p.photo}" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="pc-img-em" style="display:none;">${p.emoji}</div>`:`<div class="pc-img-em">${p.emoji}</div>`;
+  return `<div class="pcard" id="pc${p.id}">
+    <div class="pc-img cat-${p.category}">${imgH}${disc>0?`<div class="pc-ribbon">-${disc}% off</div>`:''}<button class="pc-wish" id="wl${p.id}" onclick="toggleWish(${p.id},event)">🤍</button></div>
+    <div class="pc-body"><div class="pc-cat-lbl">${p.category}</div><div class="pc-name">${p.name}</div><div class="pc-desc">${p.desc}</div>
+    <div class="pc-price-row"><span class="pc-price">₹${p.offerPrice||p.price}</span>${p.offerPrice?`<span class="pc-orig">₹${p.price}</span><span class="pc-disc">-${disc}%</span>`:''}</div>
+    ${avg>0?`<div class="pc-stars"><span class="stars">${starsH(avg)}</span><span class="rc">${avg} (${p.ratings.length})</span></div>`:''}
+    <div class="pc-coin">🪙 Earn ${earn} S Coins</div>
+    <div class="pc-footer"><button class="btn-addcart" onclick="addToCart(${p.id})">Add to Cart</button><button class="btn-quick" onclick="addToCart(${p.id})">⚡</button></div></div></div>`;
+}
+function renderGrid(gridId,cat){
+  const g=document.getElementById(gridId);if(!g)return;
+  const list=products.filter(p=>p.category===cat);
+  g.innerHTML=list.length?list.map(makeCard).join(''):'<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--muted);">No items yet. Add from Admin Panel.</div>';
+}
+function doSearch(){const q=document.getElementById('searchIn').value.toLowerCase().trim();if(!q)return;toast(`Found ${products.filter(p=>p.name.toLowerCase().includes(q)).length} results`);}
+
+// DELIVERY ZONES DISPLAY
+function renderDeliveryZonesDisplay(){
+  const c=document.getElementById('deliveryZonesDisplay');if(!c)return;
+  c.innerHTML=deliveryZones.map(z=>`<div class="zone-card"><div class="zone-icon">${z.icon}</div><div class="zone-name">${z.name}</div><div class="zone-time">⏱ ${z.time}</div><div class="zone-fee">${z.fee===0?'FREE':z.fee===-1?'On request':'₹'+z.fee}</div></div>`).join('');
+}
+
+// MEMBERSHIP
+function renderMembership(){
+  const g=document.getElementById('membershipGrid');
+  g.innerHTML=membershipPlans.map(p=>{
+    const cls=`mem-${p.id}`;
+    return `<div class="mem-card ${cls}">
+      <span class="mem-icon">${p.icon}</span>
+      <div class="mem-name">${p.name} Member</div>
+      <div class="mem-price">₹${p.price}<span style="font-size:.85rem;font-weight:400;opacity:.6;">/${p.duration}mo</span></div>
+      <ul class="mem-features">${p.features.map(f=>`<li>${f}</li>`).join('')}</ul>
+      <button class="mem-btn" onclick="joinMembership('${p.id}')">${currentUser?'Join Now':'Sign In to Join'}</button>
+    </div>`;
+  }).join('');
+  // Comparison table
+  const rows=[['Discount',membershipPlans.map(p=>`${p.discountPct}% off`)],['Bonus Coins on Join',membershipPlans.map(p=>`${p.bonusCoins} 🪙`)],['Free Deliveries/mo',membershipPlans.map(p=>p.freeDeliveries===999?'Unlimited':p.freeDeliveries)],['Priority Support',['✓','✓','✓']],['Birthday Special',['✗','✓','✓']],['Free Birthday Cake',['✗','✗','✓']]];
+  document.getElementById('memberCompareBody').innerHTML=rows.map(([feat,vals])=>`<tr><td style="font-weight:600;color:var(--text);padding:10px 16px;">${feat}</td>${vals.map(v=>`<td style="text-align:center;padding:10px 16px;">${v}</td>`).join('')}</tr>`).join('');
+}
+
+function joinMembership(planId){
+  if(!currentUser){openM('loginModal');toast('Please sign in first','err');return;}
+  const plan=membershipPlans.find(p=>p.id===planId);if(!plan)return;
+  document.getElementById('memModalTitle').textContent=`Join ${plan.icon} ${plan.name}`;
+  document.getElementById('memModalContent').innerHTML=`
+    <div style="font-size:3rem;margin:12px 0;">${plan.icon}</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--mahogany);margin-bottom:8px;">₹${plan.price}</div>
+    <div style="color:var(--muted);font-size:.84rem;margin-bottom:16px;">Valid for ${plan.duration} months · ${plan.discountPct}% off all orders</div>
+    <div style="background:var(--cream);border-radius:10px;padding:14px;margin-bottom:16px;text-align:left;font-size:.82rem;">
+      ${plan.features.map(f=>`<div style="margin-bottom:6px;">✓ ${f}</div>`).join('')}
+    </div>
+    <p style="font-size:.78rem;color:var(--muted);margin-bottom:14px;">Payment via UPI/QR. After payment, send screenshot on WhatsApp to activate.</p>
+    <button class="btn-full" onclick="activateMembership('${planId}')">✅ I've Paid — Activate Membership</button>`;
+  openM('memberModal');
+}
+
+function activateMembership(planId){
+  if(!currentUser)return;
+  const plan=membershipPlans.find(p=>p.id===planId);
+  const phone=currentUser.phone;
+  if(!customers[phone])return;
+  const expiry=new Date();expiry.setMonth(expiry.getMonth()+plan.duration);
+  customers[phone].membership=planId;customers[phone].membershipExpiry=expiry.toISOString().slice(0,10);
+  customers[phone].coins=(customers[phone].coins||0)+plan.bonusCoins;
+  saveCustomers();currentUser=customers[phone];updateWallet();
+  closeM('memberModal');toast(`${plan.icon} ${plan.name} Membership activated! +${plan.bonusCoins} S Coins!`,'gold');
+  renderMembership();
+}
+
+function getMemberDiscount(){
+  if(!currentUser)return 0;
+  const c=customers[currentUser.phone];
+  if(!c||!c.membership||c.membership==='none')return 0;
+  const plan=membershipPlans.find(p=>p.id===c.membership);
+  if(!plan)return 0;
+  if(c.membershipExpiry&&new Date(c.membershipExpiry)<new Date())return 0;
+  return plan.discountPct;
+}
+
+// CAKE BUILDER
+let buildSel={size:null,flavour:null,icing:null,toppings:[],msg:'',date:'',note:''};
+function initBuilder(){
+  renderBuildOptions('sizeOptions',builderOptions.sizes,'size');
+  renderBuildOptions('flavourOptions',builderOptions.flavours,'flavour');
+  renderBuildOptions('icingOptions',builderOptions.icings,'icing');
+  renderBuildOptionsMulti('toppingOptions',builderOptions.toppings);
+}
+function renderBuildOptions(containerId,opts,type){
+  const c=document.getElementById(containerId);if(!c)return;
+  c.innerHTML=opts.map((o,i)=>`<div class="build-opt" id="bo-${type}-${i}" onclick="selBuildOpt('${type}',${i})"><span class="bo-icon">${o.icon}</span><div class="bo-name">${o.name}</div><div class="bo-price">${o.price>0?'+₹'+o.price:'Included'}</div></div>`).join('');
+}
+function renderBuildOptionsMulti(containerId,opts){
+  const c=document.getElementById(containerId);if(!c)return;
+  c.innerHTML=opts.map((o,i)=>`<div class="build-opt" id="bo-topping-${i}" onclick="selTopping(${i})"><span class="bo-icon">${o.icon}</span><div class="bo-name">${o.name}</div><div class="bo-price">${o.price>0?'+₹'+o.price:'Free'}</div></div>`).join('');
+}
+function selBuildOpt(type,idx){
+  buildSel[type]=idx;
+  document.querySelectorAll(`[id^="bo-${type}-"]`).forEach(e=>e.classList.remove('sel'));
+  document.getElementById(`bo-${type}-${idx}`).classList.add('sel');
+}
+function selTopping(idx){
+  const el=document.getElementById(`bo-topping-${idx}`);
+  if(builderOptions.toppings[idx].name==='None'){buildSel.toppings=[];document.querySelectorAll('[id^="bo-topping-"]').forEach(e=>e.classList.remove('sel'));el.classList.add('sel');return;}
+  const i=buildSel.toppings.indexOf(idx);
+  if(i>=0){buildSel.toppings.splice(i,1);el.classList.remove('sel');}else{buildSel.toppings.push(idx);el.classList.add('sel');}
+}
+function goBuildStep(n){
+  for(let i=1;i<=6;i++){const p=document.getElementById('bp'+i);const s=document.getElementById('bs'+i);if(p)p.classList.toggle('show',i===n);if(s)s.classList.toggle('active',i===n);}
+  if(n===6)showBuildSummary();
+}
+function showBuildSummary(){
+  buildSel.msg=document.getElementById('cakeMsg').value;
+  buildSel.date=document.getElementById('cakeDate').value;
+  buildSel.note=document.getElementById('cakeNote').value;
+  const s=buildSel;
+  const size=s.size!=null?builderOptions.sizes[s.size]:null;
+  const flavour=s.flavour!=null?builderOptions.flavours[s.flavour]:null;
+  const icing=s.icing!=null?builderOptions.icings[s.icing]:null;
+  const tops=s.toppings.map(i=>builderOptions.toppings[i]);
+  let total=(size?.price||0)+(flavour?.price||0)+(icing?.price||0)+tops.reduce((a,t)=>a+t.price,0);
+  const rows=[['Size',size?size.name:'Not selected',size?'₹'+size.price:'-'],['Flavour',flavour?flavour.name:'Not selected',flavour?.price>0?'+₹'+flavour.price:'Included'],['Icing',icing?icing.name:'Not selected',icing?.price>0?'+₹'+icing.price:'Included'],['Toppings',tops.length?tops.map(t=>t.name).join(', '):'None',tops.length?'+₹'+tops.reduce((a,t)=>a+t.price,0):'Free'],['Message',s.msg||'None',''],['Delivery Date',s.date||'Not selected',''],['Total','','₹'+total]];
+  document.getElementById('buildSummary').innerHTML=rows.map((r,i)=>`<div class="bs-row"><span>${r[0]}</span><span style="color:var(--muted);font-size:.8rem;">${r[1]}</span><span>${r[2]}</span></div>`).join('');
+  document.getElementById('buildSummary').dataset.total=total;
+}
+function addCustomCakeToCart(){
+  const total=parseInt(document.getElementById('buildSummary').dataset.total||0);
+  if(!total){toast('Please select cake options first','err');return;}
+  const s=buildSel;
+  const size=s.size!=null?builderOptions.sizes[s.size]:null;
+  const flavour=s.flavour!=null?builderOptions.flavours[s.flavour]:null;
+  const customItem={id:'custom'+Date.now(),name:`Custom Cake (${size?.name||''},${flavour?.name||''})`,category:'cake',price:total,offerPrice:null,emoji:'🎂',photo:'',desc:s.msg||'Custom cake',qty:1,isCustom:true};
+  cart.push(customItem);updateCart();toast('🎂 Custom cake added to cart!','success');goTab('home');
+}
+
+// WISHLIST
+const wishSet=new Set();
+function toggleWish(id,e){e.stopPropagation();const b=document.getElementById('wl'+id);if(wishSet.has(id)){wishSet.delete(id);b.textContent='🤍';b.classList.remove('liked');}else{wishSet.add(id);b.textContent='❤️';b.classList.add('liked');toast('Added to wishlist ❤️');}}
+
+// CART
+let cart=[];
+function addToCart(id){
+  const p=products.find(x=>x.id===id);const ex=cart.find(x=>x.id===id);
+  if(ex)ex.qty++;else cart.push({...p,qty:1});
+  updateCart();toast(`${p.emoji} ${p.name} added!`,'success');
+  const cb=document.querySelector('.npill.cart');cb.style.transform='scale(1.15)';setTimeout(()=>cb.style.transform='',250);
+}
+function chgQty(id,d){const it=cart.find(x=>x.id===id);if(!it)return;it.qty+=d;if(it.qty<=0)cart=cart.filter(x=>x.id!==id);updateCart();}
+function rmCart(id){cart=cart.filter(x=>x.id!==id);updateCart();}
+function getCartTotal(){return cart.reduce((s,i)=>s+(i.offerPrice||i.price)*i.qty,0);}
+function updateCart(){
+  const qty=cart.reduce((s,i)=>s+i.qty,0);document.getElementById('cartBadge').textContent=qty;
+  const subtotal=getCartTotal();
+  const memDisc=getMemberDiscount();
+  const discAmt=memDisc>0?Math.round(subtotal*memDisc/100):0;
+  const deliveryFee=subtotal>=siteSettings.freeDeliveryAbove?0:40;
+  const total=subtotal-discAmt+deliveryFee;
+  const rows=document.getElementById('csTotalRows');
+  rows.innerHTML=`<div class="cs-row"><span>Subtotal</span><span>₹${subtotal}</span></div>`+
+    (discAmt>0?`<div class="cs-row"><span>Member Discount (-${memDisc}%)</span><span style="color:var(--rose);">-₹${discAmt}</span></div>`:'')+
+    `<div class="cs-row"><span>Delivery</span><span>${deliveryFee===0?'FREE':'₹'+deliveryFee}</span></div>`+
+    `<div class="cs-row total"><span>Total</span><span>₹${total}</span></div>`;
+  document.getElementById('csCoin').textContent=`🪙 You'll earn ${Math.floor(subtotal/100)*siteSettings.coinRate} S Coins`;
+  const b=document.getElementById('csBody');
+  if(!cart.length){b.innerHTML='<div class="cs-empty"><div style="font-size:3rem;opacity:.24;">🛒</div><p>Your cart is empty</p></div>';return;}
+  b.innerHTML=cart.map(i=>`<div class="ci"><div class="ci-em">${i.photo?`<img src="${i.photo}" alt="">`:i.emoji}</div><div class="ci-info"><div class="ci-name">${i.name}</div><div class="ci-price">₹${(i.offerPrice||i.price)*i.qty}</div><div class="ci-qty"><button class="qbtn" onclick="chgQty(${JSON.stringify(i.id)},-1)">−</button><span style="font-size:.82rem;font-weight:600;min-width:16px;text-align:center;">${i.qty}</span><button class="qbtn" onclick="chgQty(${JSON.stringify(i.id)},1)">+</button><button class="ci-rm" onclick="rmCart(${JSON.stringify(i.id)})">🗑</button></div></div></div>`).join('');
+}
+function toggleCart(){document.getElementById('cartSb').classList.toggle('open');document.getElementById('cartOv').classList.toggle('open');}
+
+// USER/LOGIN
+let currentUser=null;
+let customers=JSON.parse(localStorage.getItem('scc_customers')||'{}');
+let coinHistory=JSON.parse(localStorage.getItem('scc_coinHist')||'[]');
+function doLogin(){
+  const name=document.getElementById('loginName').value.trim(),phone=document.getElementById('loginPhone').value.trim();
+  if(!name||!phone){toast('Please enter name and phone','err');return;}
+  if(!customers[phone])customers[phone]={name,phone,coins:0,spent:0,orders:0,membership:'none',membershipExpiry:null,lastOrder:null};
+  else customers[phone].name=name;
+  currentUser={...customers[phone]};saveCustomers();closeM('loginModal');
+  document.getElementById('navUserLbl').textContent=name.split(' ')[0];
+  document.getElementById('navLoginBtn').querySelector('span').textContent='✅';
+  updateWallet();toast(`Welcome, ${name.split(' ')[0]}! 🎉`,'success');
+  if((customers[phone].coins||0)>0){document.getElementById('useCoinRow').style.display='block';document.getElementById('coinSaveTxt').textContent=`save ₹${(customers[phone].coins*0.1).toFixed(2)}`;}
+  updateCart();
+}
+function saveCustomers(){localStorage.setItem('scc_customers',JSON.stringify(customers));}
+function updateWallet(){
+  if(!currentUser)return;const c=customers[currentUser.phone];
+  document.getElementById('wBal').textContent=c.coins||0;
+  document.getElementById('wVal').textContent=`Worth ₹${((c.coins||0)*0.1).toFixed(2)}`;
+  document.getElementById('wUser').textContent=`👤 ${c.name} · ${c.phone}`;
+  document.getElementById('navCoins').textContent=`${c.coins||0} S Coins`;
+  const memBadge=document.getElementById('wMemberBadge');
+  if(c.membership&&c.membership!=='none'){const plan=membershipPlans.find(p=>p.id===c.membership);if(plan)memBadge.innerHTML=`<span class="member-badge mb-${c.membership}">${plan.icon} ${plan.name} Member</span>`;}
+  else memBadge.innerHTML='';
+  const hist=coinHistory.filter(h=>h.phone===c.phone).slice(-8).reverse();
+  document.getElementById('coinHistList').innerHTML=hist.length?hist.map(h=>`<div class="chi"><span>${h.note}</span><span class="chi-plus">+${h.coins} 🪙</span></div>`).join(''):'<p style="color:var(--muted);font-size:.72rem;">No transactions yet.</p>';
+}
+
+// REVIEWS
+let allReviews=JSON.parse(localStorage.getItem('scc_reviews')||'[]');
+let selStars=5;
+function setStars(n){selStars=n;document.querySelectorAll('.star-btn').forEach((b,i)=>b.classList.toggle('on',i<n));}
+function submitReview(){
+  const prodId=parseInt(document.getElementById('rvProd').value),text=document.getElementById('rvText').value.trim(),name=document.getElementById('rvName').value.trim()||'Anonymous';
+  if(!text){toast('Please write your review','err');return;}
+  const prod=products.find(p=>p.id===prodId);if(prod&&prod.ratings)prod.ratings.push(selStars);
+  allReviews.unshift({id:Date.now(),productId:prodId,productName:prod?prod.name:'',reviewerName:name,rating:selStars,text,date:new Date().toLocaleDateString('en-IN')});
+  localStorage.setItem('scc_reviews',JSON.stringify(allReviews));
+  closeM('reviewModal');renderHomeReviews();toast('Review submitted! ⭐','gold');
+}
+function renderHomeReviews(){
+  const grid=document.getElementById('homeReviews');
+  const src=allReviews.length>0?allReviews.slice(0,4):[
+    {reviewerName:'Priya Sharma',rating:5,text:"The chocolate cake was absolutely divine! Perfect for my daughter's birthday.",productName:'Dark Chocolate Layer Cake',date:'2 days ago'},
+    {reviewerName:'Rohit Das',rating:5,text:'Best pizza in Malda! Crispy crust, generous toppings. Super quick delivery.',productName:'Pepperoni Stone Bake',date:'1 week ago'},
+    {reviewerName:'Ananya Roy',rating:4,text:'The butter cookies are so fresh! My whole family loves them.',productName:'Butter Shortbread',date:'3 days ago'},
+    {reviewerName:'Suresh Kumar',rating:5,text:'Red velvet cake was perfect. Beautiful presentation, delicious taste!',productName:'Red Velvet Classic',date:'5 days ago'},
+  ];
+  grid.innerHTML=src.map(r=>`<div class="review-card"><div class="rv-head"><div class="rv-avatar">${r.reviewerName.charAt(0).toUpperCase()}</div><div><div class="rv-name">${r.reviewerName}</div><div class="rv-date">${r.date||''}</div></div><div class="rv-stars" style="margin-left:auto;">${starsH(r.rating)}</div></div><div class="rv-text">${r.text}</div>${r.productName?`<div class="rv-product">🎂 ${r.productName}</div>`:''}</div>`).join('');
+}
+function populateRvSel(){document.getElementById('rvProd').innerHTML=products.map(p=>`<option value="${p.id}">${p.emoji} ${p.name}</option>`).join('');}
+
+// TRACK ORDER
+function trackOrder(){
+  const q=document.getElementById('trackIn').value.trim().toLowerCase();
+  if(!q){toast('Enter Order ID or phone','err');return;}
+  const orders=JSON.parse(localStorage.getItem('scc_orders')||'[]');
+  const ord=orders.find(o=>o.id.toLowerCase()===q||o.phone.includes(q));
+  const tl=document.getElementById('trackTl'),steps=document.getElementById('tlSteps');
+  if(!ord){steps.innerHTML='<div style="text-align:center;padding:14px;color:var(--muted);">Order not found.</div>';tl.classList.add('show');return;}
+  const sm={pending:1,confirmed:2,preparing:3,out_for_delivery:4,delivered:5};const cs=sm[ord.status]||1;
+  const STEPS=[{label:'Order Placed',note:`Order ${ord.id} received`},{label:'Payment Confirmed',note:`₹${ord.total} received`},{label:'Being Prepared',note:'Our bakers are on it!'},{label:'Out for Delivery',note:`Heading to ${ord.address||'your address'}`},{label:'Delivered!',note:'Enjoy your order!'}];
+  steps.innerHTML=STEPS.map((s,i)=>`<div class="tl-step"><div class="tl-dot ${i<cs?'done':i===cs?'current':''}">${i<cs?'✓':i+1}</div><div class="tl-label" style="color:${i<=cs?'var(--text)':'var(--muted)'};">${s.label}</div><div class="tl-time">${i<cs?'Completed':i===cs?'In Progress':'Pending'}</div>${i<=cs?`<div class="tl-note">${s.note}</div>`:''}</div>`).join('');
+  tl.classList.add('show');toast('Order found!','success');
+}
+
+// CHECKOUT
+let lastOrder=null;let currentPayMethod='upi';
+function selPayMethod(m){currentPayMethod=m;document.querySelectorAll('.pay-method').forEach(e=>e.classList.remove('sel'));document.getElementById('pm-'+m).classList.add('sel');document.getElementById('upi-section').style.display=m==='upi'?'block':'none';document.getElementById('cod-section').style.display=m==='cod'?'block':'none';}
+function openCheckout(){
+  if(!cart.length){toast('Cart is empty');return;}
+  if(!currentUser){closeM('checkoutModal');openM('loginModal');toast('Please sign in first','err');return;}
+  document.getElementById('ordName').value=currentUser.name||'';document.getElementById('ordPhone').value=currentUser.phone||'';
+  showStep(1);openM('checkoutModal');toggleCart();
+  const subtotal=getCartTotal();
+  const memDisc=getMemberDiscount();
+  const discAmt=memDisc>0?Math.round(subtotal*memDisc/100):0;
+  const deliveryFee=subtotal>=siteSettings.freeDeliveryAbove?0:40;
+  const total=subtotal-discAmt+deliveryFee;
+  document.getElementById('payAmt').textContent='₹'+total;
+  document.getElementById('codAmt').textContent='₹'+total;
+  const summary=`<div style="font-size:.78rem;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Subtotal</span><span>₹${subtotal}</span></div>${discAmt>0?`<div style="display:flex;justify-content:space-between;margin-bottom:4px;color:var(--rose);"><span>Member Discount</span><span>-₹${discAmt}</span></div>`:''}<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Delivery</span><span>${deliveryFee===0?'FREE':'₹'+deliveryFee}</span></div><div style="display:flex;justify-content:space-between;font-weight:700;font-size:.9rem;color:var(--mahogany);padding-top:6px;border-top:1px solid #e8ddd5;"><span>Total</span><span>₹${total}</span></div></div>`;
+  document.getElementById('checkoutSummary').innerHTML=summary;
+  const saved=JSON.parse(localStorage.getItem('scc_payment')||'{}');
+  document.getElementById('payUpiId').textContent=saved.upiId||'UPI ID not set — contact admin';
+  const qrSrc=localStorage.getItem('scc_qr');const wrap=document.getElementById('qrDisplayWrap');
+  if(qrSrc)wrap.innerHTML=`<img src="${qrSrc}" alt="QR">`;else wrap.innerHTML='<div style="font-size:2.8rem;opacity:.22;">📲</div>';
+}
+function showStep(n){[1,2,3].forEach(i=>{document.getElementById('step'+i).classList.toggle('show',i===n);document.getElementById('os'+i).classList.toggle('active',i===n);});}
+function goStep(n){
+  if(n===2){if(!document.getElementById('ordName').value.trim()||!document.getElementById('ordPhone').value.trim()){toast('Fill name and phone','err');return;}showStep(2);}
+  else if(n===3)placeOrder();
+}
+function placeOrder(){
+  const name=document.getElementById('ordName').value.trim(),phone=document.getElementById('ordPhone').value.trim(),addr=document.getElementById('ordAddr').value.trim();
+  const subtotal=getCartTotal();
+  const memDisc=getMemberDiscount();
+  const discAmt=memDisc>0?Math.round(subtotal*memDisc/100):0;
+  const deliveryFee=subtotal>=siteSettings.freeDeliveryAbove?0:40;
+  let total=subtotal-discAmt+deliveryFee;
+  const useC=document.getElementById('useCoin').checked&&currentUser;let coinDisc=0;
+  if(useC){coinDisc=parseFloat(((customers[currentUser.phone].coins||0)*0.1).toFixed(2));total=Math.max(0,total-coinDisc);}
+  const coins=Math.floor(subtotal/100)*siteSettings.coinRate;
+  const oid='ORD'+Date.now().toString().slice(-6);
+  const order={id:oid,name,phone,address:addr,items:[...cart],total:parseFloat(total.toFixed(2)),coins,status:'pending',payment:'pending',paymentMethod:currentPayMethod,time:new Date().toLocaleString('en-IN')};
+  let orders=JSON.parse(localStorage.getItem('scc_orders')||'[]');orders.unshift(order);localStorage.setItem('scc_orders',JSON.stringify(orders));
+  if(!customers[phone])customers[phone]={name,phone,coins:0,spent:0,orders:0,membership:'none',membershipExpiry:null,lastOrder:null};
+  if(useC&&currentUser)customers[phone].coins=Math.max(0,(customers[phone].coins||0)-Math.round(coinDisc/0.1));
+  customers[phone].coins=(customers[phone].coins||0)+coins;
+  customers[phone].spent=(customers[phone].spent||0)+parseFloat(total.toFixed(2));
+  customers[phone].orders=(customers[phone].orders||0)+1;
+  customers[phone].lastOrder=new Date().toLocaleString('en-IN');
+  saveCustomers();if(currentUser){currentUser=customers[phone];updateWallet();}
+  const cutoff=new Date();cutoff.setMonth(cutoff.getMonth()-siteSettings.coinValidity);
+  coinHistory=coinHistory.filter(h=>new Date(h.date)>cutoff);
+  coinHistory.push({phone,coins,note:'Order '+oid,date:new Date().toISOString()});
+  localStorage.setItem('scc_coinHist',JSON.stringify(coinHistory));
+  lastOrder=order;sendSMS(order);
+  document.getElementById('confPhone').textContent=phone;
+  document.getElementById('confCoins').textContent=`🪙 +${coins} S Coins added! Total: ${customers[phone].coins} coins`;
+  document.getElementById('confWaRow').style.display='block';
+  cart=[];updateCart();showStep(3);updateAdmStats();syncOrderToDB(order);
+  // WhatsApp auto-notification
+  setTimeout(()=>openWhatsApp(),500);
+}
+function openWhatsApp(){
+  if(!lastOrder)return;
+  const w=JSON.parse(localStorage.getItem('scc_wa')||'{}');
+  const num=(w.num||'918768927686').replace(/\D/g,'');
+  let tmpl=w.template||'New Order! ID:{ORDER_ID} | {NAME}({PHONE}) | {ITEMS} | ₹{TOTAL} | {ADDRESS}';
+  const items=lastOrder.items.map(i=>i.name+' x'+i.qty).join(', ');
+  const msg=tmpl.replace('{ORDER_ID}',lastOrder.id).replace('{NAME}',lastOrder.name).replace('{PHONE}',lastOrder.phone).replace('{ITEMS}',items).replace('{TOTAL}',lastOrder.total).replace('{ADDRESS}',lastOrder.address||'Not provided');
+  window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg),'_blank');
+}
+async function sendSMS(order){
+  const cfg=JSON.parse(localStorage.getItem('scc_sms')||'{}');if(!cfg.key)return;
+  const tmpl=cfg.template||"Order {ORDER_ID} Sanchita's Ekbarna Malda! Rs.{TOTAL}. +{COINS} S Coins!";
+  const msg=tmpl.replace('{ORDER_ID}',order.id).replace('{TOTAL}',order.total).replace('{COINS}',order.coins);
+  const ph=order.phone.replace(/\D/g,'').replace(/^91/,'');
+  try{await fetch('https://www.fast2sms.com/dev/bulkV2?authorization='+cfg.key+'&route=q&message='+encodeURIComponent(msg)+'&flash=0&numbers='+ph);}catch(e){}
+}
+async function testSMS(){const cfg=JSON.parse(localStorage.getItem('scc_sms')||'{}');if(!cfg.key){toast('Enter API key first','err');return;}await sendSMS({id:'TEST001',phone:'918768927686',total:100,coins:10});toast('Test SMS sent!','success');}
+
+// MODALS
+function openM(id){document.getElementById(id).classList.add('show');}
+function closeM(id){document.getElementById(id).classList.remove('show');}
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',function(e){if(e.target===this)closeM(this.id);}));
+
+// TOAST
+function toast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+(type||'')+' show';clearTimeout(t._t);t._t=setTimeout(()=>t.className='toast',3000);}
+
+// ADMIN
+const ADM_PWD='sanchita@admin2024';
+function openAdminGate(){openM('adminGateModal');setTimeout(()=>document.getElementById('admPass').focus(),100);}
+function chkAdmin(){if(document.getElementById('admPass').value===ADM_PWD){closeM('adminGateModal');document.getElementById('admPass').value='';document.getElementById('adminPanel').classList.add('show');renderAdmProds();updateAdmStats();renderOrders();renderCusts();loadAdminSettings();}else toast('Wrong password','err');}
+function closeAdmin(){document.getElementById('adminPanel').classList.remove('show');}
+function admTab(id,el){document.querySelectorAll('.adm-pane').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.adm-tab').forEach(t=>t.classList.remove('on'));document.getElementById('adm-'+id).classList.add('on');el.classList.add('on');
+  if(id==='prods')renderAdmProds();if(id==='orders')renderOrders();if(id==='customers')renderCusts();
+  if(id==='delivery')renderDeliveryAdmin();if(id==='membership')renderMembershipAdmin();if(id==='builder')renderBuilderAdmin();}
+
+function loadAdminSettings(){
+  const s=siteSettings;
+  const setVal=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v||'';};
+  setVal('se-s1tag',s.heroTag);setVal('se-s1h1',s.heroH1);setVal('se-s1p',s.heroP);setVal('se-addr',s.address);setVal('se-phone',s.phone);setVal('se-hours',s.hours);
+  setVal('se-offerName',s.festName);setVal('se-offerDisc',s.festDisc);setVal('se-offerDesc',s.festDesc);
+  setVal('se-coinRate',s.coinRate);setVal('se-coinValidity',s.coinValidity);
+  setVal('freeDeliveryThreshold',s.freeDeliveryAbove);setVal('minOrderValue',s.minOrder);
+  if(s.ticker){setVal('tk1',s.ticker[0]);setVal('tk2',s.ticker[1]);setVal('tk3',s.ticker[2]);setVal('tk4',s.ticker[3]);}
+  const saved=JSON.parse(localStorage.getItem('scc_payment')||'{}');
+  setVal('upiId',saved.upiId);setVal('upiName',saved.upiName);setVal('rzpKey',saved.rzpKey||'');
+}
+function saveHeroContent(){
+  siteSettings.heroTag=document.getElementById('se-s1tag').value;
+  siteSettings.heroH1=document.getElementById('se-s1h1').value;
+  siteSettings.heroP=document.getElementById('se-s1p').value;
+  saveSettings();toast('Hero content saved!','success');
+}
+function saveTicker(){
+  siteSettings.ticker=[document.getElementById('tk1').value,document.getElementById('tk2').value,document.getElementById('tk3').value,document.getElementById('tk4').value];
+  const tt=document.getElementById('t1');if(tt)tt.textContent=siteSettings.ticker[0];
+  const tt2=document.getElementById('t2');if(tt2)tt2.textContent=siteSettings.ticker[1];
+  const tt3=document.getElementById('t3');if(tt3)tt3.textContent=siteSettings.ticker[2];
+  const tt4=document.getElementById('t4');if(tt4)tt4.textContent=siteSettings.ticker[3];
+  saveSettings();toast('Ticker saved!','success');
+}
+function saveSiteInfo(){
+  siteSettings.address=document.getElementById('se-addr').value;
+  siteSettings.phone=document.getElementById('se-phone').value;
+  siteSettings.hours=document.getElementById('se-hours').value;
+  siteSettings.mapUrl=document.getElementById('se-mapurl').value;
+  saveSettings();applySettings();toast('Site info saved!','success');
+}
+function saveFestBanner(){
+  siteSettings.festName=document.getElementById('se-offerName').value;
+  siteSettings.festDisc=parseInt(document.getElementById('se-offerDisc').value)||25;
+  siteSettings.festDesc=document.getElementById('se-offerDesc').value;
+  saveSettings();applySettings();toast('Festival banner updated!','success');
+}
+function saveCoinSettings(){
+  siteSettings.coinRate=parseInt(document.getElementById('se-coinRate').value)||10;
+  siteSettings.coinValidity=parseInt(document.getElementById('se-coinValidity').value)||3;
+  saveSettings();applySettings();toast('Coin settings saved!','success');
+}
+function saveSettings(){localStorage.setItem('scc_settings',JSON.stringify(siteSettings));}
+
+// DELIVERY ADMIN
+function renderDeliveryAdmin(){
+  const c=document.getElementById('deliveryZonesAdmin');
+  c.innerHTML=deliveryZones.map((z,i)=>`<div style="background:rgba(255,255,255,0.038);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:12px;margin-bottom:9px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:8px;align-items:center;">
+    <input type="text" value="${z.name}" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:7px;color:#fff;font-family:'Outfit',sans-serif;font-size:.78rem;" onchange="deliveryZones[${i}].name=this.value">
+    <input type="text" value="${z.icon}" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:7px;color:#fff;font-family:'Outfit',sans-serif;font-size:.78rem;" onchange="deliveryZones[${i}].icon=this.value">
+    <input type="text" value="${z.time}" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:7px;color:#fff;font-family:'Outfit',sans-serif;font-size:.78rem;" onchange="deliveryZones[${i}].time=this.value">
+    <input type="number" value="${z.fee}" placeholder="Fee (0=free,-1=request)" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:7px;color:#fff;font-family:'Outfit',sans-serif;font-size:.78rem;" onchange="deliveryZones[${i}].fee=parseInt(this.value)">
+    <button class="del-btn" onclick="deliveryZones.splice(${i},1);renderDeliveryAdmin()">✕</button>
+  </div>`).join('');
+}
+function addDeliveryZone(){deliveryZones.push({name:'New Zone',icon:'📍',time:'? mins',fee:50});renderDeliveryAdmin();}
+function saveDeliveryZones(){localStorage.setItem('scc_zones',JSON.stringify(deliveryZones));renderDeliveryZonesDisplay();toast('Delivery zones saved!','success');}
+function saveDeliverySettings(){siteSettings.freeDeliveryAbove=parseInt(document.getElementById('freeDeliveryThreshold').value)||500;siteSettings.minOrder=parseInt(document.getElementById('minOrderValue').value)||0;saveSettings();toast('Delivery settings saved!','success');}
+
+// MEMBERSHIP ADMIN
+function renderMembershipAdmin(){
+  const c=document.getElementById('membershipAdmin');
+  c.innerHTML=membershipPlans.map((p,idx)=>`<div style="background:rgba(255,255,255,0.038);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:16px;margin-bottom:12px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
+      <div class="aff"><label>Plan Name</label><input type="text" value="${p.name}" onchange="membershipPlans[${idx}].name=this.value"></div>
+      <div class="aff"><label>Price (₹)</label><input type="number" value="${p.price}" onchange="membershipPlans[${idx}].price=parseInt(this.value)"></div>
+      <div class="aff"><label>Duration (months)</label><input type="number" value="${p.duration}" onchange="membershipPlans[${idx}].duration=parseInt(this.value)"></div>
+      <div class="aff"><label>Discount (%)</label><input type="number" value="${p.discountPct}" onchange="membershipPlans[${idx}].discountPct=parseInt(this.value)"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+      <div class="aff"><label>Bonus S Coins on Join</label><input type="number" value="${p.bonusCoins}" onchange="membershipPlans[${idx}].bonusCoins=parseInt(this.value)"></div>
+      <div class="aff"><label>Icon Emoji</label><input type="text" value="${p.icon}" onchange="membershipPlans[${idx}].icon=this.value"></div>
+    </div>
+    <div class="aff" style="margin-bottom:0;"><label>Benefits (one per line)</label><textarea rows="4" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:7px;padding:8px;color:#fff;font-family:'Outfit',sans-serif;font-size:.78rem;resize:vertical;width:100%;" onchange="membershipPlans[${idx}].features=this.value.split('\\n').filter(Boolean)">${p.features.join('\n')}</textarea></div>
+  </div>`).join('');
+  // Current members
+  const custs=Object.values(customers).filter(c=>c.membership&&c.membership!=='none');
+  document.getElementById('membersBody').innerHTML=custs.length?custs.map(c=>`<tr><td>${c.name}</td><td style="font-family:monospace;">${c.phone}</td><td>${c.membership}</td><td>${c.lastOrder||'-'}</td><td>${c.membershipExpiry||'-'}</td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.2);padding:22px;">No members yet.</td></tr>';
+}
+function saveMembershipPlans(){localStorage.setItem('scc_plans',JSON.stringify(membershipPlans));toast('Membership plans saved!','success');renderMembership();}
+
+// BUILDER ADMIN
+function renderBuilderAdmin(){
+  const c=document.getElementById('builderAdmin');
+  const renderSection=(label,items,key)=>`<div style="margin-bottom:16px;"><div style="color:var(--gold);font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">${label}</div>${items.map((item,i)=>`<div style="display:flex;gap:8px;margin-bottom:6px;align-items:center;"><input type="text" value="${item.icon}" style="width:48px;background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:6px;color:#fff;font-family:'Outfit',sans-serif;font-size:.8rem;" onchange="builderOptions.${key}[${i}].icon=this.value"><input type="text" value="${item.name}" style="flex:1;background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:6px;color:#fff;font-family:'Outfit',sans-serif;font-size:.8rem;" onchange="builderOptions.${key}[${i}].name=this.value"><input type="number" value="${item.price}" placeholder="Extra ₹" style="width:80px;background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:6px;color:#fff;font-family:'Outfit',sans-serif;font-size:.8rem;" onchange="builderOptions.${key}[${i}].price=parseInt(this.value)||0"><button class="del-btn" onclick="builderOptions.${key}.splice(${i},1);renderBuilderAdmin()">✕</button></div>`).join('')}<button class="abtn grey" style="font-size:.7rem;padding:5px 10px;" onclick="builderOptions.${key}.push({name:'New Option',icon:'✨',price:0});renderBuilderAdmin()">+ Add</button></div>`;
+  c.innerHTML=renderSection('Sizes',builderOptions.sizes,'sizes')+renderSection('Flavours',builderOptions.flavours,'flavours')+renderSection('Icings',builderOptions.icings,'icings')+renderSection('Toppings',builderOptions.toppings,'toppings');
+}
+function saveBuilderOptions(){localStorage.setItem('scc_builder',JSON.stringify(builderOptions));toast('Builder options saved!','success');initBuilder();}
+
+// PRODUCT ADMIN
+function prevNewPhoto(inp){const f=inp.files[0];if(!f)return;const rd=new FileReader();rd.onload=e=>{document.getElementById('newPhotoImg').src=e.target.result;document.getElementById('newPhotoPreview').style.display='block';window._newPhoto=e.target.result;};rd.readAsDataURL(f);}
+function addProd(){
+  const name=document.getElementById('pN').value.trim(),price=parseFloat(document.getElementById('pP').value);
+  if(!name||!price){toast('Fill name and price','err');return;}
+  const photo=document.getElementById('pPhoto').value.trim()||window._newPhoto||'';
+  const p={id:Date.now(),name,category:document.getElementById('pC').value,price,offerPrice:parseFloat(document.getElementById('pOP').value)||null,emoji:document.getElementById('pE').value||'🎂',photo,desc:document.getElementById('pD').value,stock:parseInt(document.getElementById('pS').value)||50,ratings:[]};
+  products.unshift(p);renderAdmProds();updateAdmStats();populateRvSel();
+  ['pN','pP','pOP','pE','pD','pS','pPhoto'].forEach(i=>document.getElementById(i).value='');
+  window._newPhoto='';document.getElementById('newPhotoPreview').style.display='none';
+  toast(p.emoji+' '+p.name+' added!','success');syncProdToDB(p);
+}
+function delProd(id){products=products.filter(p=>p.id!==id);renderAdmProds();updateAdmStats();toast('Product deleted');}
+function renderAdmProds(){
+  document.getElementById('prodCnt').textContent='('+products.length+')';
+  document.getElementById('admPGrid').innerHTML=products.map(p=>`<div class="apc">${p.photo?`<img class="apc-img" src="${p.photo}" alt="${p.name}" onerror="this.style.display='none'">`:`<span class="apc-em">${p.emoji}</span>`}<h4>${p.name}</h4><p>₹${p.offerPrice||p.price} · ${p.category}</p><div class="apc-acts"><button class="del-btn" onclick="delProd(${p.id})">Delete</button><button class="photo-btn" onclick="editPhoto(${p.id})">📷 Photo</button></div></div>`).join('');
+}
+function editPhoto(id){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=ev=>{const f=ev.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=re=>{const p=products.find(x=>x.id===id);if(p){p.photo=re.target.result;renderAdmProds();toast('Photo updated!','success');}};rd.readAsDataURL(f);};inp.click();}
+function updateAdmStats(){const ords=JSON.parse(localStorage.getItem('scc_orders')||'[]');document.getElementById('st-prod').textContent=products.length;document.getElementById('st-ord').textContent=ords.length;document.getElementById('st-rev').textContent='₹'+ords.reduce((s,o)=>s+(o.total||0),0).toFixed(0);document.getElementById('st-coin').textContent=ords.reduce((s,o)=>s+(o.coins||0),0);document.getElementById('st-cust').textContent=Object.keys(customers).length;document.getElementById('st-mem').textContent=Object.values(customers).filter(c=>c.membership&&c.membership!=='none').length;}
+function saveOffer(){const name=document.getElementById('oN').value.trim(),disc=document.getElementById('oD').value,desc=document.getElementById('oDesc').value;if(!name||!disc){toast('Fill name and discount','err');return;}document.getElementById('offerList').innerHTML+='<div style="background:rgba(212,160,23,0.05);border:1px solid rgba(212,160,23,0.14);border-radius:7px;padding:9px;margin-bottom:7px;"><strong style="color:#fff;">'+name+'</strong> — '+disc+'%<br><span style="color:rgba(255,255,255,0.3);font-size:.72rem;">'+desc+'</span></div>';document.getElementById('festH').innerHTML=name+' — <em>'+disc+'% Off</em>';document.getElementById('festP').textContent=desc;toast(name+' activated!','success');['oN','oD','oDesc','oSD','oED'].forEach(i=>document.getElementById(i).value='');}
+function savePay(){const u=document.getElementById('upiId').value.trim(),n=document.getElementById('upiName').value.trim(),rk=document.getElementById('rzpKey').value.trim();localStorage.setItem('scc_payment',JSON.stringify({upiId:u,upiName:n,rzpKey:rk}));siteSettings.upiId=u;saveSettings();toast('Payment saved!','success');}
+function prevQR(inp){const f=inp.files[0];if(!f)return;const rd=new FileReader();rd.onload=e=>{window._qrData=e.target.result;document.getElementById('qrPrev').innerHTML='<img src="'+e.target.result+'">';};rd.readAsDataURL(f);}
+function saveQR(){if(!window._qrData){toast('No QR selected','err');return;}localStorage.setItem('scc_qr',window._qrData);toast('QR saved! Shown at checkout.','success');}
+function markPay(){const id=document.getElementById('markOrdId').value.trim(),st=document.getElementById('markSt').value;if(!id){toast('Enter order ID','err');return;}let ords=JSON.parse(localStorage.getItem('scc_orders')||'[]');const o=ords.find(x=>x.id===id);if(!o){toast('Order not found','err');return;}o.payment=st;if(st==='confirmed')o.status='confirmed';localStorage.setItem('scc_orders',JSON.stringify(ords));renderOrders();toast('Order '+id+' updated','success');}
+function renderOrders(){const ords=JSON.parse(localStorage.getItem('scc_orders')||'[]');const tb=document.getElementById('ordsBody');if(!ords.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:rgba(255,255,255,0.16);padding:22px;">No orders yet.</td></tr>';return;}tb.innerHTML=ords.map(o=>`<tr><td style="font-family:monospace;color:var(--gold);font-size:.68rem;">${o.id}</td><td>${o.name}</td><td style="font-family:monospace;">${o.phone}</td><td style="color:var(--gold-light);font-weight:600;">₹${o.total}</td><td>🪙${o.coins}</td><td><span class="sb ${o.payment==='confirmed'?'sb-confirmed':o.payment==='failed'?'sb-failed':'sb-pending'}">${o.payment==='confirmed'?'✅ Paid':o.payment==='failed'?'❌ Failed':'⏳ Pending'}</span></td><td style="color:rgba(255,255,255,0.22);font-size:.68rem;">${o.time||'-'}</td></tr>`).join('');}
+function renderCusts(){const custs=Object.values(customers);const tb=document.getElementById('custBody');if(!custs.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:rgba(255,255,255,0.16);padding:22px;">No customers yet.</td></tr>';return;}tb.innerHTML=custs.sort((a,b)=>(b.spent||0)-(a.spent||0)).map(c=>`<tr><td>${c.name}</td><td style="font-family:monospace;color:rgba(212,160,23,0.7);">${c.phone}</td><td>${c.membership&&c.membership!=='none'?c.membership:'—'}</td><td style="color:var(--gold-light);">🪙${c.coins||0}</td><td>${c.orders||0}</td><td>₹${(c.spent||0).toFixed(0)}</td></tr>`).join('');}
+function exportCSV(){const custs=Object.values(customers);if(!custs.length){toast('No customers','err');return;}const rows=[['Name','Phone','Membership','S Coins','Orders','Total Spent','Last Order'],...custs.map(c=>[c.name,c.phone,c.membership||'none',c.coins||0,c.orders||0,(c.spent||0).toFixed(2),c.lastOrder||''])];const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(rows.map(r=>r.join(',')).join('\n'));a.download='sanchita_customers.csv';a.click();toast('CSV exported!','success');}
+function saveWA(){localStorage.setItem('scc_wa',JSON.stringify({num:document.getElementById('waBizNum').value.trim(),template:document.getElementById('waTemplate').value.trim()}));toast('WhatsApp settings saved!','success');}
+function saveSMS(){localStorage.setItem('scc_sms',JSON.stringify({key:document.getElementById('smsKey').value.trim(),template:document.getElementById('smsTpl').value.trim(),sid:document.getElementById('smsSid').value.trim()}));toast('SMS settings saved!','success');}
+function saveDB(){localStorage.setItem('scc_db',JSON.stringify({url:document.getElementById('dbUrl').value.trim(),key:document.getElementById('dbKey').value.trim()}));toast('DB saved!','success');}
+async function testDB(){const cfg=JSON.parse(localStorage.getItem('scc_db')||'{}');if(!cfg.url){toast('Enter URL first','err');return;}try{const r=await fetch(cfg.url+'?action=products&key='+cfg.key);const d=await r.json();document.getElementById('dbRes').innerHTML='<span style="color:#4ade80;">✅ Connected! '+(Array.isArray(d)?d.length+' products.':'OK')+'</span>';toast('Connected!','success');}catch(e){document.getElementById('dbRes').innerHTML='<span style="color:var(--rose);">❌ Failed.</span>';toast('Failed','err');}}
+async function syncOrderToDB(o){const cfg=JSON.parse(localStorage.getItem('scc_db')||'{}');if(!cfg.url)return;try{await fetch(cfg.url+'?action=place_order&key='+cfg.key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:o.name,phone:o.phone,address:o.address,items:o.items,total:o.total,coins:o.coins,id:o.id})});}catch(e){}}
+async function syncProdToDB(p){const cfg=JSON.parse(localStorage.getItem('scc_db')||'{}');if(!cfg.url)return;try{await fetch(cfg.url+'?action=add_product&key='+cfg.key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:p.name,category:p.category,price:p.price,offer_price:p.offerPrice||0,emoji:p.emoji,photo_url:p.photo,desc:p.desc,stock:p.stock})});}catch(e){}}
+
+// INIT
+renderHomeReviews();populateRvSel();renderDeliveryZonesDisplay();
+const sDB=localStorage.getItem('scc_db');if(sDB){try{const c=JSON.parse(sDB);document.getElementById('dbUrl').value=c.url||'';document.getElementById('dbKey').value=c.key||'';}catch(e){}}
+const sQR=localStorage.getItem('scc_qr');if(sQR){window._qrData=sQR;try{document.getElementById('qrPrev').innerHTML='<img src="'+sQR+'">';}catch(e){}}
+(async()=>{const cfg=JSON.parse(localStorage.getItem('scc_db')||'{}');if(!cfg.url)return;try{const r=await fetch(cfg.url+'?action=products&key='+cfg.key);const d=await r.json();if(Array.isArray(d)&&d.length){products=d.map(p=>({id:p.id,name:p.name,category:p.category,price:parseFloat(p.price),offerPrice:parseFloat(p.offer_price)||null,emoji:p.emoji,photo:p.photo_url||'',desc:p.description,stock:p.stock,ratings:[]}));populateRvSel();}}catch(e){}})();
+</script>
+
+<!-- ═══════ TASA CHATBOT ═══════ -->
+<style>
+#tasa-btn{position:fixed;bottom:28px;right:28px;z-index:8000;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#d4a017,#f0c040);border:none;cursor:none;box-shadow:0 6px 24px rgba(212,160,23,0.5);display:flex;align-items:center;justify-content:center;font-size:1.7rem;transition:.3s;animation:tasaPulse 2.5s ease-in-out infinite;overflow:hidden;padding:0;}
+@keyframes tasaPulse{0%,100%{box-shadow:0 6px 24px rgba(212,160,23,0.5);}50%{box-shadow:0 6px 36px rgba(212,160,23,0.85),0 0 0 8px rgba(212,160,23,0.1);}}
+#tasa-btn:hover{transform:scale(1.1);}
+#tasa-btn .tasa-notif{position:absolute;top:-4px;right:-4px;background:var(--rose);color:#fff;border-radius:50%;width:18px;height:18px;font-size:.62rem;font-weight:700;display:flex;align-items:center;justify-content:center;}
+#tasa-window{position:fixed;bottom:102px;right:28px;z-index:8001;width:360px;height:520px;background:#fff;border-radius:22px;box-shadow:0 20px 60px rgba(0,0,0,0.2);display:none;flex-direction:column;overflow:hidden;border:1px solid rgba(212,160,23,0.2);animation:tasaSlideIn .3s cubic-bezier(.34,1.56,.64,1);}
+@keyframes tasaSlideIn{from{transform:scale(.85) translateY(20px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
+#tasa-window.open{display:flex;}
+.tasa-head{background:linear-gradient(135deg,#0d0a07,#2a1208);padding:16px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.tasa-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#b8860b);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;border:2px solid rgba(212,160,23,0.4);position:relative;}
+.tasa-avatar::after{content:'';position:absolute;bottom:2px;right:2px;width:10px;height:10px;background:#4ade80;border-radius:50%;border:2px solid #0d0a07;}
+.tasa-info h4{color:#fff;font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;}
+.tasa-info p{color:rgba(255,255,255,0.45);font-size:.72rem;}
+.tasa-close{background:rgba(255,255,255,0.08);border:none;color:rgba(255,255,255,0.7);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:none;font-size:.9rem;margin-left:auto;transition:.2s;}

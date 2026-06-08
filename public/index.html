@@ -1782,4 +1782,126 @@ function saveCoinSettings(){
 }
 function saveSettings(){localStorage.setItem('scc_settings',JSON.stringify(siteSettings));}
 
-  
+  // DELIVERY
+  if(/(delivery|deliver|shipping|home delivery|time|how long|kitakhin)/i.test(q)){
+    return {text:"🚚 **Delivery Information:**\n\n📍 **Ekbarna (Local)** — 30 mins · FREE\n🏙️ **Malda Town** — 45 mins · ₹30\n🌆 **English Bazar** — 50 mins · ₹40\n🏘️ **Old Malda** — 55 mins · ₹40\n🛣️ **Gajol / Habibpur** — 75 mins · ₹60\n\n🆓 **Free delivery** on orders above ₹500!\n\nFor other areas, please call us: **+91 87689 27686**"};
+  }
+
+  // S COINS
+  if(/(coin|s coin|reward|points|loyalty|cashback)/i.test(q)){
+    return {text:"🪙 **S Coin Reward System:**\n\n✅ Earn **10 S Coins** for every ₹100 you spend\n💰 Each coin is worth **₹0.10**\n⏰ Coins valid for **3 months**\n♾️ **No limit** on how many you can earn!\n\n**How to use:** Sign in with your name & phone number, shop, and coins are added automatically. Redeem at checkout for discounts!\n\nWant to sign in and start earning? 😊"};
+  }
+
+  // MEMBERSHIP
+  if(/(member|membership|vip|plan|silver|gold|platinum|subscribe)/i.test(q)){
+    return {text:"👑 **Membership Plans:**\n\n🥈 **Silver** — ₹199/3 months\n• 5% off all orders\n• 50 bonus S Coins\n• 2 free deliveries/month\n\n🥇 **Gold** — ₹399/6 months\n• 10% off all orders\n• 150 bonus S Coins\n• 5 free deliveries/month\n• Birthday special offer\n\n💎 **Platinum** — ₹799/year\n• 18% off all orders\n• 400 bonus S Coins\n• Unlimited free deliveries\n• FREE birthday cake!\n\nTap the **Membership** tab to join! 👑"};
+  }
+
+  // CUSTOM CAKE
+  if(/(custom|design|build|personaliz|message on cake|name on|special cake)/i.test(q)){
+    return {text:"🎨 **Custom Cake Builder:**\n\nYes! We make fully custom cakes! You can choose:\n\n1️⃣ **Size** — Half Kg to 3 Kg\n2️⃣ **Flavour** — Chocolate, Vanilla, Red Velvet, Mango & more\n3️⃣ **Icing** — Buttercream, Fondant, Ganache\n4️⃣ **Toppings** — Berries, Macarons, Flowers & more\n5️⃣ **Message** — Your personal text\n6️⃣ **Delivery Date** — Schedule it!\n\nTap the **🎨 Custom Cake** tab in the menu to start building! 😍"};
+  }
+
+  // HOW TO ORDER
+  if(/(order|how to|buy|purchase|kemon|kivabe|process)/i.test(q)){
+    return {text:"🛍️ **How to Order:**\n\n1. **Browse** — Tap any category tab (Cakes, Pizza, Cookies, etc.)\n2. **Add to Cart** — Click 'Add to Cart' on any item\n3. **Sign In** — Enter your name & phone\n4. **Checkout** — Fill delivery address\n5. **Pay** — UPI/QR or Cash on Delivery\n6. **Confirm** — We'll call to confirm your order!\n\nNeed help? Call us: **+91 87689 27686** or WhatsApp us! 💬"};
+  }
+
+  // PAYMENT
+  if(/(pay|payment|upi|razorpay|cash|cod|online|card)/i.test(q)){
+    return {text:"💳 **Payment Options:**\n\n📲 **UPI / QR Code** — Scan and pay instantly (PhonePe, GPay, Paytm)\n💵 **Cash on Delivery** — Pay when your order arrives\n\n**UPI ID:** Available at checkout\n\nSimple, safe & secure! 🔒"};
+  }
+
+  // CONTACT
+  if(/(contact|call|phone|number|whatsapp|reach|address|location|where)/i.test(q)){
+    return {text:"📞 **Contact Us:**\n\n📍 **Address:** Ekbarna, Malda, West Bengal\n📞 **Phone:** +91 87689 27686\n💬 **WhatsApp:** +91 87689 27686\n🕐 **Timings:** 8 AM – 9 PM, All Days\n\nFeel free to call or WhatsApp us anytime! We're happy to help 😊"};
+  }
+
+  // OPENING HOURS
+  if(/(open|timing|hours|close|when|time)/i.test(q)){
+    return {text:"🕐 **Opening Hours:**\n\nWe're open **every day** from **8:00 AM to 9:00 PM**\n\n📍 Ekbarna, Malda, West Bengal\n📞 +91 87689 27686\n\nYou can also order online 24/7 and we'll confirm in the morning! 😊"};
+  }
+
+  // COMPLAINT / ISSUE
+  if(/(complaint|issue|problem|wrong|bad|damage|not fresh|refund|return|broken)/i.test(q)){
+    return {text:"😔 I'm so sorry to hear that! We always strive for the best quality.\n\n**Please contact us immediately:**\n📞 **Call:** +91 87689 27686\n💬 **WhatsApp:** +91 87689 27686\n\nWe promise to:\n• Investigate your concern right away\n• Offer a replacement or refund if needed\n• Make it right for you!\n\nYour satisfaction is our top priority. 🙏"};
+  }
+
+  // FRESH / INGREDIENTS
+  if(/(fresh|ingredient|quality|safe|allerg|gluten|vegan|eggless)/i.test(q)){
+    return {text:"🌿 **Quality & Freshness:**\n\n✅ All items are **freshly baked daily**\n✅ We use **premium Belgian chocolate**\n✅ **Farm-fresh** cream and fruits\n✅ No artificial preservatives\n\n**Eggless options** available — just mention when ordering!\n**Allergies?** Please inform us at: +91 87689 27686\n\nYour health and satisfaction matter to us! 💚"};
+  }
+
+  // TRACK ORDER
+  if(/(track|where is my|status|order status)/i.test(q)){
+    return {text:"📦 **Track Your Order:**\n\nYou can track your order on the **Home page** — scroll down to find the 'Track Order' section!\n\nEnter your **Order ID** or **Phone Number** to see the live status:\n• ✅ Order Placed\n• 💳 Payment Confirmed\n• 👩‍🍳 Being Prepared\n• 🛵 Out for Delivery\n• 🎉 Delivered!\n\nNeed help? Call: **+91 87689 27686** 😊"};
+  }
+
+  // MINIMUM ORDER
+  if(/(minimum|min order|minimum order)/i.test(q)){
+    return {text:"📋 **Order Info:**\n\n• No minimum order amount!\n• Cookies: Minimum 12 pieces per box\n• Custom cakes: Minimum Half Kg\n• Free delivery on orders above ₹500\n\nOrder as much or as little as you like! 😊"};
+  }
+
+  // ABOUT US
+  if(/(about|who are you|sanchita|bakery|story)/i.test(q)){
+    return {text:"🎂 **About Sanchita's Cake Corner:**\n\nWe are a passionate artisan bakery located in **Ekbarna, Malda, West Bengal**.\n\nFounded with love, we specialize in:\n• 🎂 Custom & celebration cakes\n• 🍕 Stone-baked pizzas\n• 🍪 Handcrafted cookies\n• 🍫 Premium Belgian chocolates\n\nEvery item is made fresh with the finest ingredients. Our mission is to make every celebration extra special! ✨\n\n📞 +91 87689 27686"};
+  }
+
+  // SHOW ALL PRODUCTS
+  if(/(all product|everything|what do you|menu|full menu)/i.test(q)){
+    return {text:`🛍️ **Our Full Menu:**\n\n🎂 **Cakes** — ${prods.filter(p=>p.category==='cake').length} items\n🍕 **Pizza** — ${prods.filter(p=>p.category==='pizza').length} items\n🍪 **Cookies** — ${prods.filter(p=>p.category==='cookie').length} items\n🍫 **Chocolates** — ${prods.filter(p=>p.category==='chocolate').length} items\n🎨 **Custom Cakes** — Build your own!\n\nTap any tab in the menu above to browse! Or ask me about a specific item 😊`};
+  }
+
+  // DEFAULT
+  const defaultReplies=[
+    "I'm not sure I understood that perfectly! 😊 Could you rephrase?\n\nI can help with:\n• **Products** — cakes, pizza, cookies, chocolates\n• **Prices & availability**\n• **Delivery info**\n• **Ordering help**\n• **S Coins & Membership**\n• **Complaints or issues**",
+    "Hmm, let me think... 🤔 I might not have that info right now!\n\nFor detailed queries, please contact us:\n📞 **+91 87689 27686**\n💬 **WhatsApp us** anytime!\n\nOr try asking about our cakes, pizza, delivery, or membership! 😊",
+    "Great question! 😊 For the best answer, please call us at **+91 87689 27686** or WhatsApp.\n\nMeanwhile, I can help you with products, prices, delivery, S Coins, and more!"
+  ];
+  return {text:defaultReplies[Math.floor(Math.random()*defaultReplies.length)]};
+}
+
+function tasaAddMsg(role,text,productsList){
+  const c=document.getElementById('tasaMsgs');
+  const div=document.createElement('div');
+  div.className=`msg ${role}`;
+  const now=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+
+  // Format text - bold
+  const formatted=text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+  div.innerHTML=`<div class="msg-bubble">${formatted}</div><div class="msg-time">${now}</div>`;
+
+  // Add product cards if any
+  if(productsList&&productsList.length>0){
+    productsList.forEach(p=>{
+      const card=document.createElement('div');
+      card.className='msg bot';
+      card.innerHTML=`<div class="tasa-prod-card"><div class="tpc-name">${p.emoji} ${p.name}</div><div class="tpc-price">₹${p.offerPrice||p.price}${p.offerPrice?` <span style="text-decoration:line-through;color:#bbb;font-size:.75rem;">₹${p.price}</span>`:''}</div><div class="tpc-desc">${p.desc}</div><button onclick="addToCart(${p.id});toast('${p.emoji} Added to cart!','success')">🛒 Add to Cart</button></div>`;
+      c.appendChild(card);
+    });
+  }
+
+  c.appendChild(div);
+  c.scrollTop=c.scrollHeight;
+  tasaHistory.push({role,text});
+}
+
+function showTyping(){
+  const c=document.getElementById('tasaMsgs');
+  const t=document.createElement('div');
+  t.className='msg bot';t.id='tasaTyping';
+  t.innerHTML='<div class="tasa-typing"><span></span><span></span><span></span></div>';
+  c.appendChild(t);c.scrollTop=c.scrollHeight;
+}
+function removeTyping(){const t=document.getElementById('tasaTyping');if(t)t.remove();}
+
+// Show welcome notification after 3s
+setTimeout(()=>{
+  const notif = document.getElementById('tasaNotif');
+  if(notif && !tasaOpen){
+    notif.style.display='flex';
+    notif.textContent='Hi!';
+  }
+},3000);
+</script>
+</body></html>

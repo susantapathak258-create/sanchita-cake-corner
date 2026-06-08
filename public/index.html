@@ -1127,3 +1127,431 @@ let builderOptions = JSON.parse(localStorage.getItem('scc_builder') || JSON.stri
   icings:[{name:'Buttercream',icon:'🧁',price:0},{name:'Fondant',icon:'✨',price:100},{name:'Whipped Cream',icon:'🤍',price:0},{name:'Ganache',icon:'🍫',price:80}],
   toppings:[{name:'Fresh Berries',icon:'🍓',price:60},{name:'Chocolate Shavings',icon:'🍫',price:40},{name:'Sprinkles',icon:'🎉',price:20},{name:'Edible Flowers',icon:'🌸',price:80},{name:'Macarons',icon:'🌈',price:120},{name:'None',icon:'✖️',price:0}]
 }));
+// PRODUCTS
+let products=[
+  {id:1,name:"Dark Chocolate Layer Cake",category:"cake",price:750,offerPrice:520,emoji:"🎂",photo:"",desc:"3-layer Belgian dark chocolate with ganache frosting",stock:12,ratings:[5,4,5,5]},
+  {id:2,name:"Strawberry Dream Cake",category:"cake",price:620,offerPrice:460,emoji:"🍓",photo:"",desc:"Fresh strawberries with whipped cream, light sponge",stock:8,ratings:[5,4,5]},
+  {id:3,name:"Red Velvet Classic",category:"cake",price:820,offerPrice:640,emoji:"❤️",photo:"",desc:"Classic red velvet with cream cheese frosting",stock:6,ratings:[5,5,4,5]},
+  {id:4,name:"Mango Delight Cake",category:"cake",price:580,offerPrice:440,emoji:"🥭",photo:"",desc:"Alphonso mango cream with vanilla sponge",stock:10,ratings:[4,5,4]},
+  {id:5,name:"Pepperoni Stone Bake",category:"pizza",price:420,offerPrice:350,emoji:"🍕",photo:"",desc:"Premium pepperoni, mozzarella, tomato base",stock:25,ratings:[5,4,5]},
+  {id:6,name:"Grilled Chicken Pizza",category:"pizza",price:460,offerPrice:390,emoji:"🐔",photo:"",desc:"Tender grilled chicken, bell peppers, onion",stock:20,ratings:[4,5,5]},
+  {id:7,name:"Four Cheese Pizza",category:"pizza",price:490,offerPrice:420,emoji:"🧀",photo:"",desc:"Mozzarella, cheddar, gouda, parmesan blend",stock:18,ratings:[5,4]},
+  {id:8,name:"Choco Chip Cookies",category:"cookie",price:200,offerPrice:160,emoji:"🍪",photo:"",desc:"Crispy edges, gooey centre — 12 pieces per box",stock:60,ratings:[5,5,4,5,5]},
+  {id:9,name:"Butter Shortbread",category:"cookie",price:180,offerPrice:145,emoji:"🥠",photo:"",desc:"Classic butter cookies, set of 12",stock:55,ratings:[4,4,5]},
+  {id:10,name:"Dark Chocolate Truffle Box",category:"chocolate",price:450,offerPrice:380,emoji:"🍫",photo:"",desc:"12 handmade dark chocolate truffles in gift box",stock:20,ratings:[5,5,5]},
+  {id:11,name:"Belgian Milk Chocolate Bar",category:"chocolate",price:180,offerPrice:150,emoji:"🍫",photo:"",desc:"Premium Belgian milk chocolate 100g bar",stock:35,ratings:[4,5,4]},
+  {id:12,name:"Assorted Pralines Box",category:"chocolate",price:550,offerPrice:460,emoji:"🎁",photo:"",desc:"16 assorted pralines — perfect gift",stock:15,ratings:[5,5,4,5]},
+];
+
+// INIT SITE FROM SETTINGS
+function applySettings(){
+  const s=siteSettings;
+  const el=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  el('footerAddr',s.address);el('footerPhone',s.phone);el('footerHours',s.hours);
+  el('festH',`${s.festName} — <em>${s.festDisc}% Off</em>`);
+  document.getElementById('festH').innerHTML=`${s.festName} — <em>${s.festDisc}% Off</em>`;
+  el('festP',s.festDesc);el('coinRate',s.coinRate);el('coinValidity',s.coinValidity+' Mo');
+  renderDeliveryZonesDisplay();
+}
+applySettings();
+
+// TABS
+function toggleMobileMenu(){
+  const btn=document.getElementById('burgerBtn');
+  const menu=document.getElementById('mobileMenu');
+  btn.classList.toggle('open');
+  menu.classList.toggle('open');
+}
+function goTabMob(tab){
+  toggleMobileMenu();
+  goTab(tab);
+  document.querySelectorAll('.mob-tab-btn').forEach(b=>b.classList.remove('active'));
+  const mb=document.getElementById('mtb-'+tab);if(mb)mb.classList.add('active');
+}
+function goTab(tab){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.mob-tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+tab).classList.add('active');
+  const tb=document.getElementById('tb-'+tab);if(tb)tb.classList.add('active');
+  const mb=document.getElementById('mtb-'+tab);if(mb)mb.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(tab==='cake')renderGrid('cakeGrid','cake');
+  if(tab==='pizza')renderGrid('pizzaGrid','pizza');
+  if(tab==='cookie')renderGrid('cookieGrid','cookie');
+  if(tab==='chocolate')renderGrid('chocolateGrid','chocolate');
+  if(tab==='membership')renderMembership();
+  if(tab==='builder')initBuilder();
+}
+
+// HERO SLIDER
+let curSlide=0;const SLIDES=4;
+function buildDots(){const d=document.getElementById('heroDots');d.innerHTML='';for(let i=0;i<SLIDES;i++){const b=document.createElement('div');b.className='h-dot'+(i===0?' on':'');b.onclick=()=>goSlide(i);d.appendChild(b);}}
+function goSlide(n){curSlide=(n+SLIDES)%SLIDES;document.getElementById('heroSlides').style.transform=`translateX(-${curSlide*100}%)`;document.querySelectorAll('.h-dot').forEach((d,i)=>d.classList.toggle('on',i===curSlide));}
+function slideH(d){goSlide(curSlide+d);}
+buildDots();setInterval(()=>goSlide(curSlide+1),5500);
+
+// COUNTDOWN
+function tick(){const now=new Date(),end=new Date(now);end.setHours(23,59,59,999);const diff=end-now,h=Math.floor(diff/3600000),m=Math.floor(diff%3600000/60000),s=Math.floor(diff%60000/1000);document.getElementById('cdH').textContent=String(h).padStart(2,'0');document.getElementById('cdM').textContent=String(m).padStart(2,'0');document.getElementById('cdS').textContent=String(s).padStart(2,'0');}
+setInterval(tick,1000);tick();
+
+// PRODUCTS
+function avgR(p){return p.ratings&&p.ratings.length?Math.round((p.ratings.reduce((a,b)=>a+b,0)/p.ratings.length)*10)/10:0;}
+function starsH(n){let s='';for(let i=1;i<=5;i++)s+=i<=Math.round(n)?'⭐':'☆';return s;}
+function makeCard(p){
+  const disc=p.offerPrice?Math.round((1-p.offerPrice/p.price)*100):0;
+  const earn=Math.floor((p.offerPrice||p.price)/100)*siteSettings.coinRate;
+  const avg=avgR(p);
+  const imgH=p.photo?`<img src="${p.photo}" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="pc-img-em" style="display:none;">${p.emoji}</div>`:`<div class="pc-img-em">${p.emoji}</div>`;
+  return `<div class="pcard" id="pc${p.id}">
+    <div class="pc-img cat-${p.category}">${imgH}${disc>0?`<div class="pc-ribbon">-${disc}% off</div>`:''}<button class="pc-wish" id="wl${p.id}" onclick="toggleWish(${p.id},event)">🤍</button></div>
+    <div class="pc-body"><div class="pc-cat-lbl">${p.category}</div><div class="pc-name">${p.name}</div><div class="pc-desc">${p.desc}</div>
+    <div class="pc-price-row"><span class="pc-price">₹${p.offerPrice||p.price}</span>${p.offerPrice?`<span class="pc-orig">₹${p.price}</span><span class="pc-disc">-${disc}%</span>`:''}</div>
+    ${avg>0?`<div class="pc-stars"><span class="stars">${starsH(avg)}</span><span class="rc">${avg} (${p.ratings.length})</span></div>`:''}
+    <div class="pc-coin">🪙 Earn ${earn} S Coins</div>
+    <div class="pc-footer"><button class="btn-addcart" onclick="addToCart(${p.id})">Add to Cart</button><button class="btn-quick" onclick="addToCart(${p.id})">⚡</button></div></div></div>`;
+}
+function renderGrid(gridId,cat){
+  const g=document.getElementById(gridId);if(!g)return;
+  const list=products.filter(p=>p.category===cat);
+  g.innerHTML=list.length?list.map(makeCard).join(''):'<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--muted);">No items yet. Add from Admin Panel.</div>';
+}
+function doSearch(){const q=document.getElementById('searchIn').value.toLowerCase().trim();if(!q)return;toast(`Found ${products.filter(p=>p.name.toLowerCase().includes(q)).length} results`);}
+
+// DELIVERY ZONES DISPLAY
+function renderDeliveryZonesDisplay(){
+  const c=document.getElementById('deliveryZonesDisplay');if(!c)return;
+  c.innerHTML=deliveryZones.map(z=>`<div class="zone-card"><div class="zone-icon">${z.icon}</div><div class="zone-name">${z.name}</div><div class="zone-time">⏱ ${z.time}</div><div class="zone-fee">${z.fee===0?'FREE':z.fee===-1?'On request':'₹'+z.fee}</div></div>`).join('');
+}
+
+// MEMBERSHIP
+function renderMembership(){
+  const g=document.getElementById('membershipGrid');
+  g.innerHTML=membershipPlans.map(p=>{
+    const cls=`mem-${p.id}`;
+    return `<div class="mem-card ${cls}">
+      <span class="mem-icon">${p.icon}</span>
+      <div class="mem-name">${p.name} Member</div>
+      <div class="mem-price">₹${p.price}<span style="font-size:.85rem;font-weight:400;opacity:.6;">/${p.duration}mo</span></div>
+      <ul class="mem-features">${p.features.map(f=>`<li>${f}</li>`).join('')}</ul>
+      <button class="mem-btn" onclick="joinMembership('${p.id}')">${currentUser?'Join Now':'Sign In to Join'}</button>
+    </div>`;
+  }).join('');
+  // Comparison table
+  const rows=[['Discount',membershipPlans.map(p=>`${p.discountPct}% off`)],['Bonus Coins on Join',membershipPlans.map(p=>`${p.bonusCoins} 🪙`)],['Free Deliveries/mo',membershipPlans.map(p=>p.freeDeliveries===999?'Unlimited':p.freeDeliveries)],['Priority Support',['✓','✓','✓']],['Birthday Special',['✗','✓','✓']],['Free Birthday Cake',['✗','✗','✓']]];
+  document.getElementById('memberCompareBody').innerHTML=rows.map(([feat,vals])=>`<tr><td style="font-weight:600;color:var(--text);padding:10px 16px;">${feat}</td>${vals.map(v=>`<td style="text-align:center;padding:10px 16px;">${v}</td>`).join('')}</tr>`).join('');
+}
+
+function joinMembership(planId){
+  if(!currentUser){openM('loginModal');toast('Please sign in first','err');return;}
+  const plan=membershipPlans.find(p=>p.id===planId);if(!plan)return;
+  document.getElementById('memModalTitle').textContent=`Join ${plan.icon} ${plan.name}`;
+  document.getElementById('memModalContent').innerHTML=`
+    <div style="font-size:3rem;margin:12px 0;">${plan.icon}</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--mahogany);margin-bottom:8px;">₹${plan.price}</div>
+    <div style="color:var(--muted);font-size:.84rem;margin-bottom:16px;">Valid for ${plan.duration} months · ${plan.discountPct}% off all orders</div>
+    <div style="background:var(--cream);border-radius:10px;padding:14px;margin-bottom:16px;text-align:left;font-size:.82rem;">
+      ${plan.features.map(f=>`<div style="margin-bottom:6px;">✓ ${f}</div>`).join('')}
+    </div>
+    <p style="font-size:.78rem;color:var(--muted);margin-bottom:14px;">Payment via UPI/QR. After payment, send screenshot on WhatsApp to activate.</p>
+    <button class="btn-full" onclick="activateMembership('${planId}')">✅ I've Paid — Activate Membership</button>`;
+  openM('memberModal');
+}
+
+function activateMembership(planId){
+  if(!currentUser)return;
+  const plan=membershipPlans.find(p=>p.id===planId);
+  const phone=currentUser.phone;
+  if(!customers[phone])return;
+  const expiry=new Date();expiry.setMonth(expiry.getMonth()+plan.duration);
+  customers[phone].membership=planId;customers[phone].membershipExpiry=expiry.toISOString().slice(0,10);
+  customers[phone].coins=(customers[phone].coins||0)+plan.bonusCoins;
+  saveCustomers();currentUser=customers[phone];updateWallet();
+  closeM('memberModal');toast(`${plan.icon} ${plan.name} Membership activated! +${plan.bonusCoins} S Coins!`,'gold');
+  renderMembership();
+}
+
+function getMemberDiscount(){
+  if(!currentUser)return 0;
+  const c=customers[currentUser.phone];
+  if(!c||!c.membership||c.membership==='none')return 0;
+  const plan=membershipPlans.find(p=>p.id===c.membership);
+  if(!plan)return 0;
+  if(c.membershipExpiry&&new Date(c.membershipExpiry)<new Date())return 0;
+  return plan.discountPct;
+}
+
+// CAKE BUILDER
+let buildSel={size:null,flavour:null,icing:null,toppings:[],msg:'',date:'',note:''};
+function initBuilder(){
+  renderBuildOptions('sizeOptions',builderOptions.sizes,'size');
+  renderBuildOptions('flavourOptions',builderOptions.flavours,'flavour');
+  renderBuildOptions('icingOptions',builderOptions.icings,'icing');
+  renderBuildOptionsMulti('toppingOptions',builderOptions.toppings);
+}
+function renderBuildOptions(containerId,opts,type){
+  const c=document.getElementById(containerId);if(!c)return;
+  c.innerHTML=opts.map((o,i)=>`<div class="build-opt" id="bo-${type}-${i}" onclick="selBuildOpt('${type}',${i})"><span class="bo-icon">${o.icon}</span><div class="bo-name">${o.name}</div><div class="bo-price">${o.price>0?'+₹'+o.price:'Included'}</div></div>`).join('');
+}
+function renderBuildOptionsMulti(containerId,opts){
+  const c=document.getElementById(containerId);if(!c)return;
+  c.innerHTML=opts.map((o,i)=>`<div class="build-opt" id="bo-topping-${i}" onclick="selTopping(${i})"><span class="bo-icon">${o.icon}</span><div class="bo-name">${o.name}</div><div class="bo-price">${o.price>0?'+₹'+o.price:'Free'}</div></div>`).join('');
+}
+function selBuildOpt(type,idx){
+  buildSel[type]=idx;
+  document.querySelectorAll(`[id^="bo-${type}-"]`).forEach(e=>e.classList.remove('sel'));
+  document.getElementById(`bo-${type}-${idx}`).classList.add('sel');
+}
+function selTopping(idx){
+  const el=document.getElementById(`bo-topping-${idx}`);
+  if(builderOptions.toppings[idx].name==='None'){buildSel.toppings=[];document.querySelectorAll('[id^="bo-topping-"]').forEach(e=>e.classList.remove('sel'));el.classList.add('sel');return;}
+  const i=buildSel.toppings.indexOf(idx);
+  if(i>=0){buildSel.toppings.splice(i,1);el.classList.remove('sel');}else{buildSel.toppings.push(idx);el.classList.add('sel');}
+}
+function goBuildStep(n){
+  for(let i=1;i<=6;i++){const p=document.getElementById('bp'+i);const s=document.getElementById('bs'+i);if(p)p.classList.toggle('show',i===n);if(s)s.classList.toggle('active',i===n);}
+  if(n===6)showBuildSummary();
+}
+function showBuildSummary(){
+  buildSel.msg=document.getElementById('cakeMsg').value;
+  buildSel.date=document.getElementById('cakeDate').value;
+  buildSel.note=document.getElementById('cakeNote').value;
+  const s=buildSel;
+  const size=s.size!=null?builderOptions.sizes[s.size]:null;
+  const flavour=s.flavour!=null?builderOptions.flavours[s.flavour]:null;
+  const icing=s.icing!=null?builderOptions.icings[s.icing]:null;
+  const tops=s.toppings.map(i=>builderOptions.toppings[i]);
+  let total=(size?.price||0)+(flavour?.price||0)+(icing?.price||0)+tops.reduce((a,t)=>a+t.price,0);
+  const rows=[['Size',size?size.name:'Not selected',size?'₹'+size.price:'-'],['Flavour',flavour?flavour.name:'Not selected',flavour?.price>0?'+₹'+flavour.price:'Included'],['Icing',icing?icing.name:'Not selected',icing?.price>0?'+₹'+icing.price:'Included'],['Toppings',tops.length?tops.map(t=>t.name).join(', '):'None',tops.length?'+₹'+tops.reduce((a,t)=>a+t.price,0):'Free'],['Message',s.msg||'None',''],['Delivery Date',s.date||'Not selected',''],['Total','','₹'+total]];
+  document.getElementById('buildSummary').innerHTML=rows.map((r,i)=>`<div class="bs-row"><span>${r[0]}</span><span style="color:var(--muted);font-size:.8rem;">${r[1]}</span><span>${r[2]}</span></div>`).join('');
+  document.getElementById('buildSummary').dataset.total=total;
+}
+function addCustomCakeToCart(){
+  const total=parseInt(document.getElementById('buildSummary').dataset.total||0);
+  if(!total){toast('Please select cake options first','err');return;}
+  const s=buildSel;
+  const size=s.size!=null?builderOptions.sizes[s.size]:null;
+  const flavour=s.flavour!=null?builderOptions.flavours[s.flavour]:null;
+  const customItem={id:'custom'+Date.now(),name:`Custom Cake (${size?.name||''},${flavour?.name||''})`,category:'cake',price:total,offerPrice:null,emoji:'🎂',photo:'',desc:s.msg||'Custom cake',qty:1,isCustom:true};
+  cart.push(customItem);updateCart();toast('🎂 Custom cake added to cart!','success');goTab('home');
+}
+
+// WISHLIST
+const wishSet=new Set();
+function toggleWish(id,e){e.stopPropagation();const b=document.getElementById('wl'+id);if(wishSet.has(id)){wishSet.delete(id);b.textContent='🤍';b.classList.remove('liked');}else{wishSet.add(id);b.textContent='❤️';b.classList.add('liked');toast('Added to wishlist ❤️');}}
+
+// CART
+let cart=[];
+function addToCart(id){
+  const p=products.find(x=>x.id===id);const ex=cart.find(x=>x.id===id);
+  if(ex)ex.qty++;else cart.push({...p,qty:1});
+  updateCart();toast(`${p.emoji} ${p.name} added!`,'success');
+  const cb=document.querySelector('.npill.cart');cb.style.transform='scale(1.15)';setTimeout(()=>cb.style.transform='',250);
+}
+function chgQty(id,d){const it=cart.find(x=>x.id===id);if(!it)return;it.qty+=d;if(it.qty<=0)cart=cart.filter(x=>x.id!==id);updateCart();}
+function rmCart(id){cart=cart.filter(x=>x.id!==id);updateCart();}
+function getCartTotal(){return cart.reduce((s,i)=>s+(i.offerPrice||i.price)*i.qty,0);}
+function updateCart(){
+  const qty=cart.reduce((s,i)=>s+i.qty,0);document.getElementById('cartBadge').textContent=qty;
+  const subtotal=getCartTotal();
+  const memDisc=getMemberDiscount();
+  const discAmt=memDisc>0?Math.round(subtotal*memDisc/100):0;
+  const deliveryFee=subtotal>=siteSettings.freeDeliveryAbove?0:40;
+  const total=subtotal-discAmt+deliveryFee;
+  const rows=document.getElementById('csTotalRows');
+  rows.innerHTML=`<div class="cs-row"><span>Subtotal</span><span>₹${subtotal}</span></div>`+
+    (discAmt>0?`<div class="cs-row"><span>Member Discount (-${memDisc}%)</span><span style="color:var(--rose);">-₹${discAmt}</span></div>`:'')+
+    `<div class="cs-row"><span>Delivery</span><span>${deliveryFee===0?'FREE':'₹'+deliveryFee}</span></div>`+
+    `<div class="cs-row total"><span>Total</span><span>₹${total}</span></div>`;
+  document.getElementById('csCoin').textContent=`🪙 You'll earn ${Math.floor(subtotal/100)*siteSettings.coinRate} S Coins`;
+  const b=document.getElementById('csBody');
+  if(!cart.length){b.innerHTML='<div class="cs-empty"><div style="font-size:3rem;opacity:.24;">🛒</div><p>Your cart is empty</p></div>';return;}
+  b.innerHTML=cart.map(i=>`<div class="ci"><div class="ci-em">${i.photo?`<img src="${i.photo}" alt="">`:i.emoji}</div><div class="ci-info"><div class="ci-name">${i.name}</div><div class="ci-price">₹${(i.offerPrice||i.price)*i.qty}</div><div class="ci-qty"><button class="qbtn" onclick="chgQty(${JSON.stringify(i.id)},-1)">−</button><span style="font-size:.82rem;font-weight:600;min-width:16px;text-align:center;">${i.qty}</span><button class="qbtn" onclick="chgQty(${JSON.stringify(i.id)},1)">+</button><button class="ci-rm" onclick="rmCart(${JSON.stringify(i.id)})">🗑</button></div></div></div>`).join('');
+}
+function toggleCart(){document.getElementById('cartSb').classList.toggle('open');document.getElementById('cartOv').classList.toggle('open');}
+
+// USER/LOGIN
+let currentUser=null;
+let customers=JSON.parse(localStorage.getItem('scc_customers')||'{}');
+let coinHistory=JSON.parse(localStorage.getItem('scc_coinHist')||'[]');
+function doLogin(){
+  const name=document.getElementById('loginName').value.trim(),phone=document.getElementById('loginPhone').value.trim();
+  if(!name||!phone){toast('Please enter name and phone','err');return;}
+  if(!customers[phone])customers[phone]={name,phone,coins:0,spent:0,orders:0,membership:'none',membershipExpiry:null,lastOrder:null};
+  else customers[phone].name=name;
+  currentUser={...customers[phone]};saveCustomers();closeM('loginModal');
+  document.getElementById('navUserLbl').textContent=name.split(' ')[0];
+  document.getElementById('navLoginBtn').querySelector('span').textContent='✅';
+  updateWallet();toast(`Welcome, ${name.split(' ')[0]}! 🎉`,'success');
+  if((customers[phone].coins||0)>0){document.getElementById('useCoinRow').style.display='block';document.getElementById('coinSaveTxt').textContent=`save ₹${(customers[phone].coins*0.1).toFixed(2)}`;}
+  updateCart();
+}
+function saveCustomers(){localStorage.setItem('scc_customers',JSON.stringify(customers));}
+function updateWallet(){
+  if(!currentUser)return;const c=customers[currentUser.phone];
+  document.getElementById('wBal').textContent=c.coins||0;
+  document.getElementById('wVal').textContent=`Worth ₹${((c.coins||0)*0.1).toFixed(2)}`;
+  document.getElementById('wUser').textContent=`👤 ${c.name} · ${c.phone}`;
+  document.getElementById('navCoins').textContent=`${c.coins||0} S Coins`;
+  const memBadge=document.getElementById('wMemberBadge');
+  if(c.membership&&c.membership!=='none'){const plan=membershipPlans.find(p=>p.id===c.membership);if(plan)memBadge.innerHTML=`<span class="member-badge mb-${c.membership}">${plan.icon} ${plan.name} Member</span>`;}
+  else memBadge.innerHTML='';
+  const hist=coinHistory.filter(h=>h.phone===c.phone).slice(-8).reverse();
+  document.getElementById('coinHistList').innerHTML=hist.length?hist.map(h=>`<div class="chi"><span>${h.note}</span><span class="chi-plus">+${h.coins} 🪙</span></div>`).join(''):'<p style="color:var(--muted);font-size:.72rem;">No transactions yet.</p>';
+}
+
+// REVIEWS
+let allReviews=JSON.parse(localStorage.getItem('scc_reviews')||'[]');
+let selStars=5;
+function setStars(n){selStars=n;document.querySelectorAll('.star-btn').forEach((b,i)=>b.classList.toggle('on',i<n));}
+function submitReview(){
+  const prodId=parseInt(document.getElementById('rvProd').value),text=document.getElementById('rvText').value.trim(),name=document.getElementById('rvName').value.trim()||'Anonymous';
+  if(!text){toast('Please write your review','err');return;}
+  const prod=products.find(p=>p.id===prodId);if(prod&&prod.ratings)prod.ratings.push(selStars);
+  allReviews.unshift({id:Date.now(),productId:prodId,productName:prod?prod.name:'',reviewerName:name,rating:selStars,text,date:new Date().toLocaleDateString('en-IN')});
+  localStorage.setItem('scc_reviews',JSON.stringify(allReviews));
+  closeM('reviewModal');renderHomeReviews();toast('Review submitted! ⭐','gold');
+}
+function renderHomeReviews(){
+  const grid=document.getElementById('homeReviews');
+  const src=allReviews.length>0?allReviews.slice(0,4):[
+    {reviewerName:'Priya Sharma',rating:5,text:"The chocolate cake was absolutely divine! Perfect for my daughter's birthday.",productName:'Dark Chocolate Layer Cake',date:'2 days ago'},
+    {reviewerName:'Rohit Das',rating:5,text:'Best pizza in Malda! Crispy crust, generous toppings. Super quick delivery.',productName:'Pepperoni Stone Bake',date:'1 week ago'},
+    {reviewerName:'Ananya Roy',rating:4,text:'The butter cookies are so fresh! My whole family loves them.',productName:'Butter Shortbread',date:'3 days ago'},
+    {reviewerName:'Suresh Kumar',rating:5,text:'Red velvet cake was perfect. Beautiful presentation, delicious taste!',productName:'Red Velvet Classic',date:'5 days ago'},
+  ];
+  grid.innerHTML=src.map(r=>`<div class="review-card"><div class="rv-head"><div class="rv-avatar">${r.reviewerName.charAt(0).toUpperCase()}</div><div><div class="rv-name">${r.reviewerName}</div><div class="rv-date">${r.date||''}</div></div><div class="rv-stars" style="margin-left:auto;">${starsH(r.rating)}</div></div><div class="rv-text">${r.text}</div>${r.productName?`<div class="rv-product">🎂 ${r.productName}</div>`:''}</div>`).join('');
+}
+function populateRvSel(){document.getElementById('rvProd').innerHTML=products.map(p=>`<option value="${p.id}">${p.emoji} ${p.name}</option>`).join('');}
+
+// TRACK ORDER
+function trackOrder(){
+  const q=document.getElementById('trackIn').value.trim().toLowerCase();
+  if(!q){toast('Enter Order ID or phone','err');return;}
+  const orders=JSON.parse(localStorage.getItem('scc_orders')||'[]');
+  const ord=orders.find(o=>o.id.toLowerCase()===q||o.phone.includes(q));
+  const tl=document.getElementById('trackTl'),steps=document.getElementById('tlSteps');
+  if(!ord){steps.innerHTML='<div style="text-align:center;padding:14px;color:var(--muted);">Order not found.</div>';tl.classList.add('show');return;}
+  const sm={pending:1,confirmed:2,preparing:3,out_for_delivery:4,delivered:5};const cs=sm[ord.status]||1;
+  const STEPS=[{label:'Order Placed',note:`Order ${ord.id} received`},{label:'Payment Confirmed',note:`₹${ord.total} received`},{label:'Being Prepared',note:'Our bakers are on it!'},{label:'Out for Delivery',note:`Heading to ${ord.address||'your address'}`},{label:'Delivered!',note:'Enjoy your order!'}];
+  steps.innerHTML=STEPS.map((s,i)=>`<div class="tl-step"><div class="tl-dot ${i<cs?'done':i===cs?'current':''}">${i<cs?'✓':i+1}</div><div class="tl-label" style="color:${i<=cs?'var(--text)':'var(--muted)'};">${s.label}</div><div class="tl-time">${i<cs?'Completed':i===cs?'In Progress':'Pending'}</div>${i<=cs?`<div class="tl-note">${s.note}</div>`:''}</div>`).join('');
+  tl.classList.add('show');toast('Order found!','success');
+}
+
+// CHECKOUT
+let lastOrder=null;let currentPayMethod='upi';
+function selPayMethod(m){currentPayMethod=m;document.querySelectorAll('.pay-method').forEach(e=>e.classList.remove('sel'));document.getElementById('pm-'+m).classList.add('sel');document.getElementById('upi-section').style.display=m==='upi'?'block':'none';document.getElementById('cod-section').style.display=m==='cod'?'block':'none';}
+function openCheckout(){
+  if(!cart.length){toast('Cart is empty');return;}
+  if(!currentUser){closeM('checkoutModal');openM('loginModal');toast('Please sign in first','err');return;}
+  document.getElementById('ordName').value=currentUser.name||'';document.getElementById('ordPhone').value=currentUser.phone||'';
+  showStep(1);openM('checkoutModal');toggleCart();
+  const subtotal=getCartTotal();
+  const memDisc=getMemberDiscount();
+  const discAmt=memDisc>0?Math.round(subtotal*memDisc/100):0;
+  const deliveryFee=subtotal>=siteSettings.freeDeliveryAbove?0:40;
+  const total=subtotal-discAmt+deliveryFee;
+  document.getElementById('payAmt').textContent='₹'+total;
+  document.getElementById('codAmt').textContent='₹'+total;
+  const summary=`<div style="font-size:.78rem;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Subtotal</span><span>₹${subtotal}</span></div>${discAmt>0?`<div style="display:flex;justify-content:space-between;margin-bottom:4px;color:var(--rose);"><span>Member Discount</span><span>-₹${discAmt}</span></div>`:''}<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Delivery</span><span>${deliveryFee===0?'FREE':'₹'+deliveryFee}</span></div><div style="display:flex;justify-content:space-between;font-weight:700;font-size:.9rem;color:var(--mahogany);padding-top:6px;border-top:1px solid #e8ddd5;"><span>Total</span><span>₹${total}</span></div></div>`;
+  document.getElementById('checkoutSummary').innerHTML=summary;
+  const saved=JSON.parse(localStorage.getItem('scc_payment')||'{}');
+  document.getElementById('payUpiId').textContent=saved.upiId||'UPI ID not set — contact admin';
+  const qrSrc=localStorage.getItem('scc_qr');const wrap=document.getElementById('qrDisplayWrap');
+  if(qrSrc)wrap.innerHTML=`<img src="${qrSrc}" alt="QR">`;else wrap.innerHTML='<div style="font-size:2.8rem;opacity:.22;">📲</div>';
+}
+function showStep(n){[1,2,3].forEach(i=>{document.getElementById('step'+i).classList.toggle('show',i===n);document.getElementById('os'+i).classList.toggle('active',i===n);});}
+function goStep(n){
+  if(n===2){if(!document.getElementById('ordName').value.trim()||!document.getElementById('ordPhone').value.trim()){toast('Fill name and phone','err');return;}showStep(2);}
+  else if(n===3)placeOrder();
+}
+function placeOrder(){
+  const name=document.getElementById('ordName').value.trim(),phone=document.getElementById('ordPhone').value.trim(),addr=document.getElementById('ordAddr').value.trim();
+  const subtotal=getCartTotal();
+  const memDisc=getMemberDiscount();
+  const discAmt=memDisc>0?Math.round(subtotal*memDisc/100):0;
+  const deliveryFee=subtotal>=siteSettings.freeDeliveryAbove?0:40;
+  let total=subtotal-discAmt+deliveryFee;
+  const useC=document.getElementById('useCoin').checked&&currentUser;let coinDisc=0;
+  if(useC){coinDisc=parseFloat(((customers[currentUser.phone].coins||0)*0.1).toFixed(2));total=Math.max(0,total-coinDisc);}
+  const coins=Math.floor(subtotal/100)*siteSettings.coinRate;
+  const oid='ORD'+Date.now().toString().slice(-6);
+  const order={id:oid,name,phone,address:addr,items:[...cart],total:parseFloat(total.toFixed(2)),coins,status:'pending',payment:'pending',paymentMethod:currentPayMethod,time:new Date().toLocaleString('en-IN')};
+  let orders=JSON.parse(localStorage.getItem('scc_orders')||'[]');orders.unshift(order);localStorage.setItem('scc_orders',JSON.stringify(orders));
+  if(!customers[phone])customers[phone]={name,phone,coins:0,spent:0,orders:0,membership:'none',membershipExpiry:null,lastOrder:null};
+  if(useC&&currentUser)customers[phone].coins=Math.max(0,(customers[phone].coins||0)-Math.round(coinDisc/0.1));
+  customers[phone].coins=(customers[phone].coins||0)+coins;
+  customers[phone].spent=(customers[phone].spent||0)+parseFloat(total.toFixed(2));
+  customers[phone].orders=(customers[phone].orders||0)+1;
+  customers[phone].lastOrder=new Date().toLocaleString('en-IN');
+  saveCustomers();if(currentUser){currentUser=customers[phone];updateWallet();}
+  const cutoff=new Date();cutoff.setMonth(cutoff.getMonth()-siteSettings.coinValidity);
+  coinHistory=coinHistory.filter(h=>new Date(h.date)>cutoff);
+  coinHistory.push({phone,coins,note:'Order '+oid,date:new Date().toISOString()});
+  localStorage.setItem('scc_coinHist',JSON.stringify(coinHistory));
+  lastOrder=order;sendSMS(order);
+  document.getElementById('confPhone').textContent=phone;
+  document.getElementById('confCoins').textContent=`🪙 +${coins} S Coins added! Total: ${customers[phone].coins} coins`;
+  document.getElementById('confWaRow').style.display='block';
+  cart=[];updateCart();showStep(3);updateAdmStats();syncOrderToDB(order);
+  // WhatsApp auto-notification
+  setTimeout(()=>openWhatsApp(),500);
+}
+function openWhatsApp(){
+  if(!lastOrder)return;
+  const w=JSON.parse(localStorage.getItem('scc_wa')||'{}');
+  const num=(w.num||'918768927686').replace(/\D/g,'');
+  let tmpl=w.template||'New Order! ID:{ORDER_ID} | {NAME}({PHONE}) | {ITEMS} | ₹{TOTAL} | {ADDRESS}';
+  const items=lastOrder.items.map(i=>i.name+' x'+i.qty).join(', ');
+  const msg=tmpl.replace('{ORDER_ID}',lastOrder.id).replace('{NAME}',lastOrder.name).replace('{PHONE}',lastOrder.phone).replace('{ITEMS}',items).replace('{TOTAL}',lastOrder.total).replace('{ADDRESS}',lastOrder.address||'Not provided');
+  window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg),'_blank');
+}
+async function sendSMS(order){
+  const cfg=JSON.parse(localStorage.getItem('scc_sms')||'{}');if(!cfg.key)return;
+  const tmpl=cfg.template||"Order {ORDER_ID} Sanchita's Ekbarna Malda! Rs.{TOTAL}. +{COINS} S Coins!";
+  const msg=tmpl.replace('{ORDER_ID}',order.id).replace('{TOTAL}',order.total).replace('{COINS}',order.coins);
+  const ph=order.phone.replace(/\D/g,'').replace(/^91/,'');
+  try{await fetch('https://www.fast2sms.com/dev/bulkV2?authorization='+cfg.key+'&route=q&message='+encodeURIComponent(msg)+'&flash=0&numbers='+ph);}catch(e){}
+}
+async function testSMS(){const cfg=JSON.parse(localStorage.getItem('scc_sms')||'{}');if(!cfg.key){toast('Enter API key first','err');return;}await sendSMS({id:'TEST001',phone:'918768927686',total:100,coins:10});toast('Test SMS sent!','success');}
+
+// MODALS
+function openM(id){document.getElementById(id).classList.add('show');}
+function closeM(id){document.getElementById(id).classList.remove('show');}
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',function(e){if(e.target===this)closeM(this.id);}));
+
+// TOAST
+function toast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+(type||'')+' show';clearTimeout(t._t);t._t=setTimeout(()=>t.className='toast',3000);}
+
+// ADMIN
+let ADM_PWD = localStorage.getItem('scc_adminPwd') || 'sanchita@admin2024';
+
+function togglePwdVis(fieldId, btn) {
+  const inp = document.getElementById(fieldId);
+  if (inp.type === 'password') {
+    inp.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    inp.type = 'password';
+    btn.textContent = '👁️';
+  }
+}
+
+function changeAdminPwd() {
+  const cur = document.getElementById('curPwd').value;
+  const nw = document.getElementById('newPwd').value;
+  const con = document.getElementById('conPwd').value;
+  const msg = document.getElementById('pwdMsg');
+  if (cur !== ADM_PWD) {
+    msg.innerHTML = '<span style="color:var(--rose);">❌ Current password is incorrect.</span>';
+    return;
+  }
+  if (nw.length < 6) {
+    msg.innerHTML = '<span style="color:var(--rose);">❌ New password must be at least 6 characters.</span>';
+    return;
+  }
+  if (nw !== con) {
+    msg.innerHTML = '<span style="color:var(--rose);">❌ Passwords do not match.</span>';
+    return;
+  }
+  

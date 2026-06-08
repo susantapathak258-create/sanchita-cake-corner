@@ -1677,125 +1677,75 @@ function renderAdmProds(){
   document.getElementById('prodCnt').textContent='('+products.length+')';
   document.getElementById('admPGrid').innerHTML=products.map(p=>`<div class="apc">${p.photo?`<img class="apc-img" src="${p.photo}" alt="${p.name}" onerror="this.style.display='none'">`:`<span class="apc-em">${p.emoji}</span>`}<h4>${p.name}</h4><p>₹${p.offerPrice||p.price} · ${p.category}</p><div class="apc-acts"><button class="del-btn" onclick="delProd(${p.id})">Delete</button><button class="photo-btn" onclick="editPhoto(${p.id})">📷 Photo</button></div></div>`).join('');
 }
-  ADM_PWD = nw;
-  localStorage.setItem('scc_adminPwd', nw);
-  document.getElementById('curPwd').value = '';
-  document.getElementById('newPwd').value = '';
-  document.getElementById('conPwd').value = '';
-  msg.innerHTML = '<span style="color:#4ade80;">✅ Password changed successfully!</span>';
-  toast('Admin password updated!', 'success');
-}
-function openAdminGate(){openM('adminGateModal');setTimeout(()=>document.getElementById('admPass').focus(),100);}
-function chkAdmin(){if(document.getElementById('admPass').value===ADM_PWD){closeM('adminGateModal');document.getElementById('admPass').value='';document.getElementById('adminPanel').classList.add('show');renderAdmProds();updateAdmStats();renderOrders();renderCusts();loadAdminSettings();}else toast('Wrong password','err');}
-function closeAdmin(){document.getElementById('adminPanel').classList.remove('show');}
-function admTab(id,el){document.querySelectorAll('.adm-pane').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.adm-tab').forEach(t=>t.classList.remove('on'));document.getElementById('adm-'+id).classList.add('on');el.classList.add('on');
-  if(id==='prods')renderAdmProds();if(id==='orders')renderOrders();if(id==='customers')renderCusts();
-  if(id==='delivery')renderDeliveryAdmin();if(id==='membership')renderMembershipAdmin();if(id==='builder')renderBuilderAdmin();}
+function editPhoto(id){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=ev=>{const f=ev.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=re=>{const p=products.find(x=>x.id===id);if(p){p.photo=re.target.result;renderAdmProds();toast('Photo updated!','success');}};rd.readAsDataURL(f);};inp.click();}
+function updateAdmStats(){const ords=JSON.parse(localStorage.getItem('scc_orders')||'[]');document.getElementById('st-prod').textContent=products.length;document.getElementById('st-ord').textContent=ords.length;document.getElementById('st-rev').textContent='₹'+ords.reduce((s,o)=>s+(o.total||0),0).toFixed(0);document.getElementById('st-coin').textContent=ords.reduce((s,o)=>s+(o.coins||0),0);document.getElementById('st-cust').textContent=Object.keys(customers).length;document.getElementById('st-mem').textContent=Object.values(customers).filter(c=>c.membership&&c.membership!=='none').length;}
+function saveOffer(){const name=document.getElementById('oN').value.trim(),disc=document.getElementById('oD').value,desc=document.getElementById('oDesc').value;if(!name||!disc){toast('Fill name and discount','err');return;}document.getElementById('offerList').innerHTML+='<div style="background:rgba(212,160,23,0.05);border:1px solid rgba(212,160,23,0.14);border-radius:7px;padding:9px;margin-bottom:7px;"><strong style="color:#fff;">'+name+'</strong> — '+disc+'%<br><span style="color:rgba(255,255,255,0.3);font-size:.72rem;">'+desc+'</span></div>';document.getElementById('festH').innerHTML=name+' — <em>'+disc+'% Off</em>';document.getElementById('festP').textContent=desc;toast(name+' activated!','success');['oN','oD','oDesc','oSD','oED'].forEach(i=>document.getElementById(i).value='');}
+function savePay(){const u=document.getElementById('upiId').value.trim(),n=document.getElementById('upiName').value.trim(),rk=document.getElementById('rzpKey').value.trim();localStorage.setItem('scc_payment',JSON.stringify({upiId:u,upiName:n,rzpKey:rk}));siteSettings.upiId=u;saveSettings();toast('Payment saved!','success');}
+function prevQR(inp){const f=inp.files[0];if(!f)return;const rd=new FileReader();rd.onload=e=>{window._qrData=e.target.result;document.getElementById('qrPrev').innerHTML='<img src="'+e.target.result+'">';};rd.readAsDataURL(f);}
+function saveQR(){if(!window._qrData){toast('No QR selected','err');return;}localStorage.setItem('scc_qr',window._qrData);toast('QR saved! Shown at checkout.','success');}
+function markPay(){const id=document.getElementById('markOrdId').value.trim(),st=document.getElementById('markSt').value;if(!id){toast('Enter order ID','err');return;}let ords=JSON.parse(localStorage.getItem('scc_orders')||'[]');const o=ords.find(x=>x.id===id);if(!o){toast('Order not found','err');return;}o.payment=st;if(st==='confirmed')o.status='confirmed';localStorage.setItem('scc_orders',JSON.stringify(ords));renderOrders();toast('Order '+id+' updated','success');}
+function renderOrders(){const ords=JSON.parse(localStorage.getItem('scc_orders')||'[]');const tb=document.getElementById('ordsBody');if(!ords.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:rgba(255,255,255,0.16);padding:22px;">No orders yet.</td></tr>';return;}tb.innerHTML=ords.map(o=>`<tr><td style="font-family:monospace;color:var(--gold);font-size:.68rem;">${o.id}</td><td>${o.name}</td><td style="font-family:monospace;">${o.phone}</td><td style="color:var(--gold-light);font-weight:600;">₹${o.total}</td><td>🪙${o.coins}</td><td><span class="sb ${o.payment==='confirmed'?'sb-confirmed':o.payment==='failed'?'sb-failed':'sb-pending'}">${o.payment==='confirmed'?'✅ Paid':o.payment==='failed'?'❌ Failed':'⏳ Pending'}</span></td><td style="color:rgba(255,255,255,0.22);font-size:.68rem;">${o.time||'-'}</td></tr>`).join('');}
+function renderCusts(){const custs=Object.values(customers);const tb=document.getElementById('custBody');if(!custs.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:rgba(255,255,255,0.16);padding:22px;">No customers yet.</td></tr>';return;}tb.innerHTML=custs.sort((a,b)=>(b.spent||0)-(a.spent||0)).map(c=>`<tr><td>${c.name}</td><td style="font-family:monospace;color:rgba(212,160,23,0.7);">${c.phone}</td><td>${c.membership&&c.membership!=='none'?c.membership:'—'}</td><td style="color:var(--gold-light);">🪙${c.coins||0}</td><td>${c.orders||0}</td><td>₹${(c.spent||0).toFixed(0)}</td></tr>`).join('');}
+function exportCSV(){const custs=Object.values(customers);if(!custs.length){toast('No customers','err');return;}const rows=[['Name','Phone','Membership','S Coins','Orders','Total Spent','Last Order'],...custs.map(c=>[c.name,c.phone,c.membership||'none',c.coins||0,c.orders||0,(c.spent||0).toFixed(2),c.lastOrder||''])];const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(rows.map(r=>r.join(',')).join('\n'));a.download='sanchita_customers.csv';a.click();toast('CSV exported!','success');}
+function saveWA(){localStorage.setItem('scc_wa',JSON.stringify({num:document.getElementById('waBizNum').value.trim(),template:document.getElementById('waTemplate').value.trim()}));toast('WhatsApp settings saved!','success');}
+function saveSMS(){localStorage.setItem('scc_sms',JSON.stringify({key:document.getElementById('smsKey').value.trim(),template:document.getElementById('smsTpl').value.trim(),sid:document.getElementById('smsSid').value.trim()}));toast('SMS settings saved!','success');}
+function saveDB(){localStorage.setItem('scc_db',JSON.stringify({url:document.getElementById('dbUrl').value.trim(),key:document.getElementById('dbKey').value.trim()}));toast('DB saved!','success');}
+async function testDB(){const cfg=JSON.parse(localStorage.getItem('scc_db')||'{}');if(!cfg.url){toast('Enter URL first','err');return;}try{const r=await fetch(cfg.url+'?action=products&key='+cfg.key);const d=await r.json();document.getElementById('dbRes').innerHTML='<span style="color:#4ade80;">✅ Connected! '+(Array.isArray(d)?d.length+' products.':'OK')+'</span>';toast('Connected!','success');}catch(e){document.getElementById('dbRes').innerHTML='<span style="color:var(--rose);">❌ Failed.</span>';toast('Failed','err');}}
+async function syncOrderToDB(o){const cfg=JSON.parse(localStorage.getItem('scc_db')||'{}');if(!cfg.url)return;try{await fetch(cfg.url+'?action=place_order&key='+cfg.key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:o.name,phone:o.phone,address:o.address,items:o.items,total:o.total,coins:o.coins,id:o.id})});}catch(e){}}
+async function syncProdToDB(p){const cfg=JSON.parse(localStorage.getItem('scc_db')||'{}');if(!cfg.url)return;try{await fetch(cfg.url+'?action=add_product&key='+cfg.key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:p.name,category:p.category,price:p.price,offer_price:p.offerPrice||0,emoji:p.emoji,photo_url:p.photo,desc:p.desc,stock:p.stock})});}catch(e){}}
 
-function loadAdminSettings(){
-  const s=siteSettings;
-  const setVal=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v||'';};
-  setVal('se-s1tag',s.heroTag);setVal('se-s1h1',s.heroH1);setVal('se-s1p',s.heroP);setVal('se-addr',s.address);setVal('se-phone',s.phone);setVal('se-hours',s.hours);
-  setVal('se-offerName',s.festName);setVal('se-offerDisc',s.festDisc);setVal('se-offerDesc',s.festDesc);
-  setVal('se-coinRate',s.coinRate);setVal('se-coinValidity',s.coinValidity);
-  setVal('freeDeliveryThreshold',s.freeDeliveryAbove);setVal('minOrderValue',s.minOrder);
-  if(s.ticker){setVal('tk1',s.ticker[0]);setVal('tk2',s.ticker[1]);setVal('tk3',s.ticker[2]);setVal('tk4',s.ticker[3]);}
-  const saved=JSON.parse(localStorage.getItem('scc_payment')||'{}');
-  setVal('upiId',saved.upiId);setVal('upiName',saved.upiName);setVal('rzpKey',saved.rzpKey||'');
-}
-function saveHeroContent(){
-  siteSettings.heroTag=document.getElementById('se-s1tag').value;
-  siteSettings.heroH1=document.getElementById('se-s1h1').value;
-  siteSettings.heroP=document.getElementById('se-s1p').value;
-  saveSettings();toast('Hero content saved!','success');
-}
-function saveTicker(){
-  siteSettings.ticker=[document.getElementById('tk1').value,document.getElementById('tk2').value,document.getElementById('tk3').value,document.getElementById('tk4').value];
-  const tt=document.getElementById('t1');if(tt)tt.textContent=siteSettings.ticker[0];
-  const tt2=document.getElementById('t2');if(tt2)tt2.textContent=siteSettings.ticker[1];
-  const tt3=document.getElementById('t3');if(tt3)tt3.textContent=siteSettings.ticker[2];
-  const tt4=document.getElementById('t4');if(tt4)tt4.textContent=siteSettings.ticker[3];
-  saveSettings();toast('Ticker saved!','success');
-}
-function saveSiteInfo(){
-  siteSettings.address=document.getElementById('se-addr').value;
-  siteSettings.phone=document.getElementById('se-phone').value;
-  siteSettings.hours=document.getElementById('se-hours').value;
-  siteSettings.mapUrl=document.getElementById('se-mapurl').value;
-  saveSettings();applySettings();toast('Site info saved!','success');
-}
-function saveFestBanner(){
-  siteSettings.festName=document.getElementById('se-offerName').value;
-  siteSettings.festDisc=parseInt(document.getElementById('se-offerDisc').value)||25;
-  siteSettings.festDesc=document.getElementById('se-offerDesc').value;
-  saveSettings();applySettings();toast('Festival banner updated!','success');
-}
-function saveCoinSettings(){
-  siteSettings.coinRate=parseInt(document.getElementById('se-coinRate').value)||10;
-  siteSettings.coinValidity=parseInt(document.getElementById('se-coinValidity').value)||3;
-  saveSettings();applySettings();toast('Coin settings saved!','success');
-}
-function saveSettings(){localStorage.setItem('scc_settings',JSON.stringify(siteSettings));}
+// INIT
+renderHomeReviews();populateRvSel();renderDeliveryZonesDisplay();
+const sDB=localStorage.getItem('scc_db');if(sDB){try{const c=JSON.parse(sDB);document.getElementById('dbUrl').value=c.url||'';document.getElementById('dbKey').value=c.key||'';}catch(e){}}
+const sQR=localStorage.getItem('scc_qr');if(sQR){window._qrData=sQR;try{document.getElementById('qrPrev').innerHTML='<img src="'+sQR+'">';}catch(e){}}
+(async()=>{const cfg=JSON.parse(localStorage.getItem('scc_db')||'{}');if(!cfg.url)return;try{const r=await fetch(cfg.url+'?action=products&key='+cfg.key);const d=await r.json();if(Array.isArray(d)&&d.length){products=d.map(p=>({id:p.id,name:p.name,category:p.category,price:parseFloat(p.price),offerPrice:parseFloat(p.offer_price)||null,emoji:p.emoji,photo:p.photo_url||'',desc:p.description,stock:p.stock,ratings:[]}));populateRvSel();}}catch(e){}})();
+</script>
 
-// DELIVERY ADMIN
-function renderDeliveryAdmin(){
-  const c=document.getElementById('deliveryZonesAdmin');
-  c.innerHTML=deliveryZones.map((z,i)=>`<div style="background:rgba(255,255,255,0.038);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:12px;margin-bottom:9px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:8px;align-items:center;">
-    <input type="text" value="${z.name}" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:7px;color:#fff;font-family:'Outfit',sans-serif;font-size:.78rem;" onchange="deliveryZones[${i}].name=this.value">
-    <input type="text" value="${z.icon}" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:7px;color:#fff;font-family:'Outfit',sans-serif;font-size:.78rem;" onchange="deliveryZones[${i}].icon=this.value">
-    <input type="text" value="${z.time}" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:7px;color:#fff;font-family:'Outfit',sans-serif;font-size:.78rem;" onchange="deliveryZones[${i}].time=this.value">
-    <input type="number" value="${z.fee}" placeholder="Fee (0=free,-1=request)" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:7px;color:#fff;font-family:'Outfit',sans-serif;font-size:.78rem;" onchange="deliveryZones[${i}].fee=parseInt(this.value)">
-    <button class="del-btn" onclick="deliveryZones.splice(${i},1);renderDeliveryAdmin()">✕</button>
-  </div>`).join('');
-}
-function addDeliveryZone(){deliveryZones.push({name:'New Zone',icon:'📍',time:'? mins',fee:50});renderDeliveryAdmin();}
-function saveDeliveryZones(){localStorage.setItem('scc_zones',JSON.stringify(deliveryZones));renderDeliveryZonesDisplay();toast('Delivery zones saved!','success');}
-function saveDeliverySettings(){siteSettings.freeDeliveryAbove=parseInt(document.getElementById('freeDeliveryThreshold').value)||500;siteSettings.minOrder=parseInt(document.getElementById('minOrderValue').value)||0;saveSettings();toast('Delivery settings saved!','success');}
-
-// MEMBERSHIP ADMIN
-function renderMembershipAdmin(){
-  const c=document.getElementById('membershipAdmin');
-  c.innerHTML=membershipPlans.map((p,idx)=>`<div style="background:rgba(255,255,255,0.038);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:16px;margin-bottom:12px;">
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
-      <div class="aff"><label>Plan Name</label><input type="text" value="${p.name}" onchange="membershipPlans[${idx}].name=this.value"></div>
-      <div class="aff"><label>Price (₹)</label><input type="number" value="${p.price}" onchange="membershipPlans[${idx}].price=parseInt(this.value)"></div>
-      <div class="aff"><label>Duration (months)</label><input type="number" value="${p.duration}" onchange="membershipPlans[${idx}].duration=parseInt(this.value)"></div>
-      <div class="aff"><label>Discount (%)</label><input type="number" value="${p.discountPct}" onchange="membershipPlans[${idx}].discountPct=parseInt(this.value)"></div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
-      <div class="aff"><label>Bonus S Coins on Join</label><input type="number" value="${p.bonusCoins}" onchange="membershipPlans[${idx}].bonusCoins=parseInt(this.value)"></div>
-      <div class="aff"><label>Icon Emoji</label><input type="text" value="${p.icon}" onchange="membershipPlans[${idx}].icon=this.value"></div>
-    </div>
-    <div class="aff" style="margin-bottom:0;"><label>Benefits (one per line)</label><textarea rows="4" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:7px;padding:8px;color:#fff;font-family:'Outfit',sans-serif;font-size:.78rem;resize:vertical;width:100%;" onchange="membershipPlans[${idx}].features=this.value.split('\\n').filter(Boolean)">${p.features.join('\n')}</textarea></div>
-  </div>`).join('');
-  // Current members
-  const custs=Object.values(customers).filter(c=>c.membership&&c.membership!=='none');
-  document.getElementById('membersBody').innerHTML=custs.length?custs.map(c=>`<tr><td>${c.name}</td><td style="font-family:monospace;">${c.phone}</td><td>${c.membership}</td><td>${c.lastOrder||'-'}</td><td>${c.membershipExpiry||'-'}</td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.2);padding:22px;">No members yet.</td></tr>';
-}
-function saveMembershipPlans(){localStorage.setItem('scc_plans',JSON.stringify(membershipPlans));toast('Membership plans saved!','success');renderMembership();}
-
-// BUILDER ADMIN
-function renderBuilderAdmin(){
-  const c=document.getElementById('builderAdmin');
-  const renderSection=(label,items,key)=>`<div style="margin-bottom:16px;"><div style="color:var(--gold);font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">${label}</div>${items.map((item,i)=>`<div style="display:flex;gap:8px;margin-bottom:6px;align-items:center;"><input type="text" value="${item.icon}" style="width:48px;background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:6px;color:#fff;font-family:'Outfit',sans-serif;font-size:.8rem;" onchange="builderOptions.${key}[${i}].icon=this.value"><input type="text" value="${item.name}" style="flex:1;background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:6px;color:#fff;font-family:'Outfit',sans-serif;font-size:.8rem;" onchange="builderOptions.${key}[${i}].name=this.value"><input type="number" value="${item.price}" placeholder="Extra ₹" style="width:80px;background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:6px;color:#fff;font-family:'Outfit',sans-serif;font-size:.8rem;" onchange="builderOptions.${key}[${i}].price=parseInt(this.value)||0"><button class="del-btn" onclick="builderOptions.${key}.splice(${i},1);renderBuilderAdmin()">✕</button></div>`).join('')}<button class="abtn grey" style="font-size:.7rem;padding:5px 10px;" onclick="builderOptions.${key}.push({name:'New Option',icon:'✨',price:0});renderBuilderAdmin()">+ Add</button></div>`;
-  c.innerHTML=renderSection('Sizes',builderOptions.sizes,'sizes')+renderSection('Flavours',builderOptions.flavours,'flavours')+renderSection('Icings',builderOptions.icings,'icings')+renderSection('Toppings',builderOptions.toppings,'toppings');
-}
-function saveBuilderOptions(){localStorage.setItem('scc_builder',JSON.stringify(builderOptions));toast('Builder options saved!','success');initBuilder();}
-
-// PRODUCT ADMIN
-function prevNewPhoto(inp){const f=inp.files[0];if(!f)return;const rd=new FileReader();rd.onload=e=>{document.getElementById('newPhotoImg').src=e.target.result;document.getElementById('newPhotoPreview').style.display='block';window._newPhoto=e.target.result;};rd.readAsDataURL(f);}
-function addProd(){
-  const name=document.getElementById('pN').value.trim(),price=parseFloat(document.getElementById('pP').value);
-  if(!name||!price){toast('Fill name and price','err');return;}
-  const photo=document.getElementById('pPhoto').value.trim()||window._newPhoto||'';
-  const p={id:Date.now(),name,category:document.getElementById('pC').value,price,offerPrice:parseFloat(document.getElementById('pOP').value)||null,emoji:document.getElementById('pE').value||'🎂',photo,desc:document.getElementById('pD').value,stock:parseInt(document.getElementById('pS').value)||50,ratings:[]};
-  products.unshift(p);renderAdmProds();updateAdmStats();populateRvSel();
-  ['pN','pP','pOP','pE','pD','pS','pPhoto'].forEach(i=>document.getElementById(i).value='');
-  window._newPhoto='';document.getElementById('newPhotoPreview').style.display='none';
-  toast(p.emoji+' '+p.name+' added!','success');syncProdToDB(p);
-}
-function delProd(id){products=products.filter(p=>p.id!==id);renderAdmProds();updateAdmStats();toast('Product deleted');}
-function renderAdmProds(){
-  document.getElementById('prodCnt').textContent='('+products.length+')';
-  document.getElementById('admPGrid').innerHTML=products.map(p=>`<div class="apc">${p.photo?`<img class="apc-img" src="${p.photo}" alt="${p.name}" onerror="this.style.display='none'">`:`<span class="apc-em">${p.emoji}</span>`}<h4>${p.name}</h4><p>₹${p.offerPrice||p.price} · ${p.category}</p><div class="apc-acts"><button class="del-btn" onclick="delProd(${p.id})">Delete</button><button class="photo-btn" onclick="editPhoto(${p.id})">📷 Photo</button></div></div>`).join('');
-}
+<!-- ═══════ TASA CHATBOT ═══════ -->
+<style>
+#tasa-btn{position:fixed;bottom:28px;right:28px;z-index:8000;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#d4a017,#f0c040);border:none;cursor:pointer;box-shadow:0 6px 24px rgba(212,160,23,0.5);display:flex;align-items:center;justify-content:center;font-size:1.7rem;transition:.3s;animation:tasaPulse 2.5s ease-in-out infinite;overflow:hidden;padding:0;}
+@keyframes tasaPulse{0%,100%{box-shadow:0 6px 24px rgba(212,160,23,0.5);}50%{box-shadow:0 6px 36px rgba(212,160,23,0.85),0 0 0 8px rgba(212,160,23,0.1);}}
+#tasa-btn:hover{transform:scale(1.1);}
+#tasa-btn .tasa-notif{position:absolute;top:-4px;right:-4px;background:var(--rose);color:#fff;border-radius:50%;width:18px;height:18px;font-size:.62rem;font-weight:700;display:flex;align-items:center;justify-content:center;}
+#tasa-window{position:fixed;bottom:102px;right:28px;z-index:8001;width:360px;height:520px;background:#fff;border-radius:22px;box-shadow:0 20px 60px rgba(0,0,0,0.2);display:none;flex-direction:column;overflow:hidden;border:1px solid rgba(212,160,23,0.2);animation:tasaSlideIn .3s cubic-bezier(.34,1.56,.64,1);}
+@keyframes tasaSlideIn{from{transform:scale(.85) translateY(20px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
+#tasa-window.open{display:flex;}
+.tasa-head{background:linear-gradient(135deg,#0d0a07,#2a1208);padding:16px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.tasa-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#b8860b);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;border:2px solid rgba(212,160,23,0.4);position:relative;}
+.tasa-avatar::after{content:'';position:absolute;bottom:2px;right:2px;width:10px;height:10px;background:#4ade80;border-radius:50%;border:2px solid #0d0a07;}
+.tasa-info h4{color:#fff;font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;}
+.tasa-info p{color:rgba(255,255,255,0.45);font-size:.72rem;}
+.tasa-close{background:rgba(255,255,255,0.08);border:none;color:rgba(255,255,255,0.7);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.9rem;margin-left:auto;transition:.2s;}
+.tasa-close:hover{background:var(--rose);color:#fff;}
+.tasa-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:#fafaf8;scroll-behavior:smooth;}
+.tasa-msgs::-webkit-scrollbar{width:4px;}
+.tasa-msgs::-webkit-scrollbar-thumb{background:rgba(212,160,23,0.3);border-radius:2px;}
+.msg{display:flex;flex-direction:column;max-width:80%;}
+.msg.bot{align-self:flex-start;}
+.msg.user{align-self:flex-end;align-items:flex-end;}
+.msg-bubble{padding:10px 14px;border-radius:16px;font-size:.84rem;line-height:1.55;font-weight:400;}
+.msg.bot .msg-bubble{background:#fff;color:var(--text);border:1px solid rgba(212,160,23,0.15);border-bottom-left-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.msg.user .msg-bubble{background:linear-gradient(135deg,var(--mahogany),#5c2a10);color:#fff;border-bottom-right-radius:4px;}
+.msg-time{font-size:.62rem;color:var(--muted);margin-top:3px;padding:0 4px;}
+.tasa-typing{display:flex;align-items:center;gap:4px;padding:10px 14px;background:#fff;border:1px solid rgba(212,160,23,0.15);border-radius:16px;border-bottom-left-radius:4px;width:fit-content;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.tasa-typing span{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:typingDot 1.2s ease-in-out infinite;}
+.tasa-typing span:nth-child(2){animation-delay:.2s;}
+.tasa-typing span:nth-child(3){animation-delay:.4s;}
+@keyframes typingDot{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-5px);opacity:1;}}
+.tasa-quick{padding:10px 14px;display:flex;gap:7px;flex-wrap:wrap;background:#fff;border-top:1px solid #f0e8e0;flex-shrink:0;}
+.tasa-quick-btn{background:var(--cream);border:1.5px solid rgba(212,160,23,0.25);color:var(--mahogany);border-radius:20px;padding:5px 12px;font-size:.74rem;font-weight:600;cursor:pointer;transition:.2s;font-family:'Outfit',sans-serif;white-space:nowrap;}
+.tasa-quick-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--noir);}
+.tasa-input-row{display:flex;gap:8px;padding:12px 14px;background:#fff;border-top:1px solid #f0e8e0;flex-shrink:0;}
+.tasa-input{flex:1;border:1.5px solid #e8ddd5;border-radius:50px;padding:9px 14px;font-family:'Outfit',sans-serif;font-size:.84rem;outline:none;transition:.2s;color:var(--text);}
+.tasa-input:focus{border-color:var(--gold);}
+.tasa-send{width:38px;height:38px;background:linear-gradient(135deg,var(--gold),#b8860b);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;transition:.3s;flex-shrink:0;}
+.tasa-send:hover{transform:scale(1.1);box-shadow:0 4px 14px rgba(212,160,23,0.4);}
+.tasa-prod-card{background:var(--cream);border:1px solid rgba(212,160,23,0.2);border-radius:12px;padding:10px 12px;margin-top:6px;font-size:.8rem;}
+.tasa-prod-card .tpc-name{font-weight:700;color:var(--mahogany);margin-bottom:3px;}
+.tasa-prod-card .tpc-price{color:var(--gold);font-weight:700;}
+.tasa-prod-card .tpc-desc{color:var(--muted);font-size:.75rem;margin:3px 0;}
+.tasa-prod-card button{background:linear-gradient(135deg,var(--mahogany),#5c2a10);color:#fff;border:none;border-radius:8px;padding:5px 12px;font-size:.73rem;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;margin-top:6px;transition:.2s;}
+.tasa-prod-card button:hover{box-shadow:0 3px 10px rgba(61,31,14,0.3);}
+@media(max-width:420px){#tasa-window{width:calc(100vw - 20px);right:10px;bottom:90px;}}
+</style>
+  

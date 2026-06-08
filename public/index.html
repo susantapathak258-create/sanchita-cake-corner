@@ -1448,3 +1448,338 @@ function openCheckout(){
   document.getElementById('ordName').value=currentUser.name||'';document.getElementById('ordPhone').value=currentUser.phone||'';
   showStep(1);openM('checkoutModal');toggleCart();
   const subtotal=getCartTotal();
+const memDisc=getMemberDiscount();
+  const discAmt=memDisc>0?Math.round(subtotal*memDisc/100):0;
+  const deliveryFee=subtotal>=siteSettings.freeDeliveryAbove?0:40;
+  const total=subtotal-discAmt+deliveryFee;
+  document.getElementById('payAmt').textContent='₹'+total;
+  document.getElementById('codAmt').textContent='₹'+total;
+  const summary=`<div style="font-size:.78rem;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Subtotal</span><span>₹${subtotal}</span></div>${discAmt>0?`<div style="display:flex;justify-content:space-between;margin-bottom:4px;color:var(--rose);"><span>Member Discount</span><span>-₹${discAmt}</span></div>`:''}<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Delivery</span><span>${deliveryFee===0?'FREE':'₹'+deliveryFee}</span></div><div style="display:flex;justify-content:space-between;font-weight:700;font-size:.9rem;color:var(--mahogany);padding-top:6px;border-top:1px solid #e8ddd5;"><span>Total</span><span>₹${total}</span></div></div>`;
+  document.getElementById('checkoutSummary').innerHTML=summary;
+  const saved=JSON.parse(localStorage.getItem('scc_payment')||'{}');
+  document.getElementById('payUpiId').textContent=saved.upiId||'UPI ID not set — contact admin';
+  const qrSrc=localStorage.getItem('scc_qr');const wrap=document.getElementById('qrDisplayWrap');
+  if(qrSrc)wrap.innerHTML=`<img src="${qrSrc}" alt="QR">`;else wrap.innerHTML='<div style="font-size:2.8rem;opacity:.22;">📲</div>';
+}
+function showStep(n){[1,2,3].forEach(i=>{document.getElementById('step'+i).classList.toggle('show',i===n);document.getElementById('os'+i).classList.toggle('active',i===n);});}
+function goStep(n){
+  if(n===2){if(!document.getElementById('ordName').value.trim()||!document.getElementById('ordPhone').value.trim()){toast('Fill name and phone','err');return;}showStep(2);}
+  else if(n===3)placeOrder();
+}
+function placeOrder(){
+  const name=document.getElementById('ordName').value.trim(),phone=document.getElementById('ordPhone').value.trim(),addr=document.getElementById('ordAddr').value.trim();
+  const subtotal=getCartTotal();
+  const memDisc=getMemberDiscount();
+  const discAmt=memDisc>0?Math.round(subtotal*memDisc/100):0;
+  const deliveryFee=subtotal>=siteSettings.freeDeliveryAbove?0:40;
+  let total=subtotal-discAmt+deliveryFee;
+  const useC=document.getElementById('useCoin').checked&&currentUser;let coinDisc=0;
+  if(useC){coinDisc=parseFloat(((customers[currentUser.phone].coins||0)*0.1).toFixed(2));total=Math.max(0,total-coinDisc);}
+  const coins=Math.floor(subtotal/100)*siteSettings.coinRate;
+  const oid='ORD'+Date.now().toString().slice(-6);
+  const order={id:oid,name,phone,address:addr,items:[...cart],total:parseFloat(total.toFixed(2)),coins,status:'pending',payment:'pending',paymentMethod:currentPayMethod,time:new Date().toLocaleString('en-IN')};
+  let orders=JSON.parse(localStorage.getItem('scc_orders')||'[]');orders.unshift(order);localStorage.setItem('scc_orders',JSON.stringify(orders));
+  if(!customers[phone])customers[phone]={name,phone,coins:0,spent:0,orders:0,membership:'none',membershipExpiry:null,lastOrder:null};
+  if(useC&&currentUser)customers[phone].coins=Math.max(0,(customers[phone].coins||0)-Math.round(coinDisc/0.1));
+  customers[phone].coins=(customers[phone].coins||0)+coins;
+  customers[phone].spent=(customers[phone].spent||0)+parseFloat(total.toFixed(2));
+  customers[phone].orders=(customers[phone].orders||0)+1;
+  customers[phone].lastOrder=new Date().toLocaleString('en-IN');
+  saveCustomers();if(currentUser){currentUser=customers[phone];updateWallet();}
+  const cutoff=new Date();cutoff.setMonth(cutoff.getMonth()-siteSettings.coinValidity);
+  coinHistory=coinHistory.filter(h=>new Date(h.date)>cutoff);
+  coinHistory.push({phone,coins,note:'Order '+oid,date:new Date().toISOString()});
+  localStorage.setItem('scc_coinHist',JSON.stringify(coinHistory));
+  lastOrder=order;sendSMS(order);
+  document.getElementById('confPhone').textContent=phone;
+  document.getElementById('confCoins').textContent=`🪙 +${coins} S Coins added! Total: ${customers[phone].coins} coins`;
+  document.getElementById('confWaRow').style.display='block';
+  cart=[];updateCart();showStep(3);updateAdmStats();syncOrderToDB(order);
+  // WhatsApp auto-notification
+  setTimeout(()=>openWhatsApp(),500);
+}
+function openWhatsApp(){
+  if(!lastOrder)return;
+  const w=JSON.parse(localStorage.getItem('scc_wa')||'{}');
+  const num=(w.num||'918768927686').replace(/\D/g,'');
+  let tmpl=w.template||'New Order! ID:{ORDER_ID} | {NAME}({PHONE}) | {ITEMS} | ₹{TOTAL} | {ADDRESS}';
+  const items=lastOrder.items.map(i=>i.name+' x'+i.qty).join(', ');
+  const msg=tmpl.replace('{ORDER_ID}',lastOrder.id).replace('{NAME}',lastOrder.name).replace('{PHONE}',lastOrder.phone).replace('{ITEMS}',items).replace('{TOTAL}',lastOrder.total).replace('{ADDRESS}',lastOrder.address||'Not provided');
+  window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg),'_blank');
+}
+async function sendSMS(order){
+  const cfg=JSON.parse(localStorage.getItem('scc_sms')||'{}');if(!cfg.key)return;
+  const tmpl=cfg.template||"Order {ORDER_ID} Sanchita's Ekbarna Malda! Rs.{TOTAL}. +{COINS} S Coins!";
+  const msg=tmpl.replace('{ORDER_ID}',order.id).replace('{TOTAL}',order.total).replace('{COINS}',order.coins);
+  const ph=order.phone.replace(/\D/g,'').replace(/^91/,'');
+  try{await fetch('https://www.fast2sms.com/dev/bulkV2?authorization='+cfg.key+'&route=q&message='+encodeURIComponent(msg)+'&flash=0&numbers='+ph);}catch(e){}
+}
+async function testSMS(){const cfg=JSON.parse(localStorage.getItem('scc_sms')||'{}');if(!cfg.key){toast('Enter API key first','err');return;}await sendSMS({id:'TEST001',phone:'918768927686',total:100,coins:10});toast('Test SMS sent!','success');}
+
+// MODALS
+function openM(id){document.getElementById(id).classList.add('show');}
+function closeM(id){document.getElementById(id).classList.remove('show');}
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',function(e){if(e.target===this)closeM(this.id);}));
+
+// TOAST
+function toast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+(type||'')+' show';clearTimeout(t._t);t._t=setTimeout(()=>t.className='toast',3000);}
+
+// ADMIN
+let ADM_PWD = localStorage.getItem('scc_adminPwd') || 'sanchita@admin2024';
+
+function togglePwdVis(fieldId, btn) {
+  const inp = document.getElementById(fieldId);
+  if (inp.type === 'password') {
+    inp.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    inp.type = 'password';
+    btn.textContent = '👁️';
+  }
+}
+
+function changeAdminPwd() {
+  const cur = document.getElementById('curPwd').value;
+  const nw = document.getElementById('newPwd').value;
+  const con = document.getElementById('conPwd').value;
+  const msg = document.getElementById('pwdMsg');
+  if (cur !== ADM_PWD) {
+    msg.innerHTML = '<span style="color:var(--rose);">❌ Current password is incorrect.</span>';
+    return;
+  }
+  if (nw.length < 6) {
+    msg.innerHTML = '<span style="color:var(--rose);">❌ New password must be at least 6 characters.</span>';
+    return;
+  }
+  if (nw !== con) {
+    msg.innerHTML = '<span style="color:var(--rose);">❌ Passwords do not match.</span>';
+    return;
+  }
+  ADM_PWD = nw;
+  localStorage.setItem('scc_adminPwd', nw);
+  document.getElementById('curPwd').value = '';
+  document.getElementById('newPwd').value = '';
+  document.getElementById('conPwd').value = '';
+  msg.innerHTML = '<span style="color:#4ade80;">✅ Password changed successfully!</span>';
+  toast('Admin password updated!', 'success');
+}
+function openAdminGate(){openM('adminGateModal');setTimeout(()=>document.getElementById('admPass').focus(),100);}
+function chkAdmin(){if(document.getElementById('admPass').value===ADM_PWD){closeM('adminGateModal');document.getElementById('admPass').value='';document.getElementById('adminPanel').classList.add('show');renderAdmProds();updateAdmStats();renderOrders();renderCusts();loadAdminSettings();}else toast('Wrong password','err');}
+function closeAdmin(){document.getElementById('adminPanel').classList.remove('show');}
+function admTab(id,el){document.querySelectorAll('.adm-pane').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.adm-tab').forEach(t=>t.classList.remove('on'));document.getElementById('adm-'+id).classList.add('on');el.classList.add('on');
+  if(id==='prods')renderAdmProds();if(id==='orders')renderOrders();if(id==='customers')renderCusts();
+  if(id==='delivery')renderDeliveryAdmin();if(id==='membership')renderMembershipAdmin();if(id==='builder')renderBuilderAdmin();}
+
+function loadAdminSettings(){
+  const s=siteSettings;
+  const setVal=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v||'';};
+  setVal('se-s1tag',s.heroTag);setVal('se-s1h1',s.heroH1);setVal('se-s1p',s.heroP);setVal('se-addr',s.address);setVal('se-phone',s.phone);setVal('se-hours',s.hours);
+  setVal('se-offerName',s.festName);setVal('se-offerDisc',s.festDisc);setVal('se-offerDesc',s.festDesc);
+  setVal('se-coinRate',s.coinRate);setVal('se-coinValidity',s.coinValidity);
+  setVal('freeDeliveryThreshold',s.freeDeliveryAbove);setVal('minOrderValue',s.minOrder);
+  if(s.ticker){setVal('tk1',s.ticker[0]);setVal('tk2',s.ticker[1]);setVal('tk3',s.ticker[2]);setVal('tk4',s.ticker[3]);}
+  const saved=JSON.parse(localStorage.getItem('scc_payment')||'{}');
+  setVal('upiId',saved.upiId);setVal('upiName',saved.upiName);setVal('rzpKey',saved.rzpKey||'');
+}
+function saveHeroContent(){
+  siteSettings.heroTag=document.getElementById('se-s1tag').value;
+  siteSettings.heroH1=document.getElementById('se-s1h1').value;
+  siteSettings.heroP=document.getElementById('se-s1p').value;
+  saveSettings();toast('Hero content saved!','success');
+}
+function saveTicker(){
+  siteSettings.ticker=[document.getElementById('tk1').value,document.getElementById('tk2').value,document.getElementById('tk3').value,document.getElementById('tk4').value];
+  const tt=document.getElementById('t1');if(tt)tt.textContent=siteSettings.ticker[0];
+  const tt2=document.getElementById('t2');if(tt2)tt2.textContent=siteSettings.ticker[1];
+  const tt3=document.getElementById('t3');if(tt3)tt3.textContent=siteSettings.ticker[2];
+  const tt4=document.getElementById('t4');if(tt4)tt4.textContent=siteSettings.ticker[3];
+  saveSettings();toast('Ticker saved!','success');
+}
+function saveSiteInfo(){
+  siteSettings.address=document.getElementById('se-addr').value;
+  siteSettings.phone=document.getElementById('se-phone').value;
+  siteSettings.hours=document.getElementById('se-hours').value;
+  siteSettings.mapUrl=document.getElementById('se-mapurl').value;
+  saveSettings();applySettings();toast('Site info saved!','success');
+}
+function saveFestBanner(){
+  siteSettings.festName=document.getElementById('se-offerName').value;
+  siteSettings.festDisc=parseInt(document.getElementById('se-offerDisc').value)||25;
+  siteSettings.festDesc=document.getElementById('se-offerDesc').value;
+  saveSettings();applySettings();toast('Festival banner updated!','success');
+}
+function saveCoinSettings(){
+  siteSettings.coinRate=parseInt(document.getElementById('se-coinRate').value)||10;
+  siteSettings.coinValidity=parseInt(document.getElementById('se-coinValidity').value)||3;
+  saveSettings();applySettings();toast('Coin settings saved!','success');
+}
+function saveSettings(){localStorage.setItem('scc_settings',JSON.stringify(siteSettings));}
+
+  const memDisc=getMemberDiscount();
+  const discAmt=memDisc>0?Math.round(subtotal*memDisc/100):0;
+  const deliveryFee=subtotal>=siteSettings.freeDeliveryAbove?0:40;
+  const total=subtotal-discAmt+deliveryFee;
+  document.getElementById('payAmt').textContent='₹'+total;
+  document.getElementById('codAmt').textContent='₹'+total;
+  const summary=`<div style="font-size:.78rem;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Subtotal</span><span>₹${subtotal}</span></div>${discAmt>0?`<div style="display:flex;justify-content:space-between;margin-bottom:4px;color:var(--rose);"><span>Member Discount</span><span>-₹${discAmt}</span></div>`:''}<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Delivery</span><span>${deliveryFee===0?'FREE':'₹'+deliveryFee}</span></div><div style="display:flex;justify-content:space-between;font-weight:700;font-size:.9rem;color:var(--mahogany);padding-top:6px;border-top:1px solid #e8ddd5;"><span>Total</span><span>₹${total}</span></div></div>`;
+  document.getElementById('checkoutSummary').innerHTML=summary;
+  const saved=JSON.parse(localStorage.getItem('scc_payment')||'{}');
+  document.getElementById('payUpiId').textContent=saved.upiId||'UPI ID not set — contact admin';
+  const qrSrc=localStorage.getItem('scc_qr');const wrap=document.getElementById('qrDisplayWrap');
+  if(qrSrc)wrap.innerHTML=`<img src="${qrSrc}" alt="QR">`;else wrap.innerHTML='<div style="font-size:2.8rem;opacity:.22;">📲</div>';
+}
+function showStep(n){[1,2,3].forEach(i=>{document.getElementById('step'+i).classList.toggle('show',i===n);document.getElementById('os'+i).classList.toggle('active',i===n);});}
+function goStep(n){
+  if(n===2){if(!document.getElementById('ordName').value.trim()||!document.getElementById('ordPhone').value.trim()){toast('Fill name and phone','err');return;}showStep(2);}
+  else if(n===3)placeOrder();
+}
+function placeOrder(){
+  const name=document.getElementById('ordName').value.trim(),phone=document.getElementById('ordPhone').value.trim(),addr=document.getElementById('ordAddr').value.trim();
+  const subtotal=getCartTotal();
+  const memDisc=getMemberDiscount();
+  const discAmt=memDisc>0?Math.round(subtotal*memDisc/100):0;
+  const deliveryFee=subtotal>=siteSettings.freeDeliveryAbove?0:40;
+  let total=subtotal-discAmt+deliveryFee;
+  const useC=document.getElementById('useCoin').checked&&currentUser;let coinDisc=0;
+  if(useC){coinDisc=parseFloat(((customers[currentUser.phone].coins||0)*0.1).toFixed(2));total=Math.max(0,total-coinDisc);}
+  const coins=Math.floor(subtotal/100)*siteSettings.coinRate;
+  const oid='ORD'+Date.now().toString().slice(-6);
+  const order={id:oid,name,phone,address:addr,items:[...cart],total:parseFloat(total.toFixed(2)),coins,status:'pending',payment:'pending',paymentMethod:currentPayMethod,time:new Date().toLocaleString('en-IN')};
+  let orders=JSON.parse(localStorage.getItem('scc_orders')||'[]');orders.unshift(order);localStorage.setItem('scc_orders',JSON.stringify(orders));
+  if(!customers[phone])customers[phone]={name,phone,coins:0,spent:0,orders:0,membership:'none',membershipExpiry:null,lastOrder:null};
+  if(useC&&currentUser)customers[phone].coins=Math.max(0,(customers[phone].coins||0)-Math.round(coinDisc/0.1));
+  customers[phone].coins=(customers[phone].coins||0)+coins;
+  customers[phone].spent=(customers[phone].spent||0)+parseFloat(total.toFixed(2));
+  customers[phone].orders=(customers[phone].orders||0)+1;
+  customers[phone].lastOrder=new Date().toLocaleString('en-IN');
+  saveCustomers();if(currentUser){currentUser=customers[phone];updateWallet();}
+  const cutoff=new Date();cutoff.setMonth(cutoff.getMonth()-siteSettings.coinValidity);
+  coinHistory=coinHistory.filter(h=>new Date(h.date)>cutoff);
+  coinHistory.push({phone,coins,note:'Order '+oid,date:new Date().toISOString()});
+  localStorage.setItem('scc_coinHist',JSON.stringify(coinHistory));
+  lastOrder=order;sendSMS(order);
+  document.getElementById('confPhone').textContent=phone;
+  document.getElementById('confCoins').textContent=`🪙 +${coins} S Coins added! Total: ${customers[phone].coins} coins`;
+  document.getElementById('confWaRow').style.display='block';
+  cart=[];updateCart();showStep(3);updateAdmStats();syncOrderToDB(order);
+  // WhatsApp auto-notification
+  setTimeout(()=>openWhatsApp(),500);
+}
+function openWhatsApp(){
+  if(!lastOrder)return;
+  const w=JSON.parse(localStorage.getItem('scc_wa')||'{}');
+  const num=(w.num||'918768927686').replace(/\D/g,'');
+  let tmpl=w.template||'New Order! ID:{ORDER_ID} | {NAME}({PHONE}) | {ITEMS} | ₹{TOTAL} | {ADDRESS}';
+  const items=lastOrder.items.map(i=>i.name+' x'+i.qty).join(', ');
+  const msg=tmpl.replace('{ORDER_ID}',lastOrder.id).replace('{NAME}',lastOrder.name).replace('{PHONE}',lastOrder.phone).replace('{ITEMS}',items).replace('{TOTAL}',lastOrder.total).replace('{ADDRESS}',lastOrder.address||'Not provided');
+  window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg),'_blank');
+}
+async function sendSMS(order){
+  const cfg=JSON.parse(localStorage.getItem('scc_sms')||'{}');if(!cfg.key)return;
+  const tmpl=cfg.template||"Order {ORDER_ID} Sanchita's Ekbarna Malda! Rs.{TOTAL}. +{COINS} S Coins!";
+  const msg=tmpl.replace('{ORDER_ID}',order.id).replace('{TOTAL}',order.total).replace('{COINS}',order.coins);
+  const ph=order.phone.replace(/\D/g,'').replace(/^91/,'');
+  try{await fetch('https://www.fast2sms.com/dev/bulkV2?authorization='+cfg.key+'&route=q&message='+encodeURIComponent(msg)+'&flash=0&numbers='+ph);}catch(e){}
+}
+async function testSMS(){const cfg=JSON.parse(localStorage.getItem('scc_sms')||'{}');if(!cfg.key){toast('Enter API key first','err');return;}await sendSMS({id:'TEST001',phone:'918768927686',total:100,coins:10});toast('Test SMS sent!','success');}
+
+// MODALS
+function openM(id){document.getElementById(id).classList.add('show');}
+function closeM(id){document.getElementById(id).classList.remove('show');}
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',function(e){if(e.target===this)closeM(this.id);}));
+
+// TOAST
+function toast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+(type||'')+' show';clearTimeout(t._t);t._t=setTimeout(()=>t.className='toast',3000);}
+
+// ADMIN
+let ADM_PWD = localStorage.getItem('scc_adminPwd') || 'sanchita@admin2024';
+
+function togglePwdVis(fieldId, btn) {
+  const inp = document.getElementById(fieldId);
+  if (inp.type === 'password') {
+    inp.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    inp.type = 'password';
+    btn.textContent = '👁️';
+  }
+}
+
+function changeAdminPwd() {
+  const cur = document.getElementById('curPwd').value;
+  const nw = document.getElementById('newPwd').value;
+  const con = document.getElementById('conPwd').value;
+  const msg = document.getElementById('pwdMsg');
+  if (cur !== ADM_PWD) {
+    msg.innerHTML = '<span style="color:var(--rose);">❌ Current password is incorrect.</span>';
+    return;
+  }
+  if (nw.length < 6) {
+    msg.innerHTML = '<span style="color:var(--rose);">❌ New password must be at least 6 characters.</span>';
+    return;
+  }
+  if (nw !== con) {
+    msg.innerHTML = '<span style="color:var(--rose);">❌ Passwords do not match.</span>';
+    return;
+  }
+  ADM_PWD = nw;
+  localStorage.setItem('scc_adminPwd', nw);
+  document.getElementById('curPwd').value = '';
+  document.getElementById('newPwd').value = '';
+  document.getElementById('conPwd').value = '';
+  msg.innerHTML = '<span style="color:#4ade80;">✅ Password changed successfully!</span>';
+  toast('Admin password updated!', 'success');
+}
+function openAdminGate(){openM('adminGateModal');setTimeout(()=>document.getElementById('admPass').focus(),100);}
+function chkAdmin(){if(document.getElementById('admPass').value===ADM_PWD){closeM('adminGateModal');document.getElementById('admPass').value='';document.getElementById('adminPanel').classList.add('show');renderAdmProds();updateAdmStats();renderOrders();renderCusts();loadAdminSettings();}else toast('Wrong password','err');}
+function closeAdmin(){document.getElementById('adminPanel').classList.remove('show');}
+function admTab(id,el){document.querySelectorAll('.adm-pane').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.adm-tab').forEach(t=>t.classList.remove('on'));document.getElementById('adm-'+id).classList.add('on');el.classList.add('on');
+  if(id==='prods')renderAdmProds();if(id==='orders')renderOrders();if(id==='customers')renderCusts();
+  if(id==='delivery')renderDeliveryAdmin();if(id==='membership')renderMembershipAdmin();if(id==='builder')renderBuilderAdmin();}
+
+function loadAdminSettings(){
+  const s=siteSettings;
+  const setVal=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v||'';};
+  setVal('se-s1tag',s.heroTag);setVal('se-s1h1',s.heroH1);setVal('se-s1p',s.heroP);setVal('se-addr',s.address);setVal('se-phone',s.phone);setVal('se-hours',s.hours);
+  setVal('se-offerName',s.festName);setVal('se-offerDisc',s.festDisc);setVal('se-offerDesc',s.festDesc);
+  setVal('se-coinRate',s.coinRate);setVal('se-coinValidity',s.coinValidity);
+  setVal('freeDeliveryThreshold',s.freeDeliveryAbove);setVal('minOrderValue',s.minOrder);
+  if(s.ticker){setVal('tk1',s.ticker[0]);setVal('tk2',s.ticker[1]);setVal('tk3',s.ticker[2]);setVal('tk4',s.ticker[3]);}
+  const saved=JSON.parse(localStorage.getItem('scc_payment')||'{}');
+  setVal('upiId',saved.upiId);setVal('upiName',saved.upiName);setVal('rzpKey',saved.rzpKey||'');
+}
+function saveHeroContent(){
+  siteSettings.heroTag=document.getElementById('se-s1tag').value;
+  siteSettings.heroH1=document.getElementById('se-s1h1').value;
+  siteSettings.heroP=document.getElementById('se-s1p').value;
+  saveSettings();toast('Hero content saved!','success');
+}
+function saveTicker(){
+  siteSettings.ticker=[document.getElementById('tk1').value,document.getElementById('tk2').value,document.getElementById('tk3').value,document.getElementById('tk4').value];
+  const tt=document.getElementById('t1');if(tt)tt.textContent=siteSettings.ticker[0];
+  const tt2=document.getElementById('t2');if(tt2)tt2.textContent=siteSettings.ticker[1];
+  const tt3=document.getElementById('t3');if(tt3)tt3.textContent=siteSettings.ticker[2];
+  const tt4=document.getElementById('t4');if(tt4)tt4.textContent=siteSettings.ticker[3];
+  saveSettings();toast('Ticker saved!','success');
+}
+function saveSiteInfo(){
+  siteSettings.address=document.getElementById('se-addr').value;
+  siteSettings.phone=document.getElementById('se-phone').value;
+  siteSettings.hours=document.getElementById('se-hours').value;
+  siteSettings.mapUrl=document.getElementById('se-mapurl').value;
+  saveSettings();applySettings();toast('Site info saved!','success');
+}
+function saveFestBanner(){
+  siteSettings.festName=document.getElementById('se-offerName').value;
+  siteSettings.festDisc=parseInt(document.getElementById('se-offerDisc').value)||25;
+  siteSettings.festDesc=document.getElementById('se-offerDesc').value;
+  saveSettings();applySettings();toast('Festival banner updated!','success');
+}
+function saveCoinSettings(){
+  siteSettings.coinRate=parseInt(document.getElementById('se-coinRate').value)||10;
+  siteSettings.coinValidity=parseInt(document.getElementById('se-coinValidity').value)||3;
+  saveSettings();applySettings();toast('Coin settings saved!','success');
+}
+function saveSettings(){localStorage.setItem('scc_settings',JSON.stringify(siteSettings));}
+
+  

@@ -849,3 +849,281 @@ footer{background:var(--noir);border-top:1px solid rgba(212,160,23,0.08);padding
       </div>
     </div>
   
+<div style="background:var(--cream);border-radius:12px;padding:14px;margin-bottom:18px;">
+      <div style="font-weight:700;font-size:.85rem;color:var(--mahogany);margin-bottom:8px;">❌ Returns will NOT be accepted for:</div>
+      <div style="display:flex;flex-direction:column;gap:5px;">
+        <div style="font-size:.79rem;color:var(--muted);">• Change of mind after the order is placed or delivered</div>
+        <div style="font-size:.79rem;color:var(--muted);">• Incorrect address or delivery details provided by the customer</div>
+        <div style="font-size:.79rem;color:var(--muted);">• Taste preference or personal dislike of flavour</div>
+        <div style="font-size:.79rem;color:var(--muted);">• Products reported after more than 2 hours of delivery</div>
+        <div style="font-size:.79rem;color:var(--muted);">• Partially consumed items without valid proof of defect</div>
+      </div>
+    </div>
+
+    <div style="background:linear-gradient(135deg,#065f46,#059669);border-radius:12px;padding:16px;text-align:center;">
+      <div style="color:#fff;font-size:.85rem;font-weight:600;margin-bottom:8px;">Have an issue with your order?</div>
+      <a href="https://wa.me/918768927686?text=Hi!%20I%20have%20an%20issue%20with%20my%20order.%20Order%20ID:%20" target="_blank" style="display:inline-flex;align-items:center;gap:7px;background:#fff;color:#065f46;padding:9px 20px;border-radius:50px;font-weight:700;font-size:.84rem;text-decoration:none;">
+        💬 Contact us on WhatsApp
+      </a>
+    </div>
+
+    <div style="margin-top:16px;">
+      <button class="btn-full" onclick="closeM('returnModal')" style="max-width:180px;margin:0 auto;display:block;">Close ✕</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN GATE -->
+<div class="overlay" id="adminGateModal"><div class="modal" style="max-width:330px;text-align:center;"><div class="modal-hd"><div class="modal-title" style="font-size:1rem;">🔐 Admin Access</div><button class="modal-x" onclick="closeM('adminGateModal')">✕</button></div><div class="pwd-field-wrap" style="position:relative;margin-bottom:11px;">
+  <input type="password" id="admPass" placeholder="Admin password" style="width:100%;border:1.5px solid #e8ddd5;border-radius:7px;padding:9px 36px 9px 12px;font-family:'Outfit',sans-serif;font-size:.84rem;outline:none;text-align:center;letter-spacing:.16em;" onkeypress="if(event.key==='Enter')chkAdmin()">
+  <button onclick="togglePwdVis('admPass',this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);font-size:1rem;padding:4px;">👁️</button>
+</div>
+<button class="btn-full" onclick="chkAdmin()">Enter Admin Panel</button></div></div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel"><div class="adm-bar"><div class="adm-bar-in">
+  <div class="adm-logo">⚙️ Admin</div>
+  <div class="adm-tabs">
+    <button class="adm-tab on" onclick="admTab('dash',this)">📊 Dashboard</button>
+    <button class="adm-tab" onclick="admTab('siteEdit',this)">✏️ Site Content</button>
+    <button class="adm-tab" onclick="admTab('addProd',this)">➕ Add Product</button>
+    <button class="adm-tab" onclick="admTab('prods',this)">📦 Products</button>
+    <button class="adm-tab" onclick="admTab('payment',this)">💳 Payment/QR</button>
+    <button class="adm-tab" onclick="admTab('delivery',this)">🚚 Delivery</button>
+    <button class="adm-tab" onclick="admTab('membership',this)">👑 Membership</button>
+    <button class="adm-tab" onclick="admTab('offers',this)">🎉 Offers</button>
+    <button class="adm-tab" onclick="admTab('builder',this)">🎨 Cake Builder</button>
+    <button class="adm-tab" onclick="admTab('orders',this)">📋 Orders</button>
+    <button class="adm-tab" onclick="admTab('customers',this)">👥 Customers</button>
+    <button class="adm-tab" onclick="admTab('sms',this)">📱 SMS/WA</button>
+    <button class="adm-tab" onclick="admTab('db',this)">🗄️ Database</button>
+  </div>
+  <button class="adm-close" onclick="closeAdmin()">✕ Exit</button>
+</div></div>
+<div class="adm-body">
+
+<!-- DASHBOARD -->
+<div class="adm-pane on" id="adm-dash">
+  <div class="stats-row"><div class="stat-c"><span class="stat-v" id="st-prod">0</span><span class="stat-l">Products</span></div><div class="stat-c"><span class="stat-v" id="st-ord">0</span><span class="stat-l">Orders</span></div><div class="stat-c"><span class="stat-v" id="st-rev">₹0</span><span class="stat-l">Revenue</span></div><div class="stat-c"><span class="stat-v" id="st-coin">0</span><span class="stat-l">Coins Issued</span></div><div class="stat-c"><span class="stat-v" id="st-cust">0</span><span class="stat-l">Customers</span></div><div class="stat-c"><span class="stat-v" id="st-mem">0</span><span class="stat-l">Members</span></div></div>
+  <div class="adm-card"><h3>📡 Status</h3><div id="sysSt" style="color:rgba(255,200,0,0.7);font-size:.8rem;padding:9px;background:rgba(255,200,0,0.036);border-radius:6px;">⚠️ Demo mode — connect DB for persistence.</div></div>
+<div class="adm-card"><h3>🔐 Change Admin Password</h3>
+  <div class="afrow">
+    <div class="aff">
+      <label>Current Password</label>
+      <div style="position:relative;">
+        <input type="password" id="curPwd" placeholder="Current password" style="width:100%;padding-right:36px;">
+        <button onclick="togglePwdVis('curPwd',this)" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.4);font-size:.9rem;">👁️</button>
+      </div>
+    </div>
+    <div class="aff">
+      <label>New Password</label>
+      <div style="position:relative;">
+        <input type="password" id="newPwd" placeholder="New password (min 6 chars)" style="width:100%;padding-right:36px;">
+        <button onclick="togglePwdVis('newPwd',this)" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.4);font-size:.9rem;">👁️</button>
+      </div>
+    </div>
+  </div>
+  <div class="aff" style="margin-bottom:14px;">
+    <label>Confirm New Password</label>
+    <div style="position:relative;">
+      <input type="password" id="conPwd" placeholder="Confirm new password" style="width:100%;padding-right:36px;">
+      <button onclick="togglePwdVis('conPwd',this)" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.4);font-size:.9rem;">👁️</button>
+    </div>
+  </div>
+  <button class="abtn" onclick="changeAdminPwd()">🔐 Change Password</button>
+  <div id="pwdMsg" style="margin-top:10px;font-size:.8rem;"></div>
+</div>
+</div>
+
+<!-- SITE CONTENT EDITOR -->
+<div class="adm-pane" id="adm-siteEdit">
+  <div class="adm-card"><h3>✏️ Hero Slider Content</h3>
+    <div class="afrow"><div class="aff"><label>Slide 1 Tag Text</label><input type="text" id="se-s1tag" placeholder="✦ Fresh Baked Daily"></div><div class="aff"><label>Slide 1 Offer Badge</label><input type="text" id="se-s1badge" placeholder="30% OFF"></div></div>
+    <div class="aff" style="margin-bottom:9px;"><label>Slide 1 Heading (use | for line break)</label><input type="text" id="se-s1h1" placeholder="Cakes Crafted|with Pure Love"></div>
+    <div class="aff" style="margin-bottom:14px;"><label>Slide 1 Subtext</label><textarea id="se-s1p" rows="2" placeholder="Custom-designed cakes..."></textarea></div>
+    <button class="abtn" onclick="saveHeroContent()">💾 Save Hero Content</button>
+  </div>
+  <div class="adm-card"><h3>✏️ Ticker / Announcement Bar</h3>
+    <div class="aff" style="margin-bottom:9px;"><label>Ticker Message 1</label><input type="text" id="tk1" placeholder="Fresh Bakes Daily"></div>
+    <div class="aff" style="margin-bottom:9px;"><label>Ticker Message 2</label><input type="text" id="tk2" placeholder="10 S Coins per ₹100"></div>
+    <div class="aff" style="margin-bottom:9px;"><label>Ticker Message 3</label><input type="text" id="tk3" placeholder="Free Delivery ₹500+"></div>
+    <div class="aff" style="margin-bottom:14px;"><label>Ticker Message 4</label><input type="text" id="tk4" placeholder="Custom Cakes Available"></div>
+    <button class="abtn" onclick="saveTicker()">💾 Save Ticker</button>
+  </div>
+  <div class="adm-card"><h3>✏️ Footer & Contact Info</h3>
+    <div class="afrow"><div class="aff"><label>Shop Address</label><input type="text" id="se-addr" placeholder="Ekbarna, Malda, West Bengal"></div><div class="aff"><label>Phone Number</label><input type="text" id="se-phone" placeholder="+91 87689 27686"></div></div>
+    <div class="afrow"><div class="aff"><label>Opening Hours</label><input type="text" id="se-hours" placeholder="Open 8 AM - 9 PM, All Days"></div><div class="aff"><label>Google Maps Embed URL</label><input type="url" id="se-mapurl" placeholder="https://maps.google.com/..."></div></div>
+    <button class="abtn" onclick="saveSiteInfo()">💾 Save Info</button>
+  </div>
+  <div class="adm-card"><h3>✏️ Festival Banner</h3>
+    <div class="afrow"><div class="aff"><label>Offer Name</label><input type="text" id="se-offerName" placeholder="Eid Special"></div><div class="aff"><label>Discount %</label><input type="number" id="se-offerDisc" placeholder="25"></div></div>
+    <div class="aff" style="margin-bottom:14px;"><label>Banner Description</label><input type="text" id="se-offerDesc" placeholder="Plus bonus S Coins on every order!"></div>
+    <button class="abtn" onclick="saveFestBanner()">💾 Update Banner</button>
+  </div>
+  <div class="adm-card"><h3>✏️ S Coin Settings</h3>
+    <div class="afrow"><div class="aff"><label>Coins Earned per ₹100</label><input type="number" id="se-coinRate" placeholder="10"></div><div class="aff"><label>Coin Validity (months)</label><input type="number" id="se-coinValidity" placeholder="3"></div></div>
+    <button class="abtn" onclick="saveCoinSettings()">💾 Save Coin Settings</button>
+  </div>
+</div>
+
+<!-- ADD PRODUCT -->
+<div class="adm-pane" id="adm-addProd"><div class="adm-card"><h3>➕ Add New Product</h3>
+  <div class="afrow"><div class="aff"><label>Name</label><input type="text" id="pN" placeholder="Dark Chocolate Cake"></div><div class="aff"><label>Category</label><select id="pC"><option value="cake">🎂 Cake</option><option value="pizza">🍕 Pizza</option><option value="cookie">🍪 Cookies</option><option value="chocolate">🍫 Chocolate</option><option value="cupcake">🧁 Cupcake</option></select></div></div>
+  <div class="afrow"><div class="aff"><label>Price (₹)</label><input type="number" id="pP" placeholder="450"></div><div class="aff"><label>Offer Price (₹)</label><input type="number" id="pOP" placeholder="380"></div></div>
+  <div class="afrow"><div class="aff"><label>Emoji</label><input type="text" id="pE" placeholder="🎂"></div><div class="aff"><label>Stock</label><input type="number" id="pS" placeholder="50"></div></div>
+  <div class="aff" style="margin-bottom:9px;"><label>Description</label><textarea id="pD" rows="2" placeholder="Describe this item..."></textarea></div>
+  <div class="aff" style="margin-bottom:9px;"><label>Photo URL (optional)</label><input type="url" id="pPhoto" placeholder="https://..."></div>
+  <div class="aff" style="margin-bottom:13px;"><label>Upload Photo from Device</label><input type="file" id="pPhotoFile" accept="image/*" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:7px;padding:7px 10px;color:rgba(255,255,255,0.62);font-family:'Outfit',sans-serif;font-size:.76rem;width:100%;" onchange="prevNewPhoto(this)"></div>
+  <div id="newPhotoPreview" style="display:none;margin-bottom:11px;"><img id="newPhotoImg" style="width:85px;height:85px;object-fit:cover;border-radius:6px;border:2px solid rgba(212,160,23,0.26);"></div>
+  <button class="abtn" onclick="addProd()">✅ Add Product</button>
+</div></div>
+
+<!-- PRODUCTS -->
+<div class="adm-pane" id="adm-prods"><div class="adm-card"><h3>📦 All Products <span id="prodCnt" style="font-size:.78rem;color:rgba(255,255,255,0.22);font-family:'Outfit',sans-serif;"></span></h3><div class="adm-pgrid" id="admPGrid"></div></div></div>
+
+<!-- PAYMENT -->
+<div class="adm-pane" id="adm-payment">
+  <div class="adm-card"><h3>💳 UPI / PhonePe Settings</h3>
+    <div class="afrow"><div class="aff"><label>UPI ID or Phone</label><input type="text" id="upiId" placeholder="+91 87689 27686"></div><div class="aff"><label>Account Name</label><input type="text" id="upiName" placeholder="Sanchita's Cake Corner"></div></div>
+    <div class="aff" style="margin-bottom:14px;"><label>Razorpay Key ID (optional)</label><input type="text" id="rzpKey" placeholder="rzp_live_xxxxxxxxxx"></div>
+    <button class="abtn" onclick="savePay()" style="margin-bottom:20px;">💾 Save Payment Settings</button>
+    <h3>📷 Upload QR Code</h3>
+    <div class="qr-upload-area" onclick="document.getElementById('qrFi').click()"><div class="qr-prev" id="qrPrev"><span style="font-size:1.7rem;opacity:.24;">📷</span></div><p style="color:rgba(255,255,255,0.32);font-size:.76rem;">Click to upload QR image</p><input type="file" id="qrFi" accept="image/*" style="display:none;" onchange="prevQR(this)"></div>
+    <button class="abtn" style="margin-top:11px;" onclick="saveQR()">✅ Save QR Code</button>
+  </div>
+  <div class="adm-card"><h3>✅ Mark Order Payment</h3>
+    <div class="afrow"><div class="aff"><label>Order ID</label><input type="text" id="markOrdId" placeholder="ORD123456"></div><div class="aff"><label>Status</label><select id="markSt"><option value="confirmed">✅ Confirmed</option><option value="pending">⏳ Pending</option><option value="failed">❌ Failed</option></select></div></div>
+    <button class="abtn" onclick="markPay()">Update Payment</button>
+  </div>
+</div>
+
+<!-- DELIVERY SETTINGS -->
+<div class="adm-pane" id="adm-delivery">
+  <div class="adm-card"><h3>🚚 Delivery Zones & Charges</h3>
+    <p style="color:rgba(255,255,255,0.4);font-size:.8rem;margin-bottom:16px;">Edit delivery zones. Changes reflect on the website immediately.</p>
+    <div id="deliveryZonesAdmin"></div>
+    <button class="abtn green" onclick="addDeliveryZone()" style="margin-top:12px;">+ Add Zone</button>
+    <button class="abtn" onclick="saveDeliveryZones()" style="margin-left:8px;">💾 Save All Zones</button>
+  </div>
+  <div class="adm-card"><h3>🆓 Free Delivery Threshold</h3>
+    <div class="afrow"><div class="aff"><label>Free delivery above (₹)</label><input type="number" id="freeDeliveryThreshold" placeholder="500"></div><div class="aff"><label>Min Order Value (₹)</label><input type="number" id="minOrderValue" placeholder="0"></div></div>
+    <button class="abtn" onclick="saveDeliverySettings()">💾 Save</button>
+  </div>
+</div>
+
+<!-- MEMBERSHIP ADMIN -->
+<div class="adm-pane" id="adm-membership">
+  <div class="adm-card"><h3>👑 Membership Plans</h3>
+    <p style="color:rgba(255,255,255,0.4);font-size:.8rem;margin-bottom:16px;">Edit membership plans, fees and benefits.</p>
+    <div id="membershipAdmin"></div>
+    <button class="abtn" onclick="saveMembershipPlans()" style="margin-top:12px;">💾 Save All Plans</button>
+  </div>
+  <div class="adm-card"><h3>👥 Current Members</h3>
+    <div style="overflow-x:auto;"><table class="orders-tbl"><thead><tr><th>Name</th><th>Phone</th><th>Plan</th><th>Joined</th><th>Expires</th></tr></thead><tbody id="membersBody"><tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.2);padding:22px;">No members yet.</td></tr></tbody></table></div>
+  </div>
+</div>
+
+<!-- OFFERS -->
+<div class="adm-pane" id="adm-offers">
+  <div class="adm-card"><h3>🎉 Festival Offer</h3>
+    <div class="afrow"><div class="aff"><label>Offer Name</label><input type="text" id="oN" placeholder="Eid Special"></div><div class="aff"><label>Discount %</label><input type="number" id="oD" placeholder="25"></div></div>
+    <div class="afrow"><div class="aff"><label>Start</label><input type="date" id="oSD"></div><div class="aff"><label>End</label><input type="date" id="oED"></div></div>
+    <div class="aff" style="margin-bottom:14px;"><label>Description</label><input type="text" id="oDesc" placeholder="25% off all cakes!"></div>
+    <button class="abtn" onclick="saveOffer()">🎉 Activate Offer</button>
+  </div>
+  <div class="adm-card"><h3>Active Offers</h3><div id="offerList" style="color:rgba(255,255,255,0.26);font-size:.76rem;">None.</div></div>
+</div>
+
+<!-- CAKE BUILDER ADMIN -->
+<div class="adm-pane" id="adm-builder">
+  <div class="adm-card"><h3>🎨 Cake Builder Options</h3>
+    <p style="color:rgba(255,255,255,0.4);font-size:.8rem;margin-bottom:16px;">Edit sizes, flavours, icings and toppings for the custom cake builder.</p>
+    <div id="builderAdmin"></div>
+    <button class="abtn" onclick="saveBuilderOptions()" style="margin-top:12px;">💾 Save Builder Options</button>
+  </div>
+</div>
+
+<!-- ORDERS -->
+<div class="adm-pane" id="adm-orders"><div class="adm-card"><h3>📋 Orders</h3><div style="overflow-x:auto;"><table class="orders-tbl"><thead><tr><th>ID</th><th>Customer</th><th>Phone</th><th>Total</th><th>Coins</th><th>Payment</th><th>Time</th></tr></thead><tbody id="ordsBody"><tr><td colspan="7" style="text-align:center;color:rgba(255,255,255,0.16);padding:22px;">No orders yet.</td></tr></tbody></table></div></div></div>
+
+<!-- CUSTOMERS -->
+<div class="adm-pane" id="adm-customers"><div class="adm-card"><h3>👥 Customers</h3><button class="abtn" onclick="exportCSV()" style="margin-bottom:13px;">📥 Export CSV</button><div style="overflow-x:auto;"><table class="orders-tbl"><thead><tr><th>Name</th><th>Phone</th><th>Member</th><th>S Coins</th><th>Orders</th><th>Spent</th></tr></thead><tbody id="custBody"><tr><td colspan="6" style="text-align:center;color:rgba(255,255,255,0.16);padding:22px;">No customers yet.</td></tr></tbody></table></div></div></div>
+
+<!-- SMS/WA -->
+<div class="adm-pane" id="adm-sms">
+  <div class="adm-card"><h3>💬 WhatsApp</h3><div class="sms-info">Orders auto-send a WhatsApp notification to your number.</div>
+    <div class="aff" style="margin-bottom:9px;"><label>WhatsApp Number</label><input type="tel" id="waBizNum" placeholder="+91 87689 27686"></div>
+    <div class="aff" style="margin-bottom:13px;"><label>Template</label><textarea id="waTemplate" rows="3" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:7px;padding:7px 10px;color:#fff;font-family:'Outfit',sans-serif;font-size:.77rem;resize:vertical;width:100%;">New Order! ID:{ORDER_ID} | {NAME}({PHONE}) | {ITEMS} | ₹{TOTAL} | {ADDRESS}</textarea></div>
+    <button class="abtn" onclick="saveWA()">💾 Save</button>
+  </div>
+  <div class="adm-card"><h3>📱 Fast2SMS</h3><div class="sms-info">₹100 for ~400 SMS at fast2sms.com</div>
+    <div class="afrow"><div class="aff"><label>API Key</label><input type="text" id="smsKey" placeholder="API Key"></div><div class="aff"><label>Sender ID</label><input type="text" id="smsSid" placeholder="SANCHI"></div></div>
+    <div class="aff" style="margin-bottom:13px;"><label>SMS Template</label><textarea id="smsTpl" rows="2" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:7px;padding:7px 10px;color:#fff;font-family:'Outfit',sans-serif;font-size:.76rem;resize:vertical;width:100%;">Order {ORDER_ID} Sanchita's Ekbarna Malda! Rs.{TOTAL} confirmed. +{COINS} S Coins!</textarea></div>
+    <button class="abtn" onclick="saveSMS()" style="margin-right:6px;">💾 Save</button><button class="abtn grey" onclick="testSMS()">📤 Test</button>
+  </div>
+</div>
+
+<!-- DATABASE -->
+<div class="adm-pane" id="adm-db">
+  <div class="adm-card"><h3>🗄️ InfinityFree MySQL</h3>
+    <div class="afrow"><div class="aff"><label>API URL</label><input type="url" id="dbUrl" placeholder="https://yoursite.infinityfreeapp.com/api"></div><div class="aff"><label>Secret Key</label><input type="password" id="dbKey" placeholder="secret_key"></div></div>
+    <button class="abtn" onclick="saveDB()" style="margin-right:7px;">💾 Save</button><button class="abtn grey" onclick="testDB()">🔗 Test</button>
+    <div id="dbRes" style="margin-top:9px;font-size:.74rem;"></div>
+  </div>
+  <div class="adm-card"><h3>SQL Setup</h3><div class="code-blk"><pre>CREATE TABLE products (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(200), category VARCHAR(50), price DECIMAL(10,2), offer_price DECIMAL(10,2), emoji VARCHAR(10), photo_url VARCHAR(500), description TEXT, stock INT DEFAULT 100, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE orders (id VARCHAR(20) PRIMARY KEY, customer_name VARCHAR(200), phone VARCHAR(20), address TEXT, items JSON, total DECIMAL(10,2), coins_earned INT, status VARCHAR(50) DEFAULT 'pending', payment_status VARCHAR(50) DEFAULT 'pending', payment_method VARCHAR(50), created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE customers (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(200), phone VARCHAR(20) UNIQUE, total_coins INT DEFAULT 0, total_spent DECIMAL(10,2) DEFAULT 0, order_count INT DEFAULT 0, membership VARCHAR(20) DEFAULT 'none', membership_expiry DATE, last_order TIMESTAMP);
+CREATE TABLE reviews (id INT AUTO_INCREMENT PRIMARY KEY, product_id INT, product_name VARCHAR(200), reviewer_name VARCHAR(200), rating INT, review_text TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);</pre></div>
+  </div>
+</div>
+
+</div></div><!-- end admin -->
+
+<footer id="siteFooter">
+  <div class="footer-grid">
+    <div class="footer-brand"><span class="logo-txt">Sanchita's Cake Corner</span><p id="footerAbout">Artisan cakes, pizzas, cookies and chocolates crafted with love in Ekbarna, Malda.</p><div class="contact-info"><div class="cline"><span class="ci2">📍</span><span id="footerAddr">Ekbarna, Malda, West Bengal</span></div><div class="cline"><span class="ci2">📞</span><span id="footerPhone">+91 87689 27686</span></div><div class="cline"><span class="ci2">💬</span><span>WhatsApp Orders Welcome</span></div><div class="cline"><span class="ci2">🕐</span><span id="footerHours">Open 8 AM – 9 PM, All Days</span></div></div></div>
+    <div class="footer-col"><h4>Menu</h4><ul><li onclick="goTab('home')">🏠 Home</li><li onclick="goTab('cake')">🎂 Cakes</li><li onclick="goTab('pizza')">🍕 Pizza</li><li onclick="goTab('cookie')">🍪 Cookies</li><li onclick="goTab('chocolate')">🍫 Chocolates</li><li onclick="goTab('builder')">🎨 Custom Cake</li><li onclick="goTab('membership')">👑 Membership</li></ul></div>
+    <div class="footer-col"><h4>Help</h4><ul><li>📦 Track Order</li><li onclick="openM('returnModal')" style="cursor:pointer;">🔄 Return Policy</li><li>🪙 S Coin FAQ</li><li>❓ Help Centre</li></ul></div>
+    <div class="footer-col"><h4>About</h4><ul><li onclick="openM('storyModal')" style="cursor:pointer;">🏪 Our Story</li><li>🎂 Custom Orders</li><li onclick="openM('reviewModal')">⭐ Write Review</li><li onclick="openM('bulkModal')" style="cursor:pointer;">🤝 Bulk / Events</li></ul></div>
+  </div>
+  <div class="footer-btm"><p>© 2025 Sanchita's Cake Corner · Ekbarna, Malda, WB</p><button class="adm-trigger" onclick="openAdminGate()">⚙️ Admin</button></div>
+</footer>
+<script>
+// Cursor removed
+window.addEventListener('load',()=>setTimeout(()=>document.getElementById('loader').classList.add('hide'),1900));
+window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',scrollY>50));
+
+// SITE SETTINGS (editable from admin)
+let siteSettings = JSON.parse(localStorage.getItem('scc_settings') || JSON.stringify({
+  address:'Ekbarna, Malda, West Bengal', phone:'+91 87689 27686', hours:'Open 8 AM – 9 PM, All Days',
+  festName:'Eid Special', festDisc:25, festDesc:'Plus bonus S Coins on every order. Don\'t miss out!',
+  coinRate:10, coinValidity:3, freeDeliveryAbove:500, minOrder:0,
+  ticker:['Fresh Bakes Daily','10 S Coins per ₹100','Free Delivery ₹500+','Custom Cakes Available'],
+  heroTag:'✦ Fresh Baked Daily', heroH1:'Cakes Crafted|with Pure Love', heroP:'Custom-designed cakes with finest Belgian chocolate.',
+  upiId:'', upiName:'Sanchitas Cake Corner', rzpKey:'', mapUrl:''
+}));
+
+// DELIVERY ZONES
+let deliveryZones = JSON.parse(localStorage.getItem('scc_zones') || JSON.stringify([
+  {name:'Ekbarna (Local)',icon:'📍',time:'30 mins',fee:0},
+  {name:'Malda Town',icon:'🏙️',time:'45 mins',fee:30},
+  {name:'English Bazar',icon:'🌆',time:'50 mins',fee:40},
+  {name:'Old Malda',icon:'🏘️',time:'55 mins',fee:40},
+  {name:'Gajol / Habibpur',icon:'🛣️',time:'75 mins',fee:60},
+  {name:'Custom Zone',icon:'🎯',time:'Call to confirm',fee:-1}
+]));
+
+// MEMBERSHIP PLANS
+let membershipPlans = JSON.parse(localStorage.getItem('scc_plans') || JSON.stringify([
+  {id:'silver',name:'Silver',icon:'🥈',price:199,duration:3,discountPct:5,bonusCoins:50,freeDeliveries:2,features:['5% off all orders','50 bonus S Coins on join','2 free deliveries/month','Priority support']},
+  {id:'gold',name:'Gold',icon:'🥇',price:399,duration:6,discountPct:10,bonusCoins:150,freeDeliveries:5,features:['10% off all orders','150 bonus S Coins on join','5 free deliveries/month','Custom cake discount','Birthday special offer']},
+  {id:'platinum',name:'Platinum',icon:'💎',price:799,duration:12,discountPct:18,bonusCoins:400,freeDeliveries:999,features:['18% off all orders','400 bonus S Coins on join','Unlimited free deliveries','Priority queue','Annual birthday cake FREE','Exclusive new flavour access']}
+]));
+
+// CAKE BUILDER OPTIONS
+let builderOptions = JSON.parse(localStorage.getItem('scc_builder') || JSON.stringify({
+  sizes:[{name:'Half Kg',icon:'🎂',price:299},{name:'1 Kg',icon:'🎂',price:499},{name:'1.5 Kg',icon:'🎂',price:699},{name:'2 Kg',icon:'🎂',price:899},{name:'3 Kg',icon:'🎂',price:1199}],
+  flavours:[{name:'Chocolate',icon:'🍫',price:0},{name:'Vanilla',icon:'🍦',price:0},{name:'Red Velvet',icon:'❤️',price:50},{name:'Mango',icon:'🥭',price:50},{name:'Black Forest',icon:'🌲',price:50},{name:'Strawberry',icon:'🍓',price:30}],
+  icings:[{name:'Buttercream',icon:'🧁',price:0},{name:'Fondant',icon:'✨',price:100},{name:'Whipped Cream',icon:'🤍',price:0},{name:'Ganache',icon:'🍫',price:80}],
+  toppings:[{name:'Fresh Berries',icon:'🍓',price:60},{name:'Chocolate Shavings',icon:'🍫',price:40},{name:'Sprinkles',icon:'🎉',price:20},{name:'Edible Flowers',icon:'🌸',price:80},{name:'Macarons',icon:'🌈',price:120},{name:'None',icon:'✖️',price:0}]
+}));

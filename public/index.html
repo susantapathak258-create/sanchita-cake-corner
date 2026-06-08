@@ -1749,6 +1749,133 @@ const sQR=localStorage.getItem('scc_qr');if(sQR){window._qrData=sQR;try{document
 @media(max-width:420px){#tasa-window{width:calc(100vw - 20px);right:10px;bottom:90px;}}
 </style>
   
+// ═══ TASA CHATBOT ═══
+let tasaOpen=false;
+let tasaHistory=[];
+
+function toggleTasa(){
+  tasaOpen=!tasaOpen;
+  const w=document.getElementById('tasa-window');
+  w.classList.toggle('open',tasaOpen);
+  document.getElementById('tasaNotif').style.display='none';
+  if(tasaOpen&&tasaHistory.length===0){
+    setTimeout(()=>{
+      tasaAddMsg('bot','👋 Hi! I\'m **Tasa**, your personal assistant at Sanchita\'s Cake Corner!\n\nI can help you with:\n• Product details & prices\n• Delivery info\n• S Coins & Membership\n• Custom cakes\n• Order help\n\nWhat can I help you with today? 😊');
+    },400);
+  }
+}
+
+function tasaQuick(msg){
+  document.getElementById('tasaInput').value=msg;
+  tasaSend();
+}
+
+function tasaSend(){
+  const inp=document.getElementById('tasaInput');
+  const msg=inp.value.trim();
+  if(!msg)return;
+  tasaAddMsg('user',msg);
+  inp.value='';
+  showTyping();
+  setTimeout(()=>{
+    removeTyping();
+    const reply=tasaGetReply(msg.toLowerCase());
+    tasaAddMsg('bot',reply.text,reply.products);
+  },900+Math.random()*600);
+}
+
+function tasaGetReply(q){
+  const prods=typeof products!=='undefined'?products:[];
+
+  // GREETINGS
+  if(/^(hi|hello|hey|hii|helo|namaskar|assalamu|salaam)/i.test(q)){
+    return {text:"Hello! 😊 Welcome to Sanchita's Cake Corner! I'm Tasa, your personal assistant. How can I help you today?"};
+  }
+  if(/(good morning|good evening|good afternoon)/i.test(q)){
+    return {text:"Good day! 🌟 Hope you're having a wonderful time! What can I get for you today at Sanchita's?"};
+  }
+  if(/(thank|thanks|dhanyabad|shukriya)/i.test(q)){
+    return {text:"You're most welcome! 😊 Is there anything else I can help you with? Feel free to ask anytime!"};
+  }
+  if(/(bye|goodbye|see you|tata)/i.test(q)){
+    return {text:"Goodbye! 👋 Thank you for visiting Sanchita's Cake Corner. Come back soon for something delicious! 🎂"};
+  }
+
+  // PRODUCTS - CAKES
+  if(/cake|cakes|birthday cake|wedding cake|custom cake/i.test(q)){
+    const cakes=prods.filter(p=>p.category==='cake');
+    if(/(all|show|list|menu|available)/i.test(q)||cakes.length){
+      return {text:`Here are our delicious cakes! 🎂 We have ${cakes.length} varieties. All cakes are freshly baked to order:`,products:cakes.slice(0,4)};
+    }
+    return {text:"We have a wonderful selection of cakes! 🎂\n\n• Birthday Cakes\n• Wedding Cakes\n• Custom Designer Cakes\n• Red Velvet, Chocolate, Mango, Strawberry & more!\n\nAll cakes are freshly baked. Would you like to see our cake menu or build a **custom cake**?",};
+  }
+
+  // PIZZA
+  if(/pizza|pizzas/i.test(q)){
+    const pizzas=prods.filter(p=>p.category==='pizza');
+    return {text:`Here are our stone-baked pizzas! 🍕 Hot delivery within 60 minutes:`,products:pizzas.slice(0,4)};
+  }
+
+  // COOKIES
+  if(/cookie|cookies|biscuit/i.test(q)){
+    const cookies=prods.filter(p=>p.category==='cookie');
+    return {text:`Our freshly baked cookies! 🍪 Available in 12 flavours, sold in sets of 12:`,products:cookies.slice(0,4)};
+  }
+
+  // CHOCOLATE
+  if(/chocolate|chocolates|truffle|praline/i.test(q)){
+    const chocs=prods.filter(p=>p.category==='chocolate');
+    return {text:`Our premium Belgian chocolates! 🍫 Perfect for gifting:`,products:chocs.slice(0,4)};
+  }
+
+  // PRICE QUERY
+  if(/(price|cost|rate|kitna|how much|koto)/i.test(q)){
+    const name=q.replace(/(price|cost|rate|of|the|a|how much|is|kitna|koto)/gi,'').trim();
+    const found=prods.filter(p=>p.name.toLowerCase().includes(name)||p.category.toLowerCase().includes(name));
+    if(found.length>0){
+      return {text:`Here are the prices I found:`,products:found.slice(0,3)};
+    }
+    return {text:"Our price ranges:\n\n🎂 **Cakes**: ₹380 – ₹820\n🍕 **Pizza**: ₹320 – ₹490\n🍪 **Cookies**: ₹145 – ₹220 (12 pcs)\n🍫 **Chocolates**: ₹150 – ₹550\n\nWould you like specific pricing for any item? Just ask!"};
+  }
+
+  // SPECIFIC PRODUCT SEARCH
+  const searchTerms=['chocolate','strawberry','red velvet','mango','pepperoni','chicken','cheese','butter','oreo','truffle'];
+  for(const term of searchTerms){
+    if(q.includes(term)){
+      const found=prods.filter(p=>p.name.toLowerCase().includes(term));
+      if(found.length>0)return {text:`Here's what I found for "${term}":`,products:found.slice(0,3)};
+    }
+  }
+
+  // DELIVERY
+  if(/(delivery|deliver|shipping|home delivery|time|how long|kitakhin)/i.test(q)){
+    return {text:"🚚 **Delivery Information:**\n\n📍 **Ekbarna (Local)** — 30 mins · FREE\n🏙️ **Malda Town** — 45 mins · ₹30\n🌆 **English Bazar** — 50 mins · ₹40\n🏘️ **Old Malda** — 55 mins · ₹40\n🛣️ **Gajol / Habibpur** — 75 mins · ₹60\n\n🆓 **Free delivery** on orders above ₹500!\n\nFor other areas, please call us: **+91 87689 27686**"};
+  }
+
+  // S COINS
+  if(/(coin|s coin|reward|points|loyalty|cashback)/i.test(q)){
+    return {text:"🪙 **S Coin Reward System:**\n\n✅ Earn **10 S Coins** for every ₹100 you spend\n💰 Each coin is worth **₹0.10**\n⏰ Coins valid for **3 months**\n♾️ **No limit** on how many you can earn!\n\n**How to use:** Sign in with your name & phone number, shop, and coins are added automatically. Redeem at checkout for discounts!\n\nWant to sign in and start earning? 😊"};
+  }
+
+  // MEMBERSHIP
+  if(/(member|membership|vip|plan|silver|gold|platinum|subscribe)/i.test(q)){
+    return {text:"👑 **Membership Plans:**\n\n🥈 **Silver** — ₹199/3 months\n• 5% off all orders\n• 50 bonus S Coins\n• 2 free deliveries/month\n\n🥇 **Gold** — ₹399/6 months\n• 10% off all orders\n• 150 bonus S Coins\n• 5 free deliveries/month\n• Birthday special offer\n\n💎 **Platinum** — ₹799/year\n• 18% off all orders\n• 400 bonus S Coins\n• Unlimited free deliveries\n• FREE birthday cake!\n\nTap the **Membership** tab to join! 👑"};
+  }
+
+  // CUSTOM CAKE
+  if(/(custom|design|build|personaliz|message on cake|name on|special cake)/i.test(q)){
+    return {text:"🎨 **Custom Cake Builder:**\n\nYes! We make fully custom cakes! You can choose:\n\n1️⃣ **Size** — Half Kg to 3 Kg\n2️⃣ **Flavour** — Chocolate, Vanilla, Red Velvet, Mango & more\n3️⃣ **Icing** — Buttercream, Fondant, Ganache\n4️⃣ **Toppings** — Berries, Macarons, Flowers & more\n5️⃣ **Message** — Your personal text\n6️⃣ **Delivery Date** — Schedule it!\n\nTap the **🎨 Custom Cake** tab in the menu to start building! 😍"};
+  }
+
+  // HOW TO ORDER
+  if(/(order|how to|buy|purchase|kemon|kivabe|process)/i.test(q)){
+    return {text:"🛍️ **How to Order:**\n\n1. **Browse** — Tap any category tab (Cakes, Pizza, Cookies, etc.)\n2. **Add to Cart** — Click 'Add to Cart' on any item\n3. **Sign In** — Enter your name & phone\n4. **Checkout** — Fill delivery address\n5. **Pay** — UPI/QR or Cash on Delivery\n6. **Confirm** — We'll call to confirm your order!\n\nNeed help? Call us: **+91 87689 27686** or WhatsApp us! 💬"};
+  }
+
+  // PAYMENT
+  if(/(pay|payment|upi|razorpay|cash|cod|online|card)/i.test(q)){
+    return {text:"💳 **Payment Options:**\n\n📲 **UPI / QR Code** — Scan and pay instantly (PhonePe, GPay, Paytm)\n💵 **Cash on Delivery** — Pay when your order arrives\n\n**UPI ID:** Available at checkout\n\nSimple, safe & secure! 🔒"};
+  }  
   // CONTACT
   if(/(contact|call|phone|number|whatsapp|reach|address|location|where)/i.test(q)){
     return {text:"📞 **Contact Us:**\n\n📍 **Address:** Ekbarna, Malda, West Bengal\n📞 **Phone:** +91 87689 27686\n💬 **WhatsApp:** +91 87689 27686\n🕐 **Timings:** 8 AM – 9 PM, All Days\n\nFeel free to call or WhatsApp us anytime! We're happy to help 😊"};

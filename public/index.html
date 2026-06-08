@@ -1749,7 +1749,46 @@ const sQR=localStorage.getItem('scc_qr');if(sQR){window._qrData=sQR;try{document
 @media(max-width:420px){#tasa-window{width:calc(100vw - 20px);right:10px;bottom:90px;}}
 </style>
   
-    // DEFAULT
+  // CONTACT
+  if(/(contact|call|phone|number|whatsapp|reach|address|location|where)/i.test(q)){
+    return {text:"📞 **Contact Us:**\n\n📍 **Address:** Ekbarna, Malda, West Bengal\n📞 **Phone:** +91 87689 27686\n💬 **WhatsApp:** +91 87689 27686\n🕐 **Timings:** 8 AM – 9 PM, All Days\n\nFeel free to call or WhatsApp us anytime! We're happy to help 😊"};
+  }
+
+  // OPENING HOURS
+  if(/(open|timing|hours|close|when|time)/i.test(q)){
+    return {text:"🕐 **Opening Hours:**\n\nWe're open **every day** from **8:00 AM to 9:00 PM**\n\n📍 Ekbarna, Malda, West Bengal\n📞 +91 87689 27686\n\nYou can also order online 24/7 and we'll confirm in the morning! 😊"};
+  }
+
+  // COMPLAINT / ISSUE
+  if(/(complaint|issue|problem|wrong|bad|damage|not fresh|refund|return|broken)/i.test(q)){
+    return {text:"😔 I'm so sorry to hear that! We always strive for the best quality.\n\n**Please contact us immediately:**\n📞 **Call:** +91 87689 27686\n💬 **WhatsApp:** +91 87689 27686\n\nWe promise to:\n• Investigate your concern right away\n• Offer a replacement or refund if needed\n• Make it right for you!\n\nYour satisfaction is our top priority. 🙏"};
+  }
+
+  // FRESH / INGREDIENTS
+  if(/(fresh|ingredient|quality|safe|allerg|gluten|vegan|eggless)/i.test(q)){
+    return {text:"🌿 **Quality & Freshness:**\n\n✅ All items are **freshly baked daily**\n✅ We use **premium Belgian chocolate**\n✅ **Farm-fresh** cream and fruits\n✅ No artificial preservatives\n\n**Eggless options** available — just mention when ordering!\n**Allergies?** Please inform us at: +91 87689 27686\n\nYour health and satisfaction matter to us! 💚"};
+  }
+
+  // TRACK ORDER
+  if(/(track|where is my|status|order status)/i.test(q)){
+    return {text:"📦 **Track Your Order:**\n\nYou can track your order on the **Home page** — scroll down to find the 'Track Order' section!\n\nEnter your **Order ID** or **Phone Number** to see the live status:\n• ✅ Order Placed\n• 💳 Payment Confirmed\n• 👩‍🍳 Being Prepared\n• 🛵 Out for Delivery\n• 🎉 Delivered!\n\nNeed help? Call: **+91 87689 27686** 😊"};
+  }
+
+  // MINIMUM ORDER
+  if(/(minimum|min order|minimum order)/i.test(q)){
+    return {text:"📋 **Order Info:**\n\n• No minimum order amount!\n• Cookies: Minimum 12 pieces per box\n• Custom cakes: Minimum Half Kg\n• Free delivery on orders above ₹500\n\nOrder as much or as little as you like! 😊"};
+  }
+
+  // ABOUT US
+  if(/(about|who are you|sanchita|bakery|story)/i.test(q)){
+    return {text:"🎂 **About Sanchita's Cake Corner:**\n\nWe are a passionate artisan bakery located in **Ekbarna, Malda, West Bengal**.\n\nFounded with love, we specialize in:\n• 🎂 Custom & celebration cakes\n• 🍕 Stone-baked pizzas\n• 🍪 Handcrafted cookies\n• 🍫 Premium Belgian chocolates\n\nEvery item is made fresh with the finest ingredients. Our mission is to make every celebration extra special! ✨\n\n📞 +91 87689 27686"};
+  }
+
+  // SHOW ALL PRODUCTS
+  if(/(all product|everything|what do you|menu|full menu)/i.test(q)){
+    return {text:`🛍️ **Our Full Menu:**\n\n🎂 **Cakes** — ${prods.filter(p=>p.category==='cake').length} items\n🍕 **Pizza** — ${prods.filter(p=>p.category==='pizza').length} items\n🍪 **Cookies** — ${prods.filter(p=>p.category==='cookie').length} items\n🍫 **Chocolates** — ${prods.filter(p=>p.category==='chocolate').length} items\n🎨 **Custom Cakes** — Build your own!\n\nTap any tab in the menu above to browse! Or ask me about a specific item 😊`};
+  }
+  // DEFAULT
   const defaultReplies=[
     "I'm not sure I understood that perfectly! 😊 Could you rephrase?\n\nI can help with:\n• **Products** — cakes, pizza, cookies, chocolates\n• **Prices & availability**\n• **Delivery info**\n• **Ordering help**\n• **S Coins & Membership**\n• **Complaints or issues**",
     "Hmm, let me think... 🤔 I might not have that info right now!\n\nFor detailed queries, please contact us:\n📞 **+91 87689 27686**\n💬 **WhatsApp us** anytime!\n\nOr try asking about our cakes, pizza, delivery, or membership! 😊",

@@ -1555,3 +1555,247 @@ function changeAdminPwd() {
     return;
   }
   
+ADM_PWD = nw;
+  localStorage.setItem('scc_adminPwd', nw);
+  document.getElementById('curPwd').value = '';
+  document.getElementById('newPwd').value = '';
+  document.getElementById('conPwd').value = '';
+  msg.innerHTML = '<span style="color:#4ade80;">✅ Password changed successfully!</span>';
+  toast('Admin password updated!', 'success');
+}
+function openAdminGate(){openM('adminGateModal');setTimeout(()=>document.getElementById('admPass').focus(),100);}
+function chkAdmin(){if(document.getElementById('admPass').value===ADM_PWD){closeM('adminGateModal');document.getElementById('admPass').value='';document.getElementById('adminPanel').classList.add('show');renderAdmProds();updateAdmStats();renderOrders();renderCusts();loadAdminSettings();}else toast('Wrong password','err');}
+function closeAdmin(){document.getElementById('adminPanel').classList.remove('show');}
+function admTab(id,el){document.querySelectorAll('.adm-pane').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.adm-tab').forEach(t=>t.classList.remove('on'));document.getElementById('adm-'+id).classList.add('on');el.classList.add('on');
+  if(id==='prods')renderAdmProds();if(id==='orders')renderOrders();if(id==='customers')renderCusts();
+  if(id==='delivery')renderDeliveryAdmin();if(id==='membership')renderMembershipAdmin();if(id==='builder')renderBuilderAdmin();}
+
+function loadAdminSettings(){
+  const s=siteSettings;
+  const setVal=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v||'';};
+  setVal('se-s1tag',s.heroTag);setVal('se-s1h1',s.heroH1);setVal('se-s1p',s.heroP);setVal('se-addr',s.address);setVal('se-phone',s.phone);setVal('se-hours',s.hours);
+  setVal('se-offerName',s.festName);setVal('se-offerDisc',s.festDisc);setVal('se-offerDesc',s.festDesc);
+  setVal('se-coinRate',s.coinRate);setVal('se-coinValidity',s.coinValidity);
+  setVal('freeDeliveryThreshold',s.freeDeliveryAbove);setVal('minOrderValue',s.minOrder);
+  if(s.ticker){setVal('tk1',s.ticker[0]);setVal('tk2',s.ticker[1]);setVal('tk3',s.ticker[2]);setVal('tk4',s.ticker[3]);}
+  const saved=JSON.parse(localStorage.getItem('scc_payment')||'{}');
+  setVal('upiId',saved.upiId);setVal('upiName',saved.upiName);setVal('rzpKey',saved.rzpKey||'');
+}
+function saveHeroContent(){
+  siteSettings.heroTag=document.getElementById('se-s1tag').value;
+  siteSettings.heroH1=document.getElementById('se-s1h1').value;
+  siteSettings.heroP=document.getElementById('se-s1p').value;
+  saveSettings();toast('Hero content saved!','success');
+}
+function saveTicker(){
+  siteSettings.ticker=[document.getElementById('tk1').value,document.getElementById('tk2').value,document.getElementById('tk3').value,document.getElementById('tk4').value];
+  const tt=document.getElementById('t1');if(tt)tt.textContent=siteSettings.ticker[0];
+  const tt2=document.getElementById('t2');if(tt2)tt2.textContent=siteSettings.ticker[1];
+  const tt3=document.getElementById('t3');if(tt3)tt3.textContent=siteSettings.ticker[2];
+  const tt4=document.getElementById('t4');if(tt4)tt4.textContent=siteSettings.ticker[3];
+  saveSettings();toast('Ticker saved!','success');
+}
+function saveSiteInfo(){
+  siteSettings.address=document.getElementById('se-addr').value;
+  siteSettings.phone=document.getElementById('se-phone').value;
+  siteSettings.hours=document.getElementById('se-hours').value;
+  siteSettings.mapUrl=document.getElementById('se-mapurl').value;
+  saveSettings();applySettings();toast('Site info saved!','success');
+}
+function saveFestBanner(){
+  siteSettings.festName=document.getElementById('se-offerName').value;
+  siteSettings.festDisc=parseInt(document.getElementById('se-offerDisc').value)||25;
+  siteSettings.festDesc=document.getElementById('se-offerDesc').value;
+  saveSettings();applySettings();toast('Festival banner updated!','success');
+}
+function saveCoinSettings(){
+  siteSettings.coinRate=parseInt(document.getElementById('se-coinRate').value)||10;
+  siteSettings.coinValidity=parseInt(document.getElementById('se-coinValidity').value)||3;
+  saveSettings();applySettings();toast('Coin settings saved!','success');
+}
+function saveSettings(){localStorage.setItem('scc_settings',JSON.stringify(siteSettings));}
+
+// DELIVERY ADMIN
+function renderDeliveryAdmin(){
+  const c=document.getElementById('deliveryZonesAdmin');
+  c.innerHTML=deliveryZones.map((z,i)=>`<div style="background:rgba(255,255,255,0.038);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:12px;margin-bottom:9px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:8px;align-items:center;">
+    <input type="text" value="${z.name}" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:7px;color:#fff;font-family:'Outfit',sans-serif;font-size:.78rem;" onchange="deliveryZones[${i}].name=this.value">
+    <input type="text" value="${z.icon}" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:7px;color:#fff;font-family:'Outfit',sans-serif;font-size:.78rem;" onchange="deliveryZones[${i}].icon=this.value">
+    <input type="text" value="${z.time}" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:7px;color:#fff;font-family:'Outfit',sans-serif;font-size:.78rem;" onchange="deliveryZones[${i}].time=this.value">
+    <input type="number" value="${z.fee}" placeholder="Fee (0=free,-1=request)" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:7px;color:#fff;font-family:'Outfit',sans-serif;font-size:.78rem;" onchange="deliveryZones[${i}].fee=parseInt(this.value)">
+    <button class="del-btn" onclick="deliveryZones.splice(${i},1);renderDeliveryAdmin()">✕</button>
+  </div>`).join('');
+}
+function addDeliveryZone(){deliveryZones.push({name:'New Zone',icon:'📍',time:'? mins',fee:50});renderDeliveryAdmin();}
+function saveDeliveryZones(){localStorage.setItem('scc_zones',JSON.stringify(deliveryZones));renderDeliveryZonesDisplay();toast('Delivery zones saved!','success');}
+function saveDeliverySettings(){siteSettings.freeDeliveryAbove=parseInt(document.getElementById('freeDeliveryThreshold').value)||500;siteSettings.minOrder=parseInt(document.getElementById('minOrderValue').value)||0;saveSettings();toast('Delivery settings saved!','success');}
+
+// MEMBERSHIP ADMIN
+function renderMembershipAdmin(){
+  const c=document.getElementById('membershipAdmin');
+  c.innerHTML=membershipPlans.map((p,idx)=>`<div style="background:rgba(255,255,255,0.038);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:16px;margin-bottom:12px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
+      <div class="aff"><label>Plan Name</label><input type="text" value="${p.name}" onchange="membershipPlans[${idx}].name=this.value"></div>
+      <div class="aff"><label>Price (₹)</label><input type="number" value="${p.price}" onchange="membershipPlans[${idx}].price=parseInt(this.value)"></div>
+      <div class="aff"><label>Duration (months)</label><input type="number" value="${p.duration}" onchange="membershipPlans[${idx}].duration=parseInt(this.value)"></div>
+      <div class="aff"><label>Discount (%)</label><input type="number" value="${p.discountPct}" onchange="membershipPlans[${idx}].discountPct=parseInt(this.value)"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+      <div class="aff"><label>Bonus S Coins on Join</label><input type="number" value="${p.bonusCoins}" onchange="membershipPlans[${idx}].bonusCoins=parseInt(this.value)"></div>
+      <div class="aff"><label>Icon Emoji</label><input type="text" value="${p.icon}" onchange="membershipPlans[${idx}].icon=this.value"></div>
+    </div>
+    <div class="aff" style="margin-bottom:0;"><label>Benefits (one per line)</label><textarea rows="4" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:7px;padding:8px;color:#fff;font-family:'Outfit',sans-serif;font-size:.78rem;resize:vertical;width:100%;" onchange="membershipPlans[${idx}].features=this.value.split('\\n').filter(Boolean)">${p.features.join('\n')}</textarea></div>
+  </div>`).join('');
+  // Current members
+  const custs=Object.values(customers).filter(c=>c.membership&&c.membership!=='none');
+  document.getElementById('membersBody').innerHTML=custs.length?custs.map(c=>`<tr><td>${c.name}</td><td style="font-family:monospace;">${c.phone}</td><td>${c.membership}</td><td>${c.lastOrder||'-'}</td><td>${c.membershipExpiry||'-'}</td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.2);padding:22px;">No members yet.</td></tr>';
+}
+function saveMembershipPlans(){localStorage.setItem('scc_plans',JSON.stringify(membershipPlans));toast('Membership plans saved!','success');renderMembership();}
+
+// BUILDER ADMIN
+function renderBuilderAdmin(){
+  const c=document.getElementById('builderAdmin');
+  const renderSection=(label,items,key)=>`<div style="margin-bottom:16px;"><div style="color:var(--gold);font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">${label}</div>${items.map((item,i)=>`<div style="display:flex;gap:8px;margin-bottom:6px;align-items:center;"><input type="text" value="${item.icon}" style="width:48px;background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:6px;color:#fff;font-family:'Outfit',sans-serif;font-size:.8rem;" onchange="builderOptions.${key}[${i}].icon=this.value"><input type="text" value="${item.name}" style="flex:1;background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:6px;color:#fff;font-family:'Outfit',sans-serif;font-size:.8rem;" onchange="builderOptions.${key}[${i}].name=this.value"><input type="number" value="${item.price}" placeholder="Extra ₹" style="width:80px;background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:6px;color:#fff;font-family:'Outfit',sans-serif;font-size:.8rem;" onchange="builderOptions.${key}[${i}].price=parseInt(this.value)||0"><button class="del-btn" onclick="builderOptions.${key}.splice(${i},1);renderBuilderAdmin()">✕</button></div>`).join('')}<button class="abtn grey" style="font-size:.7rem;padding:5px 10px;" onclick="builderOptions.${key}.push({name:'New Option',icon:'✨',price:0});renderBuilderAdmin()">+ Add</button></div>`;
+  c.innerHTML=renderSection('Sizes',builderOptions.sizes,'sizes')+renderSection('Flavours',builderOptions.flavours,'flavours')+renderSection('Icings',builderOptions.icings,'icings')+renderSection('Toppings',builderOptions.toppings,'toppings');
+}
+function saveBuilderOptions(){localStorage.setItem('scc_builder',JSON.stringify(builderOptions));toast('Builder options saved!','success');initBuilder();}
+
+// PRODUCT ADMIN
+function prevNewPhoto(inp){const f=inp.files[0];if(!f)return;const rd=new FileReader();rd.onload=e=>{document.getElementById('newPhotoImg').src=e.target.result;document.getElementById('newPhotoPreview').style.display='block';window._newPhoto=e.target.result;};rd.readAsDataURL(f);}
+function addProd(){
+  const name=document.getElementById('pN').value.trim(),price=parseFloat(document.getElementById('pP').value);
+  if(!name||!price){toast('Fill name and price','err');return;}
+  const photo=document.getElementById('pPhoto').value.trim()||window._newPhoto||'';
+  const p={id:Date.now(),name,category:document.getElementById('pC').value,price,offerPrice:parseFloat(document.getElementById('pOP').value)||null,emoji:document.getElementById('pE').value||'🎂',photo,desc:document.getElementById('pD').value,stock:parseInt(document.getElementById('pS').value)||50,ratings:[]};
+  products.unshift(p);renderAdmProds();updateAdmStats();populateRvSel();
+  ['pN','pP','pOP','pE','pD','pS','pPhoto'].forEach(i=>document.getElementById(i).value='');
+  window._newPhoto='';document.getElementById('newPhotoPreview').style.display='none';
+  toast(p.emoji+' '+p.name+' added!','success');syncProdToDB(p);
+}
+function delProd(id){products=products.filter(p=>p.id!==id);renderAdmProds();updateAdmStats();toast('Product deleted');}
+function renderAdmProds(){
+  document.getElementById('prodCnt').textContent='('+products.length+')';
+  document.getElementById('admPGrid').innerHTML=products.map(p=>`<div class="apc">${p.photo?`<img class="apc-img" src="${p.photo}" alt="${p.name}" onerror="this.style.display='none'">`:`<span class="apc-em">${p.emoji}</span>`}<h4>${p.name}</h4><p>₹${p.offerPrice||p.price} · ${p.category}</p><div class="apc-acts"><button class="del-btn" onclick="delProd(${p.id})">Delete</button><button class="photo-btn" onclick="editPhoto(${p.id})">📷 Photo</button></div></div>`).join('');
+}
+  ADM_PWD = nw;
+  localStorage.setItem('scc_adminPwd', nw);
+  document.getElementById('curPwd').value = '';
+  document.getElementById('newPwd').value = '';
+  document.getElementById('conPwd').value = '';
+  msg.innerHTML = '<span style="color:#4ade80;">✅ Password changed successfully!</span>';
+  toast('Admin password updated!', 'success');
+}
+function openAdminGate(){openM('adminGateModal');setTimeout(()=>document.getElementById('admPass').focus(),100);}
+function chkAdmin(){if(document.getElementById('admPass').value===ADM_PWD){closeM('adminGateModal');document.getElementById('admPass').value='';document.getElementById('adminPanel').classList.add('show');renderAdmProds();updateAdmStats();renderOrders();renderCusts();loadAdminSettings();}else toast('Wrong password','err');}
+function closeAdmin(){document.getElementById('adminPanel').classList.remove('show');}
+function admTab(id,el){document.querySelectorAll('.adm-pane').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.adm-tab').forEach(t=>t.classList.remove('on'));document.getElementById('adm-'+id).classList.add('on');el.classList.add('on');
+  if(id==='prods')renderAdmProds();if(id==='orders')renderOrders();if(id==='customers')renderCusts();
+  if(id==='delivery')renderDeliveryAdmin();if(id==='membership')renderMembershipAdmin();if(id==='builder')renderBuilderAdmin();}
+
+function loadAdminSettings(){
+  const s=siteSettings;
+  const setVal=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v||'';};
+  setVal('se-s1tag',s.heroTag);setVal('se-s1h1',s.heroH1);setVal('se-s1p',s.heroP);setVal('se-addr',s.address);setVal('se-phone',s.phone);setVal('se-hours',s.hours);
+  setVal('se-offerName',s.festName);setVal('se-offerDisc',s.festDisc);setVal('se-offerDesc',s.festDesc);
+  setVal('se-coinRate',s.coinRate);setVal('se-coinValidity',s.coinValidity);
+  setVal('freeDeliveryThreshold',s.freeDeliveryAbove);setVal('minOrderValue',s.minOrder);
+  if(s.ticker){setVal('tk1',s.ticker[0]);setVal('tk2',s.ticker[1]);setVal('tk3',s.ticker[2]);setVal('tk4',s.ticker[3]);}
+  const saved=JSON.parse(localStorage.getItem('scc_payment')||'{}');
+  setVal('upiId',saved.upiId);setVal('upiName',saved.upiName);setVal('rzpKey',saved.rzpKey||'');
+}
+function saveHeroContent(){
+  siteSettings.heroTag=document.getElementById('se-s1tag').value;
+  siteSettings.heroH1=document.getElementById('se-s1h1').value;
+  siteSettings.heroP=document.getElementById('se-s1p').value;
+  saveSettings();toast('Hero content saved!','success');
+}
+function saveTicker(){
+  siteSettings.ticker=[document.getElementById('tk1').value,document.getElementById('tk2').value,document.getElementById('tk3').value,document.getElementById('tk4').value];
+  const tt=document.getElementById('t1');if(tt)tt.textContent=siteSettings.ticker[0];
+  const tt2=document.getElementById('t2');if(tt2)tt2.textContent=siteSettings.ticker[1];
+  const tt3=document.getElementById('t3');if(tt3)tt3.textContent=siteSettings.ticker[2];
+  const tt4=document.getElementById('t4');if(tt4)tt4.textContent=siteSettings.ticker[3];
+  saveSettings();toast('Ticker saved!','success');
+}
+function saveSiteInfo(){
+  siteSettings.address=document.getElementById('se-addr').value;
+  siteSettings.phone=document.getElementById('se-phone').value;
+  siteSettings.hours=document.getElementById('se-hours').value;
+  siteSettings.mapUrl=document.getElementById('se-mapurl').value;
+  saveSettings();applySettings();toast('Site info saved!','success');
+}
+function saveFestBanner(){
+  siteSettings.festName=document.getElementById('se-offerName').value;
+  siteSettings.festDisc=parseInt(document.getElementById('se-offerDisc').value)||25;
+  siteSettings.festDesc=document.getElementById('se-offerDesc').value;
+  saveSettings();applySettings();toast('Festival banner updated!','success');
+}
+function saveCoinSettings(){
+  siteSettings.coinRate=parseInt(document.getElementById('se-coinRate').value)||10;
+  siteSettings.coinValidity=parseInt(document.getElementById('se-coinValidity').value)||3;
+  saveSettings();applySettings();toast('Coin settings saved!','success');
+}
+function saveSettings(){localStorage.setItem('scc_settings',JSON.stringify(siteSettings));}
+
+// DELIVERY ADMIN
+function renderDeliveryAdmin(){
+  const c=document.getElementById('deliveryZonesAdmin');
+  c.innerHTML=deliveryZones.map((z,i)=>`<div style="background:rgba(255,255,255,0.038);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:12px;margin-bottom:9px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:8px;align-items:center;">
+    <input type="text" value="${z.name}" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:7px;color:#fff;font-family:'Outfit',sans-serif;font-size:.78rem;" onchange="deliveryZones[${i}].name=this.value">
+    <input type="text" value="${z.icon}" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:7px;color:#fff;font-family:'Outfit',sans-serif;font-size:.78rem;" onchange="deliveryZones[${i}].icon=this.value">
+    <input type="text" value="${z.time}" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:7px;color:#fff;font-family:'Outfit',sans-serif;font-size:.78rem;" onchange="deliveryZones[${i}].time=this.value">
+    <input type="number" value="${z.fee}" placeholder="Fee (0=free,-1=request)" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:7px;color:#fff;font-family:'Outfit',sans-serif;font-size:.78rem;" onchange="deliveryZones[${i}].fee=parseInt(this.value)">
+    <button class="del-btn" onclick="deliveryZones.splice(${i},1);renderDeliveryAdmin()">✕</button>
+  </div>`).join('');
+}
+function addDeliveryZone(){deliveryZones.push({name:'New Zone',icon:'📍',time:'? mins',fee:50});renderDeliveryAdmin();}
+function saveDeliveryZones(){localStorage.setItem('scc_zones',JSON.stringify(deliveryZones));renderDeliveryZonesDisplay();toast('Delivery zones saved!','success');}
+function saveDeliverySettings(){siteSettings.freeDeliveryAbove=parseInt(document.getElementById('freeDeliveryThreshold').value)||500;siteSettings.minOrder=parseInt(document.getElementById('minOrderValue').value)||0;saveSettings();toast('Delivery settings saved!','success');}
+
+// MEMBERSHIP ADMIN
+function renderMembershipAdmin(){
+  const c=document.getElementById('membershipAdmin');
+  c.innerHTML=membershipPlans.map((p,idx)=>`<div style="background:rgba(255,255,255,0.038);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:16px;margin-bottom:12px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
+      <div class="aff"><label>Plan Name</label><input type="text" value="${p.name}" onchange="membershipPlans[${idx}].name=this.value"></div>
+      <div class="aff"><label>Price (₹)</label><input type="number" value="${p.price}" onchange="membershipPlans[${idx}].price=parseInt(this.value)"></div>
+      <div class="aff"><label>Duration (months)</label><input type="number" value="${p.duration}" onchange="membershipPlans[${idx}].duration=parseInt(this.value)"></div>
+      <div class="aff"><label>Discount (%)</label><input type="number" value="${p.discountPct}" onchange="membershipPlans[${idx}].discountPct=parseInt(this.value)"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+      <div class="aff"><label>Bonus S Coins on Join</label><input type="number" value="${p.bonusCoins}" onchange="membershipPlans[${idx}].bonusCoins=parseInt(this.value)"></div>
+      <div class="aff"><label>Icon Emoji</label><input type="text" value="${p.icon}" onchange="membershipPlans[${idx}].icon=this.value"></div>
+    </div>
+    <div class="aff" style="margin-bottom:0;"><label>Benefits (one per line)</label><textarea rows="4" style="background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:7px;padding:8px;color:#fff;font-family:'Outfit',sans-serif;font-size:.78rem;resize:vertical;width:100%;" onchange="membershipPlans[${idx}].features=this.value.split('\\n').filter(Boolean)">${p.features.join('\n')}</textarea></div>
+  </div>`).join('');
+  // Current members
+  const custs=Object.values(customers).filter(c=>c.membership&&c.membership!=='none');
+  document.getElementById('membersBody').innerHTML=custs.length?custs.map(c=>`<tr><td>${c.name}</td><td style="font-family:monospace;">${c.phone}</td><td>${c.membership}</td><td>${c.lastOrder||'-'}</td><td>${c.membershipExpiry||'-'}</td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.2);padding:22px;">No members yet.</td></tr>';
+}
+function saveMembershipPlans(){localStorage.setItem('scc_plans',JSON.stringify(membershipPlans));toast('Membership plans saved!','success');renderMembership();}
+
+// BUILDER ADMIN
+function renderBuilderAdmin(){
+  const c=document.getElementById('builderAdmin');
+  const renderSection=(label,items,key)=>`<div style="margin-bottom:16px;"><div style="color:var(--gold);font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">${label}</div>${items.map((item,i)=>`<div style="display:flex;gap:8px;margin-bottom:6px;align-items:center;"><input type="text" value="${item.icon}" style="width:48px;background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:6px;color:#fff;font-family:'Outfit',sans-serif;font-size:.8rem;" onchange="builderOptions.${key}[${i}].icon=this.value"><input type="text" value="${item.name}" style="flex:1;background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:6px;color:#fff;font-family:'Outfit',sans-serif;font-size:.8rem;" onchange="builderOptions.${key}[${i}].name=this.value"><input type="number" value="${item.price}" placeholder="Extra ₹" style="width:80px;background:rgba(255,255,255,0.044);border:1px solid rgba(255,255,255,0.078);border-radius:6px;padding:6px;color:#fff;font-family:'Outfit',sans-serif;font-size:.8rem;" onchange="builderOptions.${key}[${i}].price=parseInt(this.value)||0"><button class="del-btn" onclick="builderOptions.${key}.splice(${i},1);renderBuilderAdmin()">✕</button></div>`).join('')}<button class="abtn grey" style="font-size:.7rem;padding:5px 10px;" onclick="builderOptions.${key}.push({name:'New Option',icon:'✨',price:0});renderBuilderAdmin()">+ Add</button></div>`;
+  c.innerHTML=renderSection('Sizes',builderOptions.sizes,'sizes')+renderSection('Flavours',builderOptions.flavours,'flavours')+renderSection('Icings',builderOptions.icings,'icings')+renderSection('Toppings',builderOptions.toppings,'toppings');
+}
+function saveBuilderOptions(){localStorage.setItem('scc_builder',JSON.stringify(builderOptions));toast('Builder options saved!','success');initBuilder();}
+
+// PRODUCT ADMIN
+function prevNewPhoto(inp){const f=inp.files[0];if(!f)return;const rd=new FileReader();rd.onload=e=>{document.getElementById('newPhotoImg').src=e.target.result;document.getElementById('newPhotoPreview').style.display='block';window._newPhoto=e.target.result;};rd.readAsDataURL(f);}
+function addProd(){
+  const name=document.getElementById('pN').value.trim(),price=parseFloat(document.getElementById('pP').value);
+  if(!name||!price){toast('Fill name and price','err');return;}
+  const photo=document.getElementById('pPhoto').value.trim()||window._newPhoto||'';
+  const p={id:Date.now(),name,category:document.getElementById('pC').value,price,offerPrice:parseFloat(document.getElementById('pOP').value)||null,emoji:document.getElementById('pE').value||'🎂',photo,desc:document.getElementById('pD').value,stock:parseInt(document.getElementById('pS').value)||50,ratings:[]};
+  products.unshift(p);renderAdmProds();updateAdmStats();populateRvSel();
+  ['pN','pP','pOP','pE','pD','pS','pPhoto'].forEach(i=>document.getElementById(i).value='');
+  window._newPhoto='';document.getElementById('newPhotoPreview').style.display='none';
+  toast(p.emoji+' '+p.name+' added!','success');syncProdToDB(p);
+}
+function delProd(id){products=products.filter(p=>p.id!==id);renderAdmProds();updateAdmStats();toast('Product deleted');}
+function renderAdmProds(){
+  document.getElementById('prodCnt').textContent='('+products.length+')';
+  document.getElementById('admPGrid').innerHTML=products.map(p=>`<div class="apc">${p.photo?`<img class="apc-img" src="${p.photo}" alt="${p.name}" onerror="this.style.display='none'">`:`<span class="apc-em">${p.emoji}</span>`}<h4>${p.name}</h4><p>₹${p.offerPrice||p.price} · ${p.category}</p><div class="apc-acts"><button class="del-btn" onclick="delProd(${p.id})">Delete</button><button class="photo-btn" onclick="editPhoto(${p.id})">📷 Photo</button></div></div>`).join('');
+}

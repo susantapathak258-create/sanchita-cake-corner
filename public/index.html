@@ -1701,6 +1701,7 @@ const sQR=localStorage.getItem('scc_qr');if(sQR){window._qrData=sQR;try{document
 (async()=>{const cfg=JSON.parse(localStorage.getItem('scc_db')||'{}');if(!cfg.url)return;try{const r=await fetch(cfg.url+'?action=products&key='+cfg.key);const d=await r.json();if(Array.isArray(d)&&d.length){products=d.map(p=>({id:p.id,name:p.name,category:p.category,price:parseFloat(p.price),offerPrice:parseFloat(p.offer_price)||null,emoji:p.emoji,photo:p.photo_url||'',desc:p.description,stock:p.stock,ratings:[]}));populateRvSel();}}catch(e){}})();
 </script>
 
+<script>
 <!-- ═══════ TASA CHATBOT ═══════ -->
 <style>
 #tasa-btn{position:fixed;bottom:28px;right:28px;z-index:8000;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#d4a017,#f0c040);border:none;cursor:pointer;box-shadow:0 6px 24px rgba(212,160,23,0.5);display:flex;align-items:center;justify-content:center;font-size:1.7rem;transition:.3s;animation:tasaPulse 2.5s ease-in-out infinite;overflow:hidden;padding:0;}

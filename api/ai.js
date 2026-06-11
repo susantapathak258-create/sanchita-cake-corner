@@ -5,38 +5,36 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const { prompt } = req.body || {};
-  if (!prompt) return res.status(400).json({ error: 'No prompt' });
+  if (!prompt) return res.status(400).json({ error: 'No prompt provided' });
+
+  const apiKey = process.env.GEMINI_KEY;
+  if (!apiKey) return res.status(500).json({ error: 'GEMINI_KEY not set' });
 
   try {
     const r = await fetch(
-      'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3',
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          inputs: `<s>[INST] You must respond with valid JSON only. No explanation, no markdown. ${prompt} [/INST]`,
-          parameters: { max_new_tokens: 800, temperature: 0.7, return_full_text: false }
+          contents: [{ parts: [{ text: 'Respond ONLY with valid JSON, no markdown, no explanation.\n\n' + prompt }] }],
+          generationConfig: { temperature: 0.8, maxOutputTokens: 1000 }
         })
       }
     );
 
     const data = await r.json();
-    
-    let text = '';
-    if (Array.isArray(data)) text = data[0]?.generated_text || '';
-    else if (data.generated_text) text = data.generated_text;
-    else if (data.error) throw new Error(data.error);
-    else text = JSON.stringify(data);
+    if (data.error) throw new Error(data.error.message);
 
-    // Extract JSON
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
     const match = text.match(/\{[\s\S]*\}/);
-    if (!match) throw new Error('No JSON found: ' + text.slice(0, 100));
-    
+    if (!match) throw new Error('No JSON in response: ' + text.slice(0, 100));
+
     const parsed = JSON.parse(match[0]);
     return res.json(parsed);
 
   } catch (e) {
-    console.error('AI error:', e.message);
+    console.error('Gemini error:', e.message);
     return res.status(500).json({ error: e.message });
   }
 }

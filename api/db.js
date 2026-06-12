@@ -38,6 +38,31 @@ export default async function handler(req, res) {
       return res.json({ ok: true, id: r[0].id });
     }
 
+    // ── GET SETTINGS ──────────────────────────────────────
+    if (action === 'get_settings') {
+      const rows = await sql`SELECT key, value FROM settings`;
+      const obj = {};
+      rows.forEach(r => { try { obj[r.key] = JSON.parse(r.value); } catch { obj[r.key] = r.value; } });
+      return res.json(obj);
+    }
+
+    // ── SAVE SETTING ──────────────────────────────────────
+    if (action === 'save_setting' && req.method === 'POST') {
+      const { key, value } = req.body;
+      await sql`
+        INSERT INTO settings (key, value, updated_at)
+        VALUES (${key}, ${JSON.stringify(value)}, NOW())
+        ON CONFLICT (key) DO UPDATE SET value = ${JSON.stringify(value)}, updated_at = NOW()`;
+      return res.json({ ok: true });
+    }
+
+    // ── UPDATE PHOTO ──────────────────────────────────────
+    if (action === 'update_photo' && req.method === 'POST') {
+      const { id, photo_url } = req.body;
+      await sql`UPDATE products SET photo_url = ${photo_url} WHERE id = ${id}`;
+      return res.json({ ok: true });
+    }
+
     // ── DELETE PRODUCT ────────────────────────────────────
     if (action === 'delete_product' && req.method === 'POST') {
       const { id } = req.body;
